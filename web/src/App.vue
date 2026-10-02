@@ -8,6 +8,15 @@
       </div>
       <div class="flex gap-1">
         <router-link
+          to="/"
+          class="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+          :class="$route.name === 'home'
+            ? 'bg-primary-50 text-primary-700'
+            : 'text-surface-600 hover:bg-surface-50'"
+        >
+          <i class="pi pi-home mr-1" />Início
+        </router-link>
+        <router-link
           to="/registrar"
           class="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
           :class="$route.name === 'registrar'

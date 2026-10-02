@@ -7,6 +7,11 @@
         <p class="text-surface-500 mt-1">Autenticação on-chain via Solana + ZK Proof</p>
       </div>
 
+      <div v-if="modoDemo" class="flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-lg px-4 py-3">
+        <i class="pi pi-home text-amber-600" />
+        <span class="text-sm text-amber-700 font-medium">Demo MCMV — Escritura pré-preenchida. Clique em Registrar para ver o fluxo completo.</span>
+      </div>
+
       <Card>
         <template #content>
           <div class="flex flex-col gap-4">
@@ -141,6 +146,15 @@ import type { RegistrarPayload, RegistrarResult } from './types'
 
 const DEMO_KEY = 'a' + '0'.repeat(63)
 
+const DEMO_MCMV = {
+  docType: 'escritura-mcmv',
+  cartorioId: 'CRIO-RJ-001',
+  pubKeyX: DEMO_KEY,
+  pubKeyY: DEMO_KEY,
+  sigR: DEMO_KEY,
+  sigS: DEMO_KEY,
+}
+
 export default defineComponent({
   name: 'RegistrarView',
   components: { Card, Button, Message },
@@ -156,6 +170,7 @@ export default defineComponent({
         sigR: '',
         sigS: '',
       } as RegistrarPayload,
+      modoDemo: false,
       carregando: false,
       erro: null as string | null,
       resultado: null as RegistrarResult | null,
@@ -176,6 +191,14 @@ export default defineComponent({
     },
   },
 
+  created() {
+    if (this.$route.query.demo === 'mcmv') {
+      Object.assign(this.form, DEMO_MCMV)
+      this.modoDemo = true
+      this.arquivo = new File(['Contrato MCMV - Demo CartórioChain'], 'escritura-mcmv-demo.txt', { type: 'text/plain' })
+    }
+  },
+
   methods: {
     onArquivoChange(e: Event) {
       const input = e.target as HTMLInputElement
@@ -183,12 +206,10 @@ export default defineComponent({
     },
 
     preencherDemo() {
-      this.form.pubKeyX = DEMO_KEY
-      this.form.pubKeyY = DEMO_KEY
-      this.form.sigR = DEMO_KEY
-      this.form.sigS = DEMO_KEY
-      if (!this.form.docType) this.form.docType = 'escritura'
-      if (!this.form.cartorioId) this.form.cartorioId = 'CRIO-RJ-001'
+      Object.assign(this.form, DEMO_MCMV)
+      if (!this.arquivo) {
+        this.arquivo = new File(['Contrato MCMV - Demo CartórioChain'], 'escritura-mcmv-demo.txt', { type: 'text/plain' })
+      }
     },
 
     async registrar() {
