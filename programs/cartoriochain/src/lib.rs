@@ -13,6 +13,8 @@ pub mod cartoriochain {
     use super::*;
 
     /// Registra um documento no ledger Solana com hash SHA-256 e referência Irys.
+    /// viewkey_payload: dados do signatário cifrados com ZCash ViewKey (LGPD)
+    /// signer_commitment: Pedersen commitment do pubkey — anchor point do ZK proof
     /// PDA: seeds = ["document", doc_id]
     pub fn register_document(
         ctx: Context<RegisterDocument>,
@@ -21,8 +23,10 @@ pub mod cartoriochain {
         irys_tx_id: String,
         doc_type: String,
         cartorio_id: String,
+        viewkey_payload: String,
+        signer_commitment: String,
     ) -> Result<()> {
-        register_document::register(ctx, doc_id, doc_hash, irys_tx_id, doc_type, cartorio_id)
+        register_document::register(ctx, doc_id, doc_hash, irys_tx_id, doc_type, cartorio_id, viewkey_payload, signer_commitment)
     }
 
     /// Verifica se o hash informado corresponde ao registrado. Falha se revogado.

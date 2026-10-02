@@ -25,10 +25,14 @@ pub fn register(
     irys_tx_id: String,
     doc_type: String,
     cartorio_id: String,
+    viewkey_payload: String,
+    signer_commitment: String,
 ) -> Result<()> {
     require!(!doc_type.is_empty() && doc_type.len() <= 32, CartorioError::InvalidDocType);
     require!(!cartorio_id.is_empty() && cartorio_id.len() <= 32, CartorioError::InvalidCartorioId);
     require!(irys_tx_id.len() <= 50, CartorioError::InvalidDocType);
+    require!(viewkey_payload.len() <= 256, CartorioError::InvalidDocType);
+    require!(signer_commitment.len() <= 64, CartorioError::InvalidDocType);
 
     let doc = &mut ctx.accounts.document;
     doc.doc_hash = doc_hash;
@@ -39,6 +43,8 @@ pub fn register(
     doc.registered_at = Clock::get()?.unix_timestamp;
     doc.revoked = false;
     doc.revoke_reason = String::new();
+    doc.viewkey_payload = viewkey_payload;
+    doc.signer_commitment = signer_commitment;
     doc.bump = ctx.bumps.document;
 
     emit!(DocumentRegistered {
