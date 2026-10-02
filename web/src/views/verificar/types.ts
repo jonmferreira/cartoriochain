@@ -8,6 +8,7 @@ export interface DocumentoRegistrado {
   revoked: boolean
   revoke_reason: string
   signer_commitment: string
+  viewkey_payload?: string
 }
 
 export interface VerificarResult {

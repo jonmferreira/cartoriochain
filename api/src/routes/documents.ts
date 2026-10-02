@@ -28,6 +28,7 @@ documents.post("/", async (c) => {
     const docType = body["docType"] as string;
     const cartorioId = body["cartorioId"] as string;
     const docIdSeed = body["docIdSeed"] as string | undefined;
+    const viewkeyPayload = body["viewkeyPayload"] as string | undefined;
 
     if (!file || typeof file === "string") return c.json({ error: "arquivo obrigatorio" }, 400);
     if (!docType || !cartorioId) return c.json({ error: "docType e cartorioId obrigatorios" }, 400);
@@ -38,7 +39,7 @@ documents.post("/", async (c) => {
 
     const seed = docIdSeed ?? txId;
     const provider = getProviderFromEnv();
-    const { tx, pda } = await registerDocument({ docIdSeed: seed, docHash, irystxId: txId, docType, cartorioId }, provider);
+    const { tx, pda } = await registerDocument({ docIdSeed: seed, docHash, irystxId: txId, docType, cartorioId, viewkeyPayload }, provider);
 
     return c.json({ docIdSeed: seed, pda, irystxId: txId, irysUrl: irysGatewayUrl(txId), docHash: docHash.toString("hex"), tx });
   } catch (e: unknown) {

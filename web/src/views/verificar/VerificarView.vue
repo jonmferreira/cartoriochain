@@ -53,14 +53,11 @@
             <div class="flex items-center gap-3">
               <i
                 :class="resultado.valido && !resultado.documento?.revoked
-                  ? 'pi pi-check-circle text-green-500'
-                  : 'pi pi-times-circle text-red-500'"
-                class="text-2xl"
+                  ? 'pi pi-check-circle text-green-500 text-3xl'
+                  : 'pi pi-times-circle text-red-500 text-3xl'"
               />
               <div>
-                <p class="font-semibold text-surface-900">
-                  {{ statusLabel }}
-                </p>
+                <p class="font-bold text-surface-900 text-lg">{{ statusLabel }}</p>
                 <p v-if="resultado.documento?.revoked" class="text-sm text-red-600">
                   Motivo: {{ resultado.documento.revoke_reason || 'Não informado' }}
                 </p>
@@ -70,31 +67,38 @@
             <div v-if="resultado.documento" class="flex flex-col gap-2 text-sm border-t border-surface-100 pt-3">
               <div class="flex gap-2">
                 <span class="text-surface-500 w-36 shrink-0">Tipo:</span>
-                <span>{{ resultado.documento.doc_type }}</span>
+                <span class="font-medium">{{ resultado.documento.doc_type }}</span>
               </div>
               <div class="flex gap-2">
                 <span class="text-surface-500 w-36 shrink-0">Cartório:</span>
-                <span>{{ resultado.documento.cartorio_id }}</span>
+                <span class="font-medium">{{ resultado.documento.cartorio_id }}</span>
               </div>
               <div class="flex gap-2">
                 <span class="text-surface-500 w-36 shrink-0">Registrado em:</span>
                 <span>{{ formatarData(resultado.documento.registered_at) }}</span>
               </div>
-              <div class="flex gap-2">
-                <span class="text-surface-500 w-36 shrink-0">Autoridade:</span>
-                <span class="font-mono text-xs break-all">{{ resultado.documento.authority }}</span>
-              </div>
-              <div class="flex gap-2">
-                <span class="text-surface-500 w-36 shrink-0">Hash SHA-256:</span>
-                <span class="font-mono text-xs break-all">{{ resultado.documento.doc_hash }}</span>
-              </div>
-              <div class="flex gap-2">
-                <span class="text-surface-500 w-36 shrink-0">Irys TX:</span>
-                <span class="font-mono text-xs break-all">{{ resultado.documento.irys_tx_id }}</span>
-              </div>
-              <div class="flex gap-2">
-                <span class="text-surface-500 w-36 shrink-0">Commitment ZK:</span>
-                <span class="font-mono text-xs break-all">{{ resultado.documento.signer_commitment }}</span>
+
+              <div class="border-t border-surface-100 pt-2 mt-1">
+                <button
+                  class="text-xs text-surface-400 hover:text-surface-600 flex items-center gap-1"
+                  @click="detalhesAbertos = !detalhesAbertos"
+                >
+                  <i :class="detalhesAbertos ? 'pi pi-chevron-up' : 'pi pi-chevron-down'" />
+                  Detalhes técnicos
+                </button>
+                <div v-if="detalhesAbertos" class="mt-2 flex flex-col gap-1 text-xs font-mono">
+                  <div class="flex gap-2"><span class="text-surface-400 w-32 shrink-0">Hash SHA-256:</span><span class="break-all">{{ resultado.documento.doc_hash }}</span></div>
+                  <div class="flex gap-2"><span class="text-surface-400 w-32 shrink-0">Irys TX:</span><span class="break-all">{{ resultado.documento.irys_tx_id }}</span></div>
+                  <div class="flex gap-2"><span class="text-surface-400 w-32 shrink-0">Commitment ZK:</span><span class="break-all">{{ resultado.documento.signer_commitment }}</span></div>
+                  <div class="flex gap-2"><span class="text-surface-400 w-32 shrink-0">Autoridade:</span><span class="break-all">{{ resultado.documento.authority }}</span></div>
+                  <div v-if="resultado.documento.viewkey_payload" class="flex gap-2 mt-1 p-2 rounded bg-violet-50 border border-violet-100">
+                    <i class="pi pi-lock text-violet-500 mt-0.5 shrink-0" />
+                    <div class="flex flex-col gap-0.5">
+                      <span class="font-semibold text-violet-700 not-font-mono text-xs">ZCash ViewKey payload</span>
+                      <span class="break-all text-violet-900">{{ resultado.documento.viewkey_payload }}</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -125,6 +129,7 @@ export default defineComponent({
       carregando: false,
       erro: null as string | null,
       resultado: null as VerificarResult | null,
+      detalhesAbertos: false,
     }
   },
 

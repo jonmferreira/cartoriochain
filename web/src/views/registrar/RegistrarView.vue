@@ -81,6 +81,20 @@
               />
             </div>
 
+            <div class="border border-violet-100 rounded-lg p-3 flex flex-col gap-2 bg-violet-50">
+              <div class="flex items-center gap-2">
+                <i class="pi pi-lock text-violet-600" />
+                <p class="text-xs font-semibold text-violet-700 uppercase tracking-wide">ZCash ViewKey — Dados do Signatário</p>
+              </div>
+              <p class="text-xs text-violet-600">Payload cifrado com ZCash ViewKey. Apenas o titular da ViewKey pode descriptografar. Garante privacidade LGPD on-chain.</p>
+              <textarea
+                v-model="form.viewkeyPayload"
+                rows="3"
+                placeholder='{"v":"zcash-vk-v1","payload":"...","hint":"zxviews1..."}'
+                class="border border-violet-200 rounded p-2 text-xs font-mono resize-none bg-white"
+              />
+            </div>
+
           </div>
         </template>
       </Card>
@@ -96,38 +110,59 @@
         @click="registrar"
       />
 
-      <Card v-if="resultado" class="border-2 border-primary-200 bg-primary-50">
+      <Card v-if="resultado" class="border-2 border-green-200 bg-green-50">
         <template #content>
-          <div class="flex flex-col gap-3">
-            <div class="flex items-center gap-2">
-              <i class="pi pi-check-circle text-primary-600 text-xl" />
-              <span class="font-semibold text-primary-700">Documento registrado com sucesso!</span>
-            </div>
-            <div class="flex flex-col gap-1 text-sm">
-              <div class="flex gap-2">
-                <span class="text-surface-500 w-36">Doc ID:</span>
-                <span class="font-mono text-xs break-all">{{ resultado.docId }}</span>
-              </div>
-              <div class="flex gap-2">
-                <span class="text-surface-500 w-36">Irys TX:</span>
-                <span class="font-mono text-xs break-all">{{ resultado.irys_tx_id }}</span>
-              </div>
-              <div class="flex gap-2">
-                <span class="text-surface-500 w-36">Hash SHA-256:</span>
-                <span class="font-mono text-xs break-all">{{ resultado.doc_hash }}</span>
-              </div>
-              <div class="flex gap-2">
-                <span class="text-surface-500 w-36">Commitment ZK:</span>
-                <span class="font-mono text-xs break-all">{{ resultado.signer_commitment }}</span>
+          <div class="flex flex-col gap-4">
+
+            <div class="flex items-center gap-3">
+              <i class="pi pi-check-circle text-green-600 text-3xl" />
+              <div>
+                <p class="font-bold text-green-800 text-lg">Documento autenticado!</p>
+                <p class="text-sm text-green-700">Registrado permanentemente na blockchain.</p>
               </div>
             </div>
+
+            <div class="flex flex-col gap-2 text-sm border-t border-green-200 pt-3">
+              <div class="flex gap-2">
+                <span class="text-surface-500 w-28 shrink-0">Tipo:</span>
+                <span class="font-medium">{{ form.docType }}</span>
+              </div>
+              <div class="flex gap-2">
+                <span class="text-surface-500 w-28 shrink-0">Cartório:</span>
+                <span class="font-medium">{{ form.cartorioId }}</span>
+              </div>
+            </div>
+
             <Button
               label="Copiar link de verificação"
               icon="pi pi-link"
-              severity="secondary"
+              severity="success"
               size="small"
               @click="copiarLink"
             />
+
+            <div class="border-t border-green-200 pt-2">
+              <button
+                class="text-xs text-surface-400 hover:text-surface-600 flex items-center gap-1"
+                @click="detalhesAbertos = !detalhesAbertos"
+              >
+                <i :class="detalhesAbertos ? 'pi pi-chevron-up' : 'pi pi-chevron-down'" />
+                Detalhes técnicos
+              </button>
+              <div v-if="detalhesAbertos" class="mt-2 flex flex-col gap-1 text-xs font-mono">
+                <div class="flex gap-2"><span class="text-surface-400 w-32 shrink-0">Doc ID:</span><span class="break-all">{{ resultado.docId }}</span></div>
+                <div class="flex gap-2"><span class="text-surface-400 w-32 shrink-0">Hash SHA-256:</span><span class="break-all">{{ resultado.doc_hash }}</span></div>
+                <div class="flex gap-2"><span class="text-surface-400 w-32 shrink-0">Irys TX:</span><span class="break-all">{{ resultado.irys_tx_id }}</span></div>
+                <div v-if="resultado.viewkey_payload" class="flex gap-2 mt-1 p-2 rounded bg-violet-50 border border-violet-100">
+                  <i class="pi pi-lock text-violet-500 mt-0.5 shrink-0" />
+                  <div class="flex flex-col gap-0.5">
+                    <span class="font-semibold text-violet-700 not-font-mono text-xs">ZCash ViewKey payload</span>
+                    <span class="break-all text-violet-900">{{ resultado.viewkey_payload }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
         </template>
       </Card>
@@ -145,6 +180,11 @@ import { registrarDocumento } from './integrations'
 import type { RegistrarPayload, RegistrarResult } from './types'
 
 const DEMO_KEY = 'a' + '0'.repeat(63)
+const DEMO_VIEWKEY_PAYLOAD = JSON.stringify({
+  v: 'zcash-vk-v1',
+  payload: '4a5f3c2b1a9e8d7c6f5e4d3c2b1a0f9e8d7c6b5a4f3e2d1c0b9a8f7e6d5c4b3',
+  hint: 'zxviews1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq',
+})
 
 const DEMO_MCMV = {
   docType: 'escritura-mcmv',
@@ -153,6 +193,7 @@ const DEMO_MCMV = {
   pubKeyY: DEMO_KEY,
   sigR: DEMO_KEY,
   sigS: DEMO_KEY,
+  viewkeyPayload: DEMO_VIEWKEY_PAYLOAD,
 }
 
 export default defineComponent({
@@ -169,11 +210,13 @@ export default defineComponent({
         pubKeyY: '',
         sigR: '',
         sigS: '',
+        viewkeyPayload: '',
       } as RegistrarPayload,
       modoDemo: false,
       carregando: false,
       erro: null as string | null,
       resultado: null as RegistrarResult | null,
+      detalhesAbertos: false,
     }
   },
 

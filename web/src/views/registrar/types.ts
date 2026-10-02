@@ -5,6 +5,7 @@ export interface RegistrarPayload {
   pubKeyY: string
   sigR: string
   sigS: string
+  viewkeyPayload?: string
 }
 
 export interface RegistrarResult {
@@ -12,6 +13,7 @@ export interface RegistrarResult {
   irys_tx_id: string
   doc_hash: string
   signer_commitment: string
+  viewkey_payload?: string
   registered_at: number
   verificarUrl: string
 }
