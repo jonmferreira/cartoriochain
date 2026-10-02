@@ -59,7 +59,7 @@ commitment = "${input.commitment}"
   };
 }
 
-export async function verifyProof(proofFile: string): Promise<boolean> {
+export async function verifyProof(): Promise<boolean> {
   try {
     execSync("nargo verify", { cwd: CIRCUIT_DIR, stdio: "pipe" });
     return true;

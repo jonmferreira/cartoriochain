@@ -6,6 +6,12 @@ import { generateProof, verifyProof, computeCommitment } from "../zk";
 const router = Router();
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 4096 } });
 
+const HEX64 = /^[0-9a-fA-F]{64}$/;
+
+function validarHex64(val: unknown): val is string {
+  return typeof val === "string" && HEX64.test(val);
+}
+
 // POST /proofs/generate
 // Body: multipart — file (doc), pubKeyX (hex), pubKeyY (hex), sigR (hex), sigS (hex)
 router.post("/generate", upload.single("file"), async (req: Request, res: Response) => {
@@ -13,6 +19,12 @@ router.post("/generate", upload.single("file"), async (req: Request, res: Respon
     const { pubKeyX, pubKeyY, sigR, sigS, docHashHex } = req.body;
     if (!req.file || !pubKeyX || !pubKeyY || !sigR || !sigS) {
       return res.status(400).json({ error: "file, pubKeyX, pubKeyY, sigR, sigS obrigatorios" });
+    }
+    if (![pubKeyX, pubKeyY, sigR, sigS].every(validarHex64)) {
+      return res.status(400).json({ error: "pubKeyX, pubKeyY, sigR, sigS devem ser hex de 64 chars (32 bytes)" });
+    }
+    if (docHashHex && !validarHex64(docHashHex)) {
+      return res.status(400).json({ error: "docHashHex deve ser hex de 64 chars" });
     }
 
     const docContent = req.file.buffer;
@@ -46,11 +58,10 @@ router.post("/generate", upload.single("file"), async (req: Request, res: Respon
 });
 
 // POST /proofs/verify
+// proofFile ignorado — sempre verifica o circuito interno (evita path traversal)
 router.post("/verify", async (req: Request, res: Response) => {
   try {
-    const { proofFile } = req.body;
-    if (!proofFile) return res.status(400).json({ error: "proofFile obrigatorio" });
-    const valid = await verifyProof(proofFile);
+    const valid = await verifyProof();
     res.json({ valid });
   } catch (e: any) {
     res.status(500).json({ error: e.message });

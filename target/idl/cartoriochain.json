@@ -1,0 +1,114 @@
+{
+  "address": "BZnhVb4mdVbGRKbspvYq9mos2P4sY4iej87BEtBs2VPW",
+  "metadata": {
+    "name": "cartoriochain",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "CartorioChain — cartorio digital descentralizado"
+  },
+  "instructions": [
+    {
+      "name": "registerDocument",
+      "discriminator": [108, 34, 153, 39, 82, 41, 133, 73],
+      "accounts": [
+        {
+          "name": "document",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              { "kind": "const", "value": [100, 111, 99, 117, 109, 101, 110, 116] },
+              { "kind": "arg", "path": "docId" }
+            ]
+          }
+        },
+        { "name": "authority", "writable": true, "signer": true },
+        { "name": "systemProgram", "address": "11111111111111111111111111111111" }
+      ],
+      "args": [
+        { "name": "docId", "type": { "array": ["u8", 32] } },
+        { "name": "docHash", "type": { "array": ["u8", 32] } },
+        { "name": "irysTxId", "type": "string" },
+        { "name": "docType", "type": "string" },
+        { "name": "cartorioId", "type": "string" },
+        { "name": "viewkeyPayload", "type": "string" },
+        { "name": "signerCommitment", "type": "string" }
+      ]
+    },
+    {
+      "name": "verifyDocument",
+      "discriminator": [190, 95, 163, 221, 147, 229, 57, 162],
+      "accounts": [
+        {
+          "name": "document",
+          "pda": {
+            "seeds": [
+              { "kind": "const", "value": [100, 111, 99, 117, 109, 101, 110, 116] },
+              { "kind": "arg", "path": "docId" }
+            ]
+          }
+        }
+      ],
+      "args": [
+        { "name": "docId", "type": { "array": ["u8", 32] } },
+        { "name": "docHash", "type": { "array": ["u8", 32] } }
+      ],
+      "returns": "bool"
+    },
+    {
+      "name": "revokeDocument",
+      "discriminator": [120, 144, 209, 186, 62, 51, 209, 182],
+      "accounts": [
+        {
+          "name": "document",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              { "kind": "const", "value": [100, 111, 99, 117, 109, 101, 110, 116] },
+              { "kind": "arg", "path": "docId" }
+            ]
+          }
+        },
+        { "name": "authority", "writable": true, "signer": true }
+      ],
+      "args": [
+        { "name": "docId", "type": { "array": ["u8", 32] } },
+        { "name": "reason", "type": "string" }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "DocumentRecord",
+      "discriminator": [13, 153, 55, 14, 109, 39, 136, 125]
+    }
+  ],
+  "types": [
+    {
+      "name": "DocumentRecord",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          { "name": "docHash", "type": { "array": ["u8", 32] } },
+          { "name": "irysTxId", "type": "string" },
+          { "name": "docType", "type": "string" },
+          { "name": "cartorioId", "type": "string" },
+          { "name": "authority", "type": "pubkey" },
+          { "name": "registeredAt", "type": "i64" },
+          { "name": "revoked", "type": "bool" },
+          { "name": "revokeReason", "type": "string" },
+          { "name": "viewkeyPayload", "type": "string" },
+          { "name": "signerCommitment", "type": "string" },
+          { "name": "bump", "type": "u8" }
+        ]
+      }
+    }
+  ],
+  "errors": [
+    { "code": 6000, "name": "HashMismatch", "msg": "Hash do documento nao confere" },
+    { "code": 6001, "name": "AlreadyRevoked", "msg": "Documento ja revogado" },
+    { "code": 6002, "name": "Unauthorized", "msg": "Apenas o signatario original pode revogar" },
+    { "code": 6003, "name": "EmptyRevokeReason", "msg": "Motivo de revogacao nao pode ser vazio" },
+    { "code": 6004, "name": "InvalidDocType", "msg": "Tipo de documento invalido ou muito longo" },
+    { "code": 6005, "name": "InvalidCartorioId", "msg": "Cartorio ID invalido ou muito longo" }
+  ]
+}

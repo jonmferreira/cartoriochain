@@ -6,7 +6,7 @@ import * as path from "path";
 
 const IDL_PATH = path.resolve(__dirname, "../../target/idl/cartoriochain.json");
 const PROGRAM_ID = new PublicKey(
-  process.env.PROGRAM_ID ?? "CCHNxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+  process.env.PROGRAM_ID ?? "BZnhVb4mdVbGRKbspvYq9mos2P4sY4iej87BEtBs2VPW"
 );
 
 export function loadKeypair(privateKeyBase58OrPath: string): Keypair {
@@ -14,7 +14,8 @@ export function loadKeypair(privateKeyBase58OrPath: string): Keypair {
     const raw = JSON.parse(fs.readFileSync(privateKeyBase58OrPath, "utf-8"));
     return Keypair.fromSecretKey(new Uint8Array(raw));
   }
-  const { bs58 } = require("bs58");
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const bs58 = require("bs58");
   return Keypair.fromSecretKey(bs58.decode(privateKeyBase58OrPath));
 }
 
@@ -29,17 +30,19 @@ export function getProvider(keypair: Keypair, rpcUrl?: string): anchor.AnchorPro
 
 export function getProgram(provider: anchor.AnchorProvider) {
   const idl = JSON.parse(fs.readFileSync(IDL_PATH, "utf-8"));
-  return new anchor.Program(idl, PROGRAM_ID, provider);
+  // Anchor 0.31: construtor recebe (idl, provider); programId vem do campo address no IDL
+  anchor.setProvider(provider);
+  return new anchor.Program(idl as anchor.Idl, provider);
 }
 
 export function docIdFromString(id: string): number[] {
   return Array.from(crypto.createHash("sha256").update(id).digest());
 }
 
-export function docIdPDA(docId: number[], programId: PublicKey): PublicKey {
+export function docIdPDA(docId: number[]): PublicKey {
   const [pda] = PublicKey.findProgramAddressSync(
     [Buffer.from("document"), Buffer.from(docId)],
-    programId
+    PROGRAM_ID
   );
   return pda;
 }
@@ -50,6 +53,8 @@ export interface RegisterParams {
   irystxId: string;
   docType: string;
   cartorioId: string;
+  viewkeyPayload?: string;
+  signerCommitment?: string;
 }
 
 export async function registerDocument(
@@ -58,15 +63,17 @@ export async function registerDocument(
 ) {
   const program = getProgram(provider);
   const docId = docIdFromString(params.docIdSeed);
-  const pda = docIdPDA(docId, PROGRAM_ID);
+  const pda = docIdPDA(docId);
 
-  const tx = await program.methods
+  const tx = await (program.methods as any)
     .registerDocument(
       docId,
       Array.from(params.docHash),
       params.irystxId,
       params.docType,
-      params.cartorioId
+      params.cartorioId,
+      params.viewkeyPayload ?? "",
+      params.signerCommitment ?? ""
     )
     .accounts({ document: pda, authority: provider.wallet.publicKey })
     .rpc();
@@ -77,8 +84,8 @@ export async function registerDocument(
 export async function fetchDocument(docIdSeed: string, provider: anchor.AnchorProvider) {
   const program = getProgram(provider);
   const docId = docIdFromString(docIdSeed);
-  const pda = docIdPDA(docId, PROGRAM_ID);
-  return program.account.documentRecord.fetch(pda);
+  const pda = docIdPDA(docId);
+  return (program.account as any).documentRecord.fetch(pda);
 }
 
 export async function revokeDocument(
@@ -88,9 +95,9 @@ export async function revokeDocument(
 ) {
   const program = getProgram(provider);
   const docId = docIdFromString(docIdSeed);
-  const pda = docIdPDA(docId, PROGRAM_ID);
+  const pda = docIdPDA(docId);
 
-  return program.methods
+  return (program.methods as any)
     .revokeDocument(docId, reason)
     .accounts({ document: pda, authority: provider.wallet.publicKey })
     .rpc();

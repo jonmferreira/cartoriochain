@@ -5,11 +5,19 @@ import * as fs from "fs";
 const IRYS_URL = process.env.IRYS_URL ?? "https://node2.irys.xyz";
 const SOLANA_RPC = process.env.SOLANA_RPC ?? "https://api.devnet.solana.com";
 
-export async function getIrys(privateKey: string): Promise<Irys> {
+function resolveKey(privateKeyOrPath: string): Uint8Array | string {
+  if (fs.existsSync(privateKeyOrPath)) {
+    const raw: number[] = JSON.parse(fs.readFileSync(privateKeyOrPath, "utf-8"));
+    return new Uint8Array(raw);
+  }
+  return privateKeyOrPath;
+}
+
+export async function getIrys(privateKeyOrPath: string): Promise<Irys> {
   const irys = new Irys({
     url: IRYS_URL,
     token: "solana",
-    key: privateKey,
+    key: resolveKey(privateKeyOrPath),
     config: { providerUrl: SOLANA_RPC },
   });
   await irys.ready();

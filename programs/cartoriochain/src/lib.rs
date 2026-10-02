@@ -6,7 +6,7 @@ pub mod state;
 
 use instructions::*;
 
-declare_id!("CCHNxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+declare_id!("BZnhVb4mdVbGRKbspvYq9mos2P4sY4iej87BEtBs2VPW");
 
 #[program]
 pub mod cartoriochain {
