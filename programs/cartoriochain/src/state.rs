@@ -25,8 +25,5 @@ pub struct DocumentRecord {
 }
 
 impl DocumentRecord {
-    // discriminator(8) + hash(32) + irys_tx_id(4+50) + doc_type(4+32)
-    // + cartorio_id(4+32) + authority(32) + timestamp(8) + revoked(1)
-    // + revoke_reason(4+128) + viewkey_payload(4+256) + signer_commitment(4+64) + bump(1)
-    pub const SPACE: usize = 8 + 32 + 54 + 36 + 36 + 32 + 8 + 1 + 132 + 260 + 68 + 1;
+    pub const SPACE: usize = 668;
 }
