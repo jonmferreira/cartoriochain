@@ -1,33 +1,38 @@
-import { Router, Request, Response } from "express";
-import multer from "multer";
+import { Hono } from "hono";
 import * as crypto from "crypto";
 import { generateProof, verifyProof, computeCommitment } from "../zk";
+import { rateLimit } from "../middleware/rate-limit";
 
-const router = Router();
-const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 4096 } });
+const proofs = new Hono();
 
 const HEX64 = /^[0-9a-fA-F]{64}$/;
-
 function validarHex64(val: unknown): val is string {
   return typeof val === "string" && HEX64.test(val);
 }
 
+proofs.use("*", rateLimit(10, 60_000));
+
 // POST /proofs/generate
-// Body: multipart — file (doc), pubKeyX (hex), pubKeyY (hex), sigR (hex), sigS (hex)
-router.post("/generate", upload.single("file"), async (req: Request, res: Response) => {
+proofs.post("/generate", async (c) => {
   try {
-    const { pubKeyX, pubKeyY, sigR, sigS, docHashHex } = req.body;
-    if (!req.file || !pubKeyX || !pubKeyY || !sigR || !sigS) {
-      return res.status(400).json({ error: "file, pubKeyX, pubKeyY, sigR, sigS obrigatorios" });
+    const body = await c.req.parseBody();
+    const file = body["file"];
+    const { pubKeyX, pubKeyY, sigR, sigS, docHashHex } = body as Record<string, string>;
+
+    if (!file || typeof file === "string" || !pubKeyX || !pubKeyY || !sigR || !sigS) {
+      return c.json({ error: "file, pubKeyX, pubKeyY, sigR, sigS obrigatorios" }, 400);
     }
     if (![pubKeyX, pubKeyY, sigR, sigS].every(validarHex64)) {
-      return res.status(400).json({ error: "pubKeyX, pubKeyY, sigR, sigS devem ser hex de 64 chars (32 bytes)" });
+      return c.json({ error: "pubKeyX, pubKeyY, sigR, sigS devem ser hex de 64 chars (32 bytes)" }, 400);
     }
     if (docHashHex && !validarHex64(docHashHex)) {
-      return res.status(400).json({ error: "docHashHex deve ser hex de 64 chars" });
+      return c.json({ error: "docHashHex deve ser hex de 64 chars" }, 400);
+    }
+    if (file.size > 4096) {
+      return c.json({ error: "arquivo muito grande (max 4KB)" }, 400);
     }
 
-    const docContent = req.file.buffer;
+    const docContent = Buffer.from(await file.arrayBuffer());
     const docHash = docHashHex
       ? Buffer.from(docHashHex, "hex")
       : crypto.createHash("sha256").update(docContent).digest();
@@ -46,26 +51,25 @@ router.post("/generate", upload.single("file"), async (req: Request, res: Respon
       commitment,
     });
 
-    res.json({
+    return c.json({
       proofFile: result.proof,
       publicInputs: JSON.parse(result.publicInputs || "{}"),
       commitment,
       docHashHex: docHash.toString("hex"),
     });
-  } catch (e: any) {
-    res.status(500).json({ error: e.message });
+  } catch (e: unknown) {
+    return c.json({ error: (e as Error).message }, 500);
   }
 });
 
 // POST /proofs/verify
-// proofFile ignorado — sempre verifica o circuito interno (evita path traversal)
-router.post("/verify", async (req: Request, res: Response) => {
+proofs.post("/verify", async (c) => {
   try {
     const valid = await verifyProof();
-    res.json({ valid });
-  } catch (e: any) {
-    res.status(500).json({ error: e.message });
+    return c.json({ valid });
+  } catch (e: unknown) {
+    return c.json({ error: (e as Error).message }, 500);
   }
 });
 
-export default router;
+export default proofs;

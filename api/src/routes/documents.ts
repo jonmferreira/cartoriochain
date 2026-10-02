@@ -1,5 +1,4 @@
-import { Router, Request, Response } from "express";
-import multer from "multer";
+import { Hono } from "hono";
 import * as crypto from "crypto";
 import { uploadDocument, irysGatewayUrl } from "../irys";
 import {
@@ -9,96 +8,88 @@ import {
   fetchDocument,
   revokeDocument,
   docIdFromString,
-  docIdPDA,
 } from "../anchor-client";
-import { PublicKey } from "@solana/web3.js";
+import { rateLimit } from "../middleware/rate-limit";
 
-const router = Router();
-const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 * 1024 * 1024 } });
+const documents = new Hono();
 
 function getProviderFromEnv() {
   const keypair = loadKeypair(process.env.WALLET_KEY ?? process.env.WALLET_PATH ?? "~/.config/solana/id.json");
   return getProvider(keypair);
 }
 
-// POST /documents
-// Body: multipart — file, docType, cartorioId, docIdSeed (opcional)
-router.post("/", upload.single("file"), async (req: Request, res: Response) => {
-  try {
-    const { docType, cartorioId, docIdSeed } = req.body;
-    if (!req.file) return res.status(400).json({ error: "arquivo obrigatorio" });
-    if (!docType || !cartorioId) return res.status(400).json({ error: "docType e cartorioId obrigatorios" });
+documents.use("*", rateLimit(10, 60_000));
 
+// POST /documents
+documents.post("/", async (c) => {
+  try {
+    const body = await c.req.parseBody();
+    const file = body["file"];
+    const docType = body["docType"] as string;
+    const cartorioId = body["cartorioId"] as string;
+    const docIdSeed = body["docIdSeed"] as string | undefined;
+
+    if (!file || typeof file === "string") return c.json({ error: "arquivo obrigatorio" }, 400);
+    if (!docType || !cartorioId) return c.json({ error: "docType e cartorioId obrigatorios" }, 400);
+
+    const buffer = Buffer.from(await file.arrayBuffer());
     const walletKey = process.env.WALLET_KEY ?? process.env.WALLET_PATH ?? "~/.config/solana/id.json";
-    const { txId, docHash } = await uploadDocument(req.file.buffer, { docType, cartorioId, fileName: req.file.originalname }, walletKey);
+    const { txId, docHash } = await uploadDocument(buffer, { docType, cartorioId, fileName: file.name }, walletKey);
 
     const seed = docIdSeed ?? txId;
     const provider = getProviderFromEnv();
     const { tx, pda } = await registerDocument({ docIdSeed: seed, docHash, irystxId: txId, docType, cartorioId }, provider);
 
-    res.json({
-      docIdSeed: seed,
-      pda,
-      irystxId: txId,
-      irysUrl: irysGatewayUrl(txId),
-      docHash: docHash.toString("hex"),
-      tx,
-    });
-  } catch (e: any) {
-    res.status(500).json({ error: e.message });
+    return c.json({ docIdSeed: seed, pda, irystxId: txId, irysUrl: irysGatewayUrl(txId), docHash: docHash.toString("hex"), tx });
+  } catch (e: unknown) {
+    return c.json({ error: (e as Error).message }, 500);
   }
 });
 
 // GET /documents/:id
-router.get("/:id", async (req: Request, res: Response) => {
+documents.get("/:id", async (c) => {
   try {
     const provider = getProviderFromEnv();
-    const record = await fetchDocument(req.params.id, provider);
-    res.json({
-      ...record,
-      irysUrl: irysGatewayUrl(record.irystxId),
-      docHash: Buffer.from(record.docHash).toString("hex"),
-    });
-  } catch (e: any) {
-    res.status(404).json({ error: e.message });
+    const record = await fetchDocument(c.req.param("id"), provider);
+    return c.json({ ...record, irysUrl: irysGatewayUrl(record.irystxId as string), docHash: Buffer.from(record.docHash as Uint8Array).toString("hex") });
+  } catch (e: unknown) {
+    return c.json({ error: (e as Error).message }, 404);
   }
 });
 
 // POST /documents/:id/verify
-// Body: { docHash: string (hex) }
-router.post("/:id/verify", async (req: Request, res: Response) => {
+documents.post("/:id/verify", async (c) => {
   try {
-    const { docHash } = req.body;
-    if (!docHash) return res.status(400).json({ error: "docHash obrigatorio" });
+    const { docHash } = await c.req.json<{ docHash: string }>();
+    if (!docHash) return c.json({ error: "docHash obrigatorio" }, 400);
 
     const provider = getProviderFromEnv();
-    const record = await fetchDocument(req.params.id, provider);
+    const record = await fetchDocument(c.req.param("id"), provider);
 
     if (record.revoked) {
-      return res.json({ valid: false, reason: "revogado", revokeReason: record.revokeReason });
+      return c.json({ valid: false, reason: "revogado", revokeReason: record.revokeReason });
     }
 
-    const onChainHash = Buffer.from(record.docHash).toString("hex");
+    const onChainHash = Buffer.from(record.docHash as Uint8Array).toString("hex");
     const valid = onChainHash === docHash.toLowerCase();
-    res.json({ valid, onChainHash, provided: docHash.toLowerCase() });
-  } catch (e: any) {
-    res.status(404).json({ error: e.message });
+    return c.json({ valid, onChainHash, provided: docHash.toLowerCase() });
+  } catch (e: unknown) {
+    return c.json({ error: (e as Error).message }, 404);
   }
 });
 
 // DELETE /documents/:id
-// Body: { reason: string }
-router.delete("/:id", async (req: Request, res: Response) => {
+documents.delete("/:id", async (c) => {
   try {
-    const { reason } = req.body;
-    if (!reason) return res.status(400).json({ error: "reason obrigatorio" });
+    const { reason } = await c.req.json<{ reason: string }>();
+    if (!reason) return c.json({ error: "reason obrigatorio" }, 400);
 
     const provider = getProviderFromEnv();
-    const tx = await revokeDocument(req.params.id, reason, provider);
-    res.json({ tx, revoked: true });
-  } catch (e: any) {
-    res.status(500).json({ error: e.message });
+    const tx = await revokeDocument(c.req.param("id"), reason, provider);
+    return c.json({ tx, revoked: true });
+  } catch (e: unknown) {
+    return c.json({ error: (e as Error).message }, 500);
   }
 });
 
-export default router;
+export default documents;
