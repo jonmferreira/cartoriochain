@@ -1,0 +1,19 @@
+# Anchor build artifacts
+target/
+.anchor/
+
+# Node
+node_modules/
+yarn.lock
+package-lock.json
+
+# Solana keypairs (nunca commitar)
+**/*.json
+!Anchor.toml
+!tsconfig.json
+!package.json
+!programs/**/Cargo.toml
+
+# Env
+.env
+.env.local

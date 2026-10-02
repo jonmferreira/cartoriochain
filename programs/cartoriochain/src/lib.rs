@@ -1,0 +1,46 @@
+use anchor_lang::prelude::*;
+
+pub mod error;
+pub mod instructions;
+pub mod state;
+
+use instructions::*;
+
+declare_id!("CCHNxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+
+#[program]
+pub mod cartoriochain {
+    use super::*;
+
+    /// Registra um documento no ledger Solana com hash SHA-256 e referência Irys.
+    /// PDA: seeds = ["document", doc_id]
+    pub fn register_document(
+        ctx: Context<RegisterDocument>,
+        doc_id: [u8; 32],
+        doc_hash: [u8; 32],
+        irys_tx_id: String,
+        doc_type: String,
+        cartorio_id: String,
+    ) -> Result<()> {
+        register_document::register(ctx, doc_id, doc_hash, irys_tx_id, doc_type, cartorio_id)
+    }
+
+    /// Verifica se o hash informado corresponde ao registrado. Falha se revogado.
+    pub fn verify_document(
+        ctx: Context<VerifyDocument>,
+        doc_id: [u8; 32],
+        doc_hash: [u8; 32],
+    ) -> Result<bool> {
+        verify_document::verify(ctx, doc_id, doc_hash)
+    }
+
+    /// Revoga um documento. Apenas o signatário original pode revogar.
+    /// O registro permanece no ledger (imutabilidade preservada).
+    pub fn revoke_document(
+        ctx: Context<RevokeDocument>,
+        doc_id: [u8; 32],
+        reason: String,
+    ) -> Result<()> {
+        revoke_document::revoke(ctx, doc_id, reason)
+    }
+}
