@@ -8,9 +8,8 @@ import proofsRouter from "./routes/proofs";
 const app = new Hono();
 const PORT = Number(process.env.PORT ?? 3001);
 
-const ALLOWED_ORIGINS = (process.env.CORS_ORIGINS ?? "http://localhost:5176,http://localhost:3000")
-  .split(",")
-  .map((o) => o.trim());
+const CORS_ENV = process.env.CORS_ORIGINS ?? "http://localhost:5176,http://localhost:3000";
+const ALLOWED_ORIGINS = CORS_ENV === "*" ? "*" : CORS_ENV.split(",").map((o) => o.trim());
 
 app.use("*", secureHeaders());
 app.use("*", cors({ origin: ALLOWED_ORIGINS }));
