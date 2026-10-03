@@ -27,3 +27,12 @@ api/api-err.log
 
 # Localnet ledger
 test-ledger/
+
+# Build output
+dist/
+api/dist/
+web/dist/
+web/.wrangler/
+
+# Demo recording output
+scripts/record-demo/output/

@@ -1,43 +1,28 @@
 <template>
-  <div class="min-h-screen flex flex-col">
-    <nav class="bg-white border-b border-surface-200 px-6 py-3 flex items-center justify-between">
-      <div class="flex items-center gap-2">
-        <i class="pi pi-shield text-primary-600 text-xl" />
-        <span class="font-bold text-surface-900 text-lg">CartórioChain</span>
-        <span class="text-xs text-surface-400 ml-1">Solana · ZK · Irys</span>
-      </div>
-      <div class="flex gap-1">
+  <div class="min-h-screen flex flex-col" style="background:#F7EACB">
+    <nav style="background:#1B231D; padding: 0 24px; height:52px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:50;">
+      <router-link to="/" style="display:flex; align-items:center; gap:10px; text-decoration:none;">
+        <span style="font-family:var(--font-display); font-weight:900; font-size:16px; letter-spacing:0.04em; text-transform:uppercase; color:#F7EACB;">CartórioChain</span>
+        <span class="tag tag-yellow" style="font-size:9px; padding:2px 7px;">ZCash · Solana</span>
+      </router-link>
+      <div style="display:flex; gap:4px;">
         <router-link
-          to="/"
-          class="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-          :class="$route.name === 'home'
-            ? 'bg-primary-50 text-primary-700'
-            : 'text-surface-600 hover:bg-surface-50'"
-        >
-          <i class="pi pi-home mr-1" />Início
-        </router-link>
-        <router-link
-          to="/registrar"
-          class="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-          :class="$route.name === 'registrar'
-            ? 'bg-primary-50 text-primary-700'
-            : 'text-surface-600 hover:bg-surface-50'"
-        >
-          <i class="pi pi-plus-circle mr-1" />Registrar
-        </router-link>
-        <router-link
-          to="/verificar"
-          class="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-          :class="$route.name === 'verificar' || $route.name === 'verificar-doc'
-            ? 'bg-primary-50 text-primary-700'
-            : 'text-surface-600 hover:bg-surface-50'"
-        >
-          <i class="pi pi-search mr-1" />Verificar
-        </router-link>
+          v-for="link in links"
+          :key="link.to"
+          :to="link.to"
+          style="font-family:var(--font-display); font-size:11px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; text-decoration:none; padding:8px 14px; min-height:44px; display:inline-flex; align-items:center; cursor:pointer; transition:background 0.2s cubic-bezier(0.32,0.72,0,1), color 0.2s cubic-bezier(0.32,0.72,0,1);"
+          :style="isActive(link.to)
+            ? 'background:#FFD23F; color:#1B231D;'
+            : 'color:#D1C09F;'"
+        >{{ link.label }}</router-link>
       </div>
     </nav>
     <main class="flex-1">
-      <router-view />
+      <router-view v-slot="{ Component }">
+        <transition name="page" mode="out-in">
+          <component :is="Component" />
+        </transition>
+      </router-view>
     </main>
   </div>
 </template>
@@ -47,5 +32,28 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'App',
+  data() {
+    return {
+      links: [
+        { to: '/',          label: 'Início'   },
+        { to: '/registrar', label: 'Registrar' },
+        { to: '/verificar', label: 'Verificar' },
+      ],
+    }
+  },
+  methods: {
+    isActive(to: string) {
+      if (to === '/') return this.$route.path === '/'
+      return this.$route.path.startsWith(to)
+    },
+  },
 })
 </script>
+
+<style>
+.page-enter-active, .page-leave-active {
+  transition: opacity 0.28s cubic-bezier(0.32,0.72,0,1), transform 0.28s cubic-bezier(0.32,0.72,0,1);
+}
+.page-enter-from { opacity: 0; transform: translateY(14px); }
+.page-leave-to  { opacity: 0; transform: translateY(-8px); }
+</style>
