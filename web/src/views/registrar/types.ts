@@ -6,6 +6,7 @@ export interface RegistrarPayload {
   sigR: string
   sigS: string
   viewkeyPayload?: string
+  docIdSeed?: string
 }
 
 export interface RegistrarResult {

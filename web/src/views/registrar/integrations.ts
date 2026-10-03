@@ -14,6 +14,7 @@ export async function registrarDocumento(
   form.append('sigR', payload.sigR)
   form.append('sigS', payload.sigS)
   if (payload.viewkeyPayload) form.append('viewkeyPayload', payload.viewkeyPayload)
+  if (payload.docIdSeed) form.append('docIdSeed', payload.docIdSeed)
 
   const { data } = await http.post<RegistrarResult>('/documents', form, {
     headers: { 'Content-Type': 'multipart/form-data' },

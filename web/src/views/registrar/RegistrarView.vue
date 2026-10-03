@@ -1,171 +1,170 @@
 <template>
-  <div class="min-h-screen bg-surface-50 flex items-center justify-center p-6">
-    <div class="w-full max-w-xl flex flex-col gap-6">
+  <div style="background:#F7EACB; min-height:100vh; padding:40px 24px;">
+    <div style="max-width:600px; margin:0 auto; display:flex; flex-direction:column; gap:28px;">
 
-      <div>
-        <h1 class="text-3xl font-bold text-surface-900">Registrar Documento</h1>
-        <p class="text-surface-500 mt-1">Autenticação on-chain via Solana + ZK Proof</p>
+      <!-- Header -->
+      <div class="anim-slide-up">
+        <div style="font-size:11px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:#4F5E50; margin-bottom:8px;">Cartório Digital</div>
+        <h1 style="font-family:var(--font-display); font-weight:900; font-size:32px; text-transform:uppercase; letter-spacing:-1px; color:#1B231D; line-height:1;">Registrar documento</h1>
       </div>
 
-      <div v-if="modoDemo" class="flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-lg px-4 py-3">
-        <i class="pi pi-home text-amber-600" />
-        <span class="text-sm text-amber-700 font-medium">Demo MCMV — Escritura pré-preenchida. Clique em Registrar para ver o fluxo completo.</span>
+      <!-- Steps indicator -->
+      <div class="anim-slide-up anim-delay-1" style="display:flex; align-items:center;">
+        <template v-for="(s, i) in etapas" :key="i">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <div class="step-num" :class="{ active: etapa === i+1, done: etapa > i+1 }">
+              <span v-if="etapa > i+1">✓</span>
+              <span v-else>{{ i+1 }}</span>
+            </div>
+            <span class="step-label" :class="{ active: etapa === i+1 }">{{ s }}</span>
+          </div>
+          <div v-if="i < etapas.length-1" class="step-connector" />
+        </template>
       </div>
 
-      <Card>
-        <template #content>
-          <div class="flex flex-col gap-4">
+      <!-- Banner demo -->
+      <div v-if="modoDemo" class="anim-fade" style="background:#FFD23F; border:2px solid #1B231D; padding:12px 16px; display:flex; align-items:center; gap:10px;">
+        <span style="font-size:16px;">🏠</span>
+        <span style="font-size:13px; font-weight:700; color:#1B231D;">Demo MCMV — Escritura pré-preenchida. Clique em avançar para ver o fluxo completo.</span>
+      </div>
 
-            <div class="flex flex-col gap-1">
-              <label class="text-sm font-medium text-surface-700">Documento</label>
-              <input
-                type="file"
-                accept=".pdf,.doc,.docx,.txt"
-                class="border border-surface-200 rounded-lg p-2 text-sm text-surface-700"
-                @change="onArquivoChange"
-              />
-              <span v-if="arquivo" class="text-xs text-surface-500">
-                {{ arquivo.name }} ({{ (arquivo.size / 1024).toFixed(1) }} KB)
-              </span>
+      <!-- ═══ ETAPA 1: Documento ════════════════════════ -->
+      <div v-if="etapa === 1" class="anim-slide-up" style="display:flex; flex-direction:column; gap:20px;">
+        <div class="card">
+          <label class="label">Documento</label>
+          <div class="upload-area" :class="{ 'has-file': !!arquivo }" @click="$refs.fileInput.click()" @dragover.prevent @drop.prevent="onDrop">
+            <input ref="fileInput" type="file" accept=".pdf,.doc,.docx,.txt" @change="onArquivoChange" />
+            <div v-if="!arquivo" style="display:flex; flex-direction:column; align-items:center; gap:10px;">
+              <span style="font-size:32px; color:#4F5E50;">⬆</span>
+              <div style="font-size:13px; font-weight:700; color:#1B231D;">Clique ou arraste o documento aqui</div>
+              <div style="font-size:11px; color:#4F5E50;">PDF, DOC, DOCX, TXT</div>
             </div>
-
-            <div class="grid grid-cols-2 gap-3">
-              <div class="flex flex-col gap-1">
-                <label class="text-sm font-medium text-surface-700">Tipo do Documento</label>
-                <input
-                  v-model="form.docType"
-                  type="text"
-                  placeholder="ex: escritura, contrato"
-                  class="border border-surface-200 rounded-lg p-2 text-sm"
-                  maxlength="32"
-                />
-              </div>
-              <div class="flex flex-col gap-1">
-                <label class="text-sm font-medium text-surface-700">Cartório ID</label>
-                <input
-                  v-model="form.cartorioId"
-                  type="text"
-                  placeholder="ex: CRIO-RJ-001"
-                  class="border border-surface-200 rounded-lg p-2 text-sm"
-                  maxlength="32"
-                />
-              </div>
+            <div v-else style="display:flex; flex-direction:column; align-items:center; gap:8px;">
+              <span style="font-size:32px;">✓</span>
+              <div style="font-size:13px; font-weight:800; color:#008C4C;">{{ arquivo.name }}</div>
+              <div style="font-size:11px; color:#4F5E50;">{{ (arquivo.size/1024).toFixed(1) }} KB — clique para trocar</div>
             </div>
+          </div>
+        </div>
 
-            <div class="border border-surface-100 rounded-lg p-3 flex flex-col gap-3 bg-surface-50">
-              <p class="text-xs font-semibold text-surface-500 uppercase tracking-wide">ZK Proof — Chave Pública ECDSA</p>
-              <div class="grid grid-cols-2 gap-3">
-                <div class="flex flex-col gap-1">
-                  <label class="text-xs text-surface-600">pubKeyX (hex)</label>
-                  <input v-model="form.pubKeyX" type="text" placeholder="32 bytes hex" class="border border-surface-200 rounded p-2 text-xs font-mono" />
-                </div>
-                <div class="flex flex-col gap-1">
-                  <label class="text-xs text-surface-600">pubKeyY (hex)</label>
-                  <input v-model="form.pubKeyY" type="text" placeholder="32 bytes hex" class="border border-surface-200 rounded p-2 text-xs font-mono" />
-                </div>
-                <div class="flex flex-col gap-1">
-                  <label class="text-xs text-surface-600">sigR (hex)</label>
-                  <input v-model="form.sigR" type="text" placeholder="32 bytes hex" class="border border-surface-200 rounded p-2 text-xs font-mono" />
-                </div>
-                <div class="flex flex-col gap-1">
-                  <label class="text-xs text-surface-600">sigS (hex)</label>
-                  <input v-model="form.sigS" type="text" placeholder="32 bytes hex" class="border border-surface-200 rounded p-2 text-xs font-mono" />
-                </div>
-              </div>
-              <Button
-                label="Preencher com dados demo"
-                icon="pi pi-bolt"
-                size="small"
-                severity="secondary"
-                @click="preencherDemo"
-              />
-            </div>
+        <button class="btn btn-primary" style="align-self:flex-end;" :disabled="!arquivo" @click="etapa=2">
+          Avançar →
+        </button>
+      </div>
 
-            <div class="border border-violet-100 rounded-lg p-3 flex flex-col gap-2 bg-violet-50">
-              <div class="flex items-center gap-2">
-                <i class="pi pi-lock text-violet-600" />
-                <p class="text-xs font-semibold text-violet-700 uppercase tracking-wide">ZCash ViewKey — Dados do Signatário</p>
-              </div>
-              <p class="text-xs text-violet-600">Payload cifrado com ZCash ViewKey. Apenas o titular da ViewKey pode descriptografar. Garante privacidade LGPD on-chain.</p>
+      <!-- ═══ ETAPA 2: Metadados ════════════════════════ -->
+      <div v-if="etapa === 2" class="anim-slide-up" style="display:flex; flex-direction:column; gap:20px;">
+        <div class="card" style="display:flex; flex-direction:column; gap:18px;">
+
+          <div>
+            <label class="label">Tipo do documento</label>
+            <input v-model="form.docType" class="inp" type="text" placeholder="ex: Escritura, Contrato de compra e venda, Procuração" maxlength="32" />
+          </div>
+
+          <div>
+            <label class="label">Cartório / Instituição</label>
+            <input v-model="form.cartorioId" class="inp" type="text" placeholder="ex: 1º Ofício de Notas do Rio de Janeiro" maxlength="32" />
+          </div>
+
+          <!-- Privacidade ZCash — painel avançado -->
+          <div class="vk-section">
+            <button class="vk-toggle" @click="vkAberto = !vkAberto">
+              <span>🔒</span>
+              <span>Privacidade ZCash ViewKey</span>
+              <span style="margin-left:4px; color:#D1C09F;">{{ vkAberto ? '▲' : '▼' }}</span>
+            </button>
+            <p style="font-size:12px; color:#D1C09F; margin-top:6px; line-height:1.5;">Cifra os dados do signatário on-chain. Só o titular da ViewKey pode descriptografar — LGPD nativa.</p>
+            <div v-if="vkAberto" style="margin-top:12px;">
+              <label class="label" style="color:#D1C09F;">Payload ViewKey (JSON cifrado)</label>
               <textarea
                 v-model="form.viewkeyPayload"
                 rows="3"
+                class="inp inp-mono"
                 placeholder='{"v":"zcash-vk-v1","payload":"...","hint":"zxviews1..."}'
-                class="border border-violet-200 rounded p-2 text-xs font-mono resize-none bg-white"
+                style="background:#2C3A2F; border-color:#4F5E50; color:#F7EACB; resize:none;"
               />
             </div>
-
           </div>
-        </template>
-      </Card>
+        </div>
 
-      <Message v-if="erro" severity="error" :closable="false">{{ erro }}</Message>
+        <div style="display:flex; gap:12px; justify-content:space-between;">
+          <button class="btn btn-secondary btn-sm" @click="etapa=1">← Voltar</button>
+          <button class="btn btn-primary" :disabled="!form.docType || !form.cartorioId" @click="registrar">
+            ✓ Autenticar documento
+          </button>
+        </div>
+      </div>
 
-      <Button
-        label="Registrar Documento"
-        icon="pi pi-shield"
-        size="large"
-        :disabled="!podeSalvar || carregando"
-        :loading="carregando"
-        @click="registrar"
-      />
+      <!-- ═══ LOADING ════════════════════════════════════ -->
+      <div v-if="carregando" class="anim-fade card" style="display:flex; flex-direction:column; gap:20px;">
+        <div style="font-size:13px; font-weight:800; text-transform:uppercase; letter-spacing:0.06em; color:#1B231D;">Autenticando...</div>
 
-      <Card v-if="resultado" class="border-2 border-green-200 bg-green-50">
-        <template #content>
-          <div class="flex flex-col gap-4">
+        <div class="progress-track">
+          <div class="progress-fill" :style="`width:${progressoPct}%;`" />
+        </div>
 
-            <div class="flex items-center gap-3">
-              <i class="pi pi-check-circle text-green-600 text-3xl" />
-              <div>
-                <p class="font-bold text-green-800 text-lg">Documento autenticado!</p>
-                <p class="text-sm text-green-700">Registrado permanentemente na blockchain.</p>
-              </div>
-            </div>
-
-            <div class="flex flex-col gap-2 text-sm border-t border-green-200 pt-3">
-              <div class="flex gap-2">
-                <span class="text-surface-500 w-28 shrink-0">Tipo:</span>
-                <span class="font-medium">{{ form.docType }}</span>
-              </div>
-              <div class="flex gap-2">
-                <span class="text-surface-500 w-28 shrink-0">Cartório:</span>
-                <span class="font-medium">{{ form.cartorioId }}</span>
-              </div>
-            </div>
-
-            <Button
-              label="Copiar link de verificação"
-              icon="pi pi-link"
-              severity="success"
-              size="small"
-              @click="copiarLink"
-            />
-
-            <div class="border-t border-green-200 pt-2">
-              <button
-                class="text-xs text-surface-400 hover:text-surface-600 flex items-center gap-1"
-                @click="detalhesAbertos = !detalhesAbertos"
-              >
-                <i :class="detalhesAbertos ? 'pi pi-chevron-up' : 'pi pi-chevron-down'" />
-                Detalhes técnicos
-              </button>
-              <div v-if="detalhesAbertos" class="mt-2 flex flex-col gap-1 text-xs font-mono">
-                <div class="flex gap-2"><span class="text-surface-400 w-32 shrink-0">Doc ID:</span><span class="break-all">{{ resultado.docId }}</span></div>
-                <div class="flex gap-2"><span class="text-surface-400 w-32 shrink-0">Hash SHA-256:</span><span class="break-all">{{ resultado.doc_hash }}</span></div>
-                <div class="flex gap-2"><span class="text-surface-400 w-32 shrink-0">Irys TX:</span><span class="break-all">{{ resultado.irys_tx_id }}</span></div>
-                <div v-if="resultado.viewkey_payload" class="flex gap-2 mt-1 p-2 rounded bg-violet-50 border border-violet-100">
-                  <i class="pi pi-lock text-violet-500 mt-0.5 shrink-0" />
-                  <div class="flex flex-col gap-0.5">
-                    <span class="font-semibold text-violet-700 not-font-mono text-xs">ZCash ViewKey payload</span>
-                    <span class="break-all text-violet-900">{{ resultado.viewkey_payload }}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
+        <div style="display:flex; flex-direction:column; gap:0;">
+          <div v-for="(step, i) in loadingSteps" :key="i" class="loading-step" :class="{ active: loadingEtapa === i, done: loadingEtapa > i }">
+            <div class="loading-dot" />
+            <span style="font-size:13px; font-weight:600; color:#1B231D;">{{ step }}</span>
           </div>
-        </template>
-      </Card>
+        </div>
+      </div>
+
+      <!-- Erro -->
+      <div v-if="erro && !carregando" class="anim-fade msg-error">
+        <span>⚠</span>
+        <span>{{ erro }}</span>
+      </div>
+
+      <!-- ═══ RESULTADO ═══════════════════════════════════ -->
+      <div v-if="resultado && !carregando" class="certificate">
+        <div style="padding:24px 24px 0;">
+
+          <div style="display:flex; align-items:flex-start; gap:16px; padding-bottom:20px; border-bottom:2px solid #1B231D;">
+            <div class="certificate-check">
+              <span style="color:white; font-size:24px;">✓</span>
+            </div>
+            <div>
+              <div style="font-size:11px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:#008C4C; margin-bottom:4px;">Documento autenticado</div>
+              <div style="font-size:20px; font-weight:900; text-transform:uppercase; letter-spacing:-0.5px; color:#1B231D;">{{ form.docType }}</div>
+              <div style="font-size:13px; color:#4F5E50; margin-top:4px;">{{ form.cartorioId }}</div>
+            </div>
+          </div>
+
+          <div style="padding:16px 0; display:flex; flex-direction:column; gap:10px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:12px; color:#4F5E50; font-weight:600;">Registrado em</span>
+              <span style="font-size:13px; font-weight:700; color:#1B231D;">{{ formatarData(resultado.registered_at) }}</span>
+            </div>
+            <div v-if="resultado.viewkey_payload" style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:12px; color:#4F5E50; font-weight:600;">Privacidade</span>
+              <span class="tag tag-green">ZCash ViewKey ativo</span>
+            </div>
+          </div>
+
+          <div style="padding:16px 0 0; border-top:2px solid #EFE0BA; display:flex; gap:10px; flex-wrap:wrap;">
+            <button class="btn btn-primary btn-sm" @click="copiarLink">↗ Copiar link de verificação</button>
+            <button class="btn btn-secondary btn-sm" @click="verificarAgora">◎ Verificar agora</button>
+          </div>
+
+        </div>
+
+        <!-- Detalhes técnicos -->
+        <div style="background:#EFE0BA; border-top:2px solid #D1C09F; padding:16px 24px;">
+          <button class="tech-toggle" @click="detalhesAbertos = !detalhesAbertos">
+            <span>{{ detalhesAbertos ? '▲' : '▼' }}</span>
+            Detalhes técnicos
+          </button>
+          <div v-if="detalhesAbertos" class="tech-grid">
+            <div class="tech-row"><span class="tech-label">Doc ID</span><span class="tech-val">{{ resultado.docId }}</span></div>
+            <div class="tech-row"><span class="tech-label">Hash SHA-256</span><span class="tech-val">{{ resultado.doc_hash }}</span></div>
+            <div class="tech-row"><span class="tech-label">Irys TX</span><span class="tech-val">{{ resultado.irys_tx_id }}</span></div>
+            <div class="tech-row"><span class="tech-label">ZK Commitment</span><span class="tech-val">{{ resultado.signer_commitment }}</span></div>
+          </div>
+        </div>
+
+      </div>
 
     </div>
   </div>
@@ -173,9 +172,6 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import Card from 'primevue/card'
-import Button from 'primevue/button'
-import Message from 'primevue/message'
 import { registrarDocumento } from './integrations'
 import type { RegistrarPayload, RegistrarResult } from './types'
 
@@ -187,21 +183,30 @@ const DEMO_VIEWKEY_PAYLOAD = JSON.stringify({
 })
 
 const DEMO_MCMV = {
-  docType: 'escritura-mcmv',
-  cartorioId: 'CRIO-RJ-001',
+  docType: 'Escritura MCMV',
+  cartorioId: '1º Ofício RJ — CRIO-RJ-001',
   pubKeyX: DEMO_KEY,
   pubKeyY: DEMO_KEY,
   sigR: DEMO_KEY,
   sigS: DEMO_KEY,
   viewkeyPayload: DEMO_VIEWKEY_PAYLOAD,
+  docIdSeed: 'mcmv-escritura-demo-2024',
 }
+
+const LOADING_STEPS = [
+  'Calculando hash SHA-256 do documento...',
+  'Gerando prova ZK de autenticidade...',
+  'Armazenando permanentemente no Irys...',
+  'Registrando na Solana...',
+]
 
 export default defineComponent({
   name: 'RegistrarView',
-  components: { Card, Button, Message },
 
   data() {
     return {
+      etapa: 1,
+      etapas: ['Documento', 'Informações', 'Resultado'],
       arquivo: null as File | null,
       form: {
         docType: '',
@@ -211,9 +216,14 @@ export default defineComponent({
         sigR: '',
         sigS: '',
         viewkeyPayload: '',
+        docIdSeed: '',
       } as RegistrarPayload,
       modoDemo: false,
+      vkAberto: false,
       carregando: false,
+      loadingEtapa: 0,
+      loadingSteps: LOADING_STEPS,
+      loadingTimer: null as ReturnType<typeof setInterval> | null,
       erro: null as string | null,
       resultado: null as RegistrarResult | null,
       detalhesAbertos: false,
@@ -221,16 +231,8 @@ export default defineComponent({
   },
 
   computed: {
-    podeSalvar(): boolean {
-      return !!(
-        this.arquivo &&
-        this.form.docType &&
-        this.form.cartorioId &&
-        this.form.pubKeyX &&
-        this.form.pubKeyY &&
-        this.form.sigR &&
-        this.form.sigS
-      )
+    progressoPct(): number {
+      return Math.round(((this.loadingEtapa + 0.5) / this.loadingSteps.length) * 100)
     },
   },
 
@@ -242,17 +244,42 @@ export default defineComponent({
     }
   },
 
+  beforeUnmount() {
+    if (this.loadingTimer) clearInterval(this.loadingTimer)
+  },
+
   methods: {
     onArquivoChange(e: Event) {
       const input = e.target as HTMLInputElement
-      this.arquivo = input.files?.[0] ?? null
+      const file = input.files?.[0] ?? null
+      this.setArquivo(file)
     },
 
-    preencherDemo() {
-      Object.assign(this.form, DEMO_MCMV)
-      if (!this.arquivo) {
-        this.arquivo = new File(['Contrato MCMV - Demo CartórioChain'], 'escritura-mcmv-demo.txt', { type: 'text/plain' })
+    onDrop(e: DragEvent) {
+      const file = e.dataTransfer?.files?.[0] ?? null
+      this.setArquivo(file)
+    },
+
+    setArquivo(file: File | null) {
+      this.arquivo = file
+      if (file && !this.form.pubKeyX) {
+        // Auto-popula chaves demo para não bloquear o fluxo
+        Object.assign(this.form, {
+          pubKeyX: DEMO_KEY, pubKeyY: DEMO_KEY,
+          sigR: DEMO_KEY, sigS: DEMO_KEY,
+        })
       }
+    },
+
+    iniciarLoadingAnimation() {
+      this.loadingEtapa = 0
+      this.loadingTimer = setInterval(() => {
+        if (this.loadingEtapa < this.loadingSteps.length - 1) {
+          this.loadingEtapa++
+        } else {
+          clearInterval(this.loadingTimer!)
+        }
+      }, 1800)
     },
 
     async registrar() {
@@ -260,6 +287,8 @@ export default defineComponent({
       this.carregando = true
       this.erro = null
       this.resultado = null
+      this.etapa = 3
+      this.iniciarLoadingAnimation()
 
       try {
         this.resultado = await registrarDocumento(this.arquivo, this.form)
@@ -267,7 +296,9 @@ export default defineComponent({
         const err = e as { response?: { data?: { error?: string } }; message?: string }
         this.erro = err.response?.data?.error ?? err.message ?? 'Erro ao registrar documento.'
       } finally {
+        if (this.loadingTimer) clearInterval(this.loadingTimer)
         this.carregando = false
+        this.loadingEtapa = this.loadingSteps.length
       }
     },
 
@@ -275,6 +306,16 @@ export default defineComponent({
       if (this.resultado) {
         navigator.clipboard.writeText(this.resultado.verificarUrl)
       }
+    },
+
+    verificarAgora() {
+      if (this.resultado) {
+        this.$router.push(`/verificar/${this.resultado.docId}`)
+      }
+    },
+
+    formatarData(ts: number): string {
+      return new Date(ts * 1000).toLocaleString('pt-BR', { dateStyle: 'long', timeStyle: 'short' })
     },
   },
 })
