@@ -11,13 +11,13 @@
       <!-- Formulário de busca -->
       <div class="anim-slide-up anim-delay-1 card" style="display:flex; flex-direction:column; gap:16px;">
         <div>
-          <label class="label">ID do documento</label>
+          <label class="label">Código de verificação</label>
           <div style="display:flex; gap:0;">
             <input
               v-model="docId"
               class="inp"
               type="text"
-              placeholder="Cole o ID ou hash do documento"
+              placeholder="Cole o código do documento ou link de verificação"
               style="flex:1; border-right:none;"
               @keyup.enter="verificar"
             />
@@ -32,16 +32,23 @@
           </div>
         </div>
 
+        <!-- Verificação avançada — auditores -->
         <div>
-          <label class="label">Hash do arquivo <span style="font-weight:500; text-transform:none; letter-spacing:0;">— opcional, para re-validar conteúdo</span></label>
-          <input v-model="docHashHex" class="inp inp-mono" type="text" placeholder="SHA-256 hex do arquivo original" />
+          <button
+            style="font-size:11px; font-weight:700; color:#4F5E50; background:none; border:none; cursor:pointer; padding:0; letter-spacing:0.04em;"
+            @click="avancadoAberto = !avancadoAberto"
+          >{{ avancadoAberto ? '▲' : '▼' }} Verificação avançada (auditores)</button>
+          <div v-if="avancadoAberto" style="margin-top:10px;">
+            <label class="label">Hash do arquivo <span style="font-weight:500; text-transform:none; letter-spacing:0;">— re-valida se o conteúdo não foi alterado</span></label>
+            <input v-model="docHashHex" class="inp inp-mono" type="text" placeholder="SHA-256 hex do arquivo original" />
+          </div>
         </div>
       </div>
 
       <!-- Loading shimmer -->
       <div v-if="carregando" class="anim-fade" style="display:flex; flex-direction:column; gap:12px;">
         <div class="progress-track"><div class="progress-fill" style="width:70%; animation:progressFill 1.8s ease infinite;" /></div>
-        <div style="font-size:13px; font-weight:700; color:#4F5E50; text-align:center;">Consultando blockchain...</div>
+        <div style="font-size:13px; font-weight:700; color:#4F5E50; text-align:center;">Verificando autenticidade...</div>
       </div>
 
       <!-- Erro -->
@@ -58,7 +65,7 @@
             <div style="width:48px; height:48px; background:#EFE0BA; border:2px solid #D1C09F; display:flex; align-items:center; justify-content:center; font-size:24px; flex-shrink:0;">?</div>
             <div>
               <div style="font-size:14px; font-weight:800; color:#1B231D;">Documento não encontrado</div>
-              <div style="font-size:13px; color:#4F5E50; margin-top:4px;">Verifique se o ID está correto ou tente o hash SHA-256 do arquivo.</div>
+              <div style="font-size:13px; color:#4F5E50; margin-top:4px;">Verifique se o código está correto. Se tiver o arquivo original, use a verificação avançada abaixo.</div>
             </div>
           </div>
         </div>
@@ -91,7 +98,7 @@
               </div>
               <div v-if="resultado.documento.viewkey_payload" style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #EFE0BA; padding-bottom:12px;">
                 <span style="font-size:12px; color:#4F5E50; font-weight:600;">Privacidade do signatário</span>
-                <span class="tag tag-green">ZCash ViewKey ativo</span>
+                <span class="tag tag-green">Dados protegidos ✓</span>
               </div>
               <div v-if="resultado.documento.revoked" style="padding:12px; background:#FEF2F2; border:1.5px solid #9B1C1C;">
                 <span style="font-size:13px; font-weight:700; color:#9B1C1C;">Motivo da revogação: {{ resultado.documento.revoke_reason || 'Não informado' }}</span>
@@ -133,6 +140,7 @@ export default defineComponent({
     return {
       docId: (this.$route.params.docId as string) ?? '',
       docHashHex: '',
+      avancadoAberto: false,
       carregando: false,
       erro: null as string | null,
       resultado: null as VerificarResult | null,

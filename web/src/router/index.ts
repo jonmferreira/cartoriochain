@@ -23,6 +23,11 @@ const router = createRouter({
       name: 'verificar-doc',
       component: () => import('../views/verificar/VerificarView.vue'),
     },
+    {
+      path: '/servicos',
+      name: 'servicos',
+      component: () => import('../views/servicos/ServicosView.vue'),
+    },
   ],
 })
 

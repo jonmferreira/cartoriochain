@@ -1,0 +1,5 @@
+export { default as RegistrarSteps } from './RegistrarSteps.vue'
+export { default as RegistrarStepDocumento } from './RegistrarStepDocumento.vue'
+export { default as RegistrarStepInformacoes } from './RegistrarStepInformacoes.vue'
+export { default as RegistrarStepPagamento } from './RegistrarStepPagamento.vue'
+export { default as RegistrarStepResultado } from './RegistrarStepResultado.vue'

@@ -3,7 +3,7 @@
     <nav style="background:#1B231D; padding: 0 24px; height:52px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:50;">
       <router-link to="/" style="display:flex; align-items:center; gap:10px; text-decoration:none;">
         <span style="font-family:var(--font-display); font-weight:900; font-size:16px; letter-spacing:0.04em; text-transform:uppercase; color:#F7EACB;">CartórioChain</span>
-        <span class="tag tag-yellow" style="font-size:9px; padding:2px 7px;">ZCash · Solana</span>
+        <span class="tag tag-yellow" style="font-size:9px; padding:2px 7px;">Autenticidade Digital</span>
       </router-link>
       <div style="display:flex; gap:4px;">
         <router-link
@@ -35,7 +35,8 @@ export default defineComponent({
   data() {
     return {
       links: [
-        { to: '/',          label: 'Início'   },
+        { to: '/',          label: 'Início'    },
+        { to: '/servicos',  label: 'Serviços'  },
         { to: '/registrar', label: 'Registrar' },
         { to: '/verificar', label: 'Verificar' },
       ],

@@ -17,4 +17,8 @@ export interface RegistrarResult {
   viewkey_payload?: string
   registered_at: number
   verificarUrl: string
+  tempo_tx_hash?: string | null
+  tempo_explorer_url?: string | null
+  pda?: string
+  tx?: string
 }

@@ -1,77 +1,77 @@
-import { execSync, spawn } from "child_process";
-import * as path from "path";
+import { Noir } from "@noir-lang/noir_js";
+import { Barretenberg, UltraHonkBackend } from "@aztec/bb.js";
 import * as fs from "fs";
-import * as crypto from "crypto";
+import * as path from "path";
 
-const CIRCUIT_DIR = path.resolve(__dirname, "../../circuits/document_proof");
-const PROOFS_DIR = path.resolve(__dirname, "../../circuits/proofs");
+const CIRCUIT_PATH = path.resolve(
+  __dirname,
+  "../../circuits/document_proof/target/document_proof.json"
+);
+
+let _circuit: Record<string, unknown> | null = null;
+
+function loadCircuit(): Record<string, unknown> {
+  if (!_circuit) {
+    _circuit = JSON.parse(fs.readFileSync(CIRCUIT_PATH, "utf-8"));
+  }
+  return _circuit!;
+}
 
 export interface ProofInput {
-  docContent: Buffer;          // conteúdo bruto do documento (máx 4KB)
-  pubKeyX: Buffer;             // 32 bytes
-  pubKeyY: Buffer;             // 32 bytes
-  signatureR: Buffer;          // 32 bytes ECDSA r
-  signatureS: Buffer;          // 32 bytes ECDSA s
-  docHash: Buffer;             // SHA-256 — deve bater com on-chain
-  commitment: string;          // campo Pedersen (hex Field)
+  pubKeyX: Uint8Array;   // 32 bytes secp256k1 X
+  pubKeyY: Uint8Array;   // 32 bytes secp256k1 Y
+  signature: Uint8Array; // 64 bytes (r || s)
+  docHash: Uint8Array;   // 32 bytes SHA-256 do documento
 }
 
 export interface ProofResult {
-  proof: string;               // caminho do arquivo de prova
-  publicInputs: string;        // public inputs JSON
-}
-
-function bufToNoirArray(buf: Buffer): string {
-  return `[${Array.from(buf).join(", ")}]`;
+  proof: string;       // hex — armazenado no registro do documento
+  commitment: string;  // hex Field — Pedersen hash da chave pública, armazenado on-chain
+  publicInputs: string[]; // todos os public inputs (doc_hash fields + commitment)
 }
 
 export async function generateProof(input: ProofInput): Promise<ProofResult> {
-  fs.mkdirSync(PROOFS_DIR, { recursive: true });
+  const circuit = loadCircuit();
+  const api = await Barretenberg.new();
+  const backend = new UltraHonkBackend(circuit.bytecode as string, api);
+  const noir = new Noir(circuit as any);
 
-  // Preenche doc_content com zeros até 4096 bytes
-  const padded = Buffer.alloc(4096);
-  input.docContent.copy(padded, 0, 0, Math.min(input.docContent.length, 4096));
-
-  const proverToml = `
-doc_content = ${bufToNoirArray(padded)}
-pub_key_x = ${bufToNoirArray(input.pubKeyX)}
-pub_key_y = ${bufToNoirArray(input.pubKeyY)}
-signature_r = ${bufToNoirArray(input.signatureR)}
-signature_s = ${bufToNoirArray(input.signatureS)}
-doc_hash = ${bufToNoirArray(input.docHash)}
-commitment = "${input.commitment}"
-`.trim();
-
-  const proverPath = path.join(CIRCUIT_DIR, "Prover.toml");
-  fs.writeFileSync(proverPath, proverToml);
-
-  // nargo prove
-  execSync("nargo prove", { cwd: CIRCUIT_DIR, stdio: "pipe" });
-
-  const proofFile = path.join(CIRCUIT_DIR, "proofs", "document_proof.proof");
-  const publicInputsFile = path.join(CIRCUIT_DIR, "proofs", "document_proof.json");
-
-  return {
-    proof: proofFile,
-    publicInputs: fs.existsSync(publicInputsFile)
-      ? fs.readFileSync(publicInputsFile, "utf-8")
-      : "{}",
-  };
-}
-
-export async function verifyProof(): Promise<boolean> {
   try {
-    execSync("nargo verify", { cwd: CIRCUIT_DIR, stdio: "pipe" });
-    return true;
-  } catch {
-    return false;
+    const inputs = {
+      pub_key_x: Array.from(input.pubKeyX),
+      pub_key_y: Array.from(input.pubKeyY),
+      signature: Array.from(input.signature),
+      doc_hash: Array.from(input.docHash),
+    };
+
+    // execute gera a witness e retorna o commitment (return value do circuito)
+    const { witness, returnValue } = await noir.execute(inputs);
+    const { proof, publicInputs } = await backend.generateProof(witness);
+
+    // returnValue é o Field do commitment (output público do circuito)
+    const commitment = returnValue as string;
+    const proofHex = Buffer.from(proof).toString("hex");
+
+    return { proof: proofHex, commitment, publicInputs };
+  } finally {
+    await api.destroy();
   }
 }
 
-// Gera um Pedersen commitment das coordenadas públicas (usado pelo frontend)
-export function computeCommitment(pubKeyX: Buffer, pubKeyY: Buffer): string {
-  // Aproximação JS do Pedersen — o commitment real é gerado pelo circuito
-  // Para o frontend calcular antes de submeter ao backend
-  const raw = Buffer.concat([pubKeyX, pubKeyY]);
-  return crypto.createHash("sha256").update(raw).digest("hex");
+export async function verifyProof(
+  proofHex: string,
+  publicInputs: string[]
+): Promise<boolean> {
+  const circuit = loadCircuit();
+  const api = await Barretenberg.new();
+  const backend = new UltraHonkBackend(circuit.bytecode as string, api);
+
+  try {
+    const proof = Uint8Array.from(Buffer.from(proofHex, "hex"));
+    return await backend.verifyProof({ proof, publicInputs });
+  } catch {
+    return false;
+  } finally {
+    await api.destroy();
+  }
 }

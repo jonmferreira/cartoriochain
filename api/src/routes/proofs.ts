@@ -1,61 +1,51 @@
 import { Hono } from "hono";
 import * as crypto from "crypto";
-import { generateProof, verifyProof, computeCommitment } from "../zk";
+import { generateProof, verifyProof } from "../zk";
 import { rateLimit } from "../middleware/rate-limit";
 
 const proofs = new Hono();
 
 const HEX64 = /^[0-9a-fA-F]{64}$/;
-function validarHex64(val: unknown): val is string {
-  return typeof val === "string" && HEX64.test(val);
+const HEX128 = /^[0-9a-fA-F]{128}$/;
+
+function validHex(val: unknown, len: number): val is string {
+  return typeof val === "string" && val.length === len && /^[0-9a-fA-F]+$/.test(val);
 }
 
 proofs.use("*", rateLimit(10, 60_000));
 
 // POST /proofs/generate
+// Body (multipart or JSON): pubKeyX (hex64), pubKeyY (hex64), signature (hex128), docHash (hex64)
 proofs.post("/generate", async (c) => {
   try {
     const body = await c.req.parseBody();
-    const file = body["file"];
-    const { pubKeyX, pubKeyY, sigR, sigS, docHashHex } = body as Record<string, string>;
+    const { pubKeyX, pubKeyY, signature, docHash } = body as Record<string, string>;
 
-    if (!file || typeof file === "string" || !pubKeyX || !pubKeyY || !sigR || !sigS) {
-      return c.json({ error: "file, pubKeyX, pubKeyY, sigR, sigS obrigatorios" }, 400);
+    if (!pubKeyX || !pubKeyY || !signature || !docHash) {
+      return c.json({ error: "pubKeyX, pubKeyY, signature e docHash sao obrigatorios" }, 400);
     }
-    if (![pubKeyX, pubKeyY, sigR, sigS].every(validarHex64)) {
-      return c.json({ error: "pubKeyX, pubKeyY, sigR, sigS devem ser hex de 64 chars (32 bytes)" }, 400);
+    if (!validHex(pubKeyX, 64) || !validHex(pubKeyY, 64)) {
+      return c.json({ error: "pubKeyX e pubKeyY devem ser hex de 64 chars (32 bytes)" }, 400);
     }
-    if (docHashHex && !validarHex64(docHashHex)) {
-      return c.json({ error: "docHashHex deve ser hex de 64 chars" }, 400);
+    if (!validHex(signature, 128)) {
+      return c.json({ error: "signature deve ser hex de 128 chars (64 bytes: r||s)" }, 400);
     }
-    if (file.size > 4096) {
-      return c.json({ error: "arquivo muito grande (max 4KB)" }, 400);
+    if (!validHex(docHash, 64)) {
+      return c.json({ error: "docHash deve ser hex de 64 chars (32 bytes SHA-256)" }, 400);
     }
-
-    const docContent = Buffer.from(await file.arrayBuffer());
-    const docHash = docHashHex
-      ? Buffer.from(docHashHex, "hex")
-      : crypto.createHash("sha256").update(docContent).digest();
-
-    const pkX = Buffer.from(pubKeyX, "hex");
-    const pkY = Buffer.from(pubKeyY, "hex");
-    const commitment = computeCommitment(pkX, pkY);
 
     const result = await generateProof({
-      docContent,
-      pubKeyX: pkX,
-      pubKeyY: pkY,
-      signatureR: Buffer.from(sigR, "hex"),
-      signatureS: Buffer.from(sigS, "hex"),
-      docHash,
-      commitment,
+      pubKeyX: Uint8Array.from(Buffer.from(pubKeyX, "hex")),
+      pubKeyY: Uint8Array.from(Buffer.from(pubKeyY, "hex")),
+      signature: Uint8Array.from(Buffer.from(signature, "hex")),
+      docHash: Uint8Array.from(Buffer.from(docHash, "hex")),
     });
 
     return c.json({
-      proofFile: result.proof,
-      publicInputs: JSON.parse(result.publicInputs || "{}"),
-      commitment,
-      docHashHex: docHash.toString("hex"),
+      proof: result.proof,
+      commitment: result.commitment,
+      publicInputs: result.publicInputs,
+      docHash,
     });
   } catch (e: unknown) {
     return c.json({ error: (e as Error).message }, 500);
@@ -63,9 +53,19 @@ proofs.post("/generate", async (c) => {
 });
 
 // POST /proofs/verify
+// Body JSON: { proof: hex, publicInputs: string[] }
 proofs.post("/verify", async (c) => {
   try {
-    const valid = await verifyProof();
+    const { proof, publicInputs } = await c.req.json<{
+      proof: string;
+      publicInputs: string[];
+    }>();
+
+    if (!proof || !publicInputs?.length) {
+      return c.json({ error: "proof e publicInputs sao obrigatorios" }, 400);
+    }
+
+    const valid = await verifyProof(proof, publicInputs);
     return c.json({ valid });
   } catch (e: unknown) {
     return c.json({ error: (e as Error).message }, 500);

@@ -165,6 +165,8 @@ body {
   .certificate, .certificate-check { animation: none; }
   .progress-fill { transition: none; }
   .loading-dot { animation: none !important; }
+  .spinner { animation: none; border-top-color: #008C4C; opacity: 0.7; }
+  .shimmer { animation: none; background: #EFE0BA; }
 }
 
 .shimmer {
@@ -183,7 +185,7 @@ body {
 .progress-fill {
   height: 100%;
   background: #008C4C;
-  transition: width 0.6s ease;
+  transition: width 0.6s cubic-bezier(0.32,0.72,0,1);
 }
 
 /* ── Upload area ────────────────────────────────── */
@@ -318,6 +320,36 @@ body {
 .tech-label { width: 100px; flex-shrink: 0; font-weight: 500; }
 .tech-val { color: #1B231D; word-break: break-all; }
 
+/* ── Responsive grids ──────────────────────────── */
+.grid-2    { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+.grid-3    { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+.grid-4    { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; }
+.grid-casos{ display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+
+@media (max-width: 768px) {
+  .grid-2     { grid-template-columns: 1fr; gap: 16px; }
+  .grid-3     { grid-template-columns: 1fr; }
+  .grid-casos { grid-template-columns: 1fr; }
+  .grid-4     { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+  .grid-4 { grid-template-columns: 1fr; }
+}
+
+/* ── Spinner (pagamento PIX aguardando) ────────── */
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 3px solid #D1C09F;
+  border-top-color: #008C4C;
+  border-radius: 50%;
+  flex-shrink: 0;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
 /* ── Error message ──────────────────────────────── */
 .msg-error {
   border: 2px solid #9B1C1C;
@@ -346,6 +378,7 @@ body {
   letter-spacing: 0.08em; text-transform: uppercase;
   color: #FFD23F; padding: 0;
 }
+.vk-toggle:focus-visible { outline: 2px solid #FFD23F; outline-offset: 3px; }
 
 /* ── File drop hover state ──────────────────────── */
 .upload-area input[type="file"] { display: none; }
