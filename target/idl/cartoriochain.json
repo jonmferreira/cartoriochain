@@ -3,83 +3,307 @@
   "metadata": {
     "name": "cartoriochain",
     "version": "0.1.0",
-    "spec": "0.1.0",
-    "description": "CartorioChain — cartorio digital descentralizado"
+    "spec": "0.1.0"
   },
   "instructions": [
     {
-      "name": "registerDocument",
-      "discriminator": [108, 34, 153, 39, 82, 41, 133, 73],
+      "name": "register_document",
+      "docs": [
+        "Registra um documento no ledger Solana com hash SHA-256 e referência Irys.",
+        "viewkey_payload: dados do signatário cifrados com ZCash ViewKey (LGPD)",
+        "signer_commitment: Pedersen commitment do pubkey — anchor point do ZK proof",
+        "PDA: seeds = [\"document\", doc_id]"
+      ],
+      "discriminator": [
+        108,
+        34,
+        153,
+        39,
+        82,
+        41,
+        133,
+        73
+      ],
       "accounts": [
         {
           "name": "document",
           "writable": true,
           "pda": {
             "seeds": [
-              { "kind": "const", "value": [100, 111, 99, 117, 109, 101, 110, 116] },
-              { "kind": "arg", "path": "docId" }
+              {
+                "kind": "const",
+                "value": [
+                  100,
+                  111,
+                  99,
+                  117,
+                  109,
+                  101,
+                  110,
+                  116
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "doc_id"
+              }
             ]
           }
         },
-        { "name": "authority", "writable": true, "signer": true },
-        { "name": "systemProgram", "address": "11111111111111111111111111111111" }
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
       ],
       "args": [
-        { "name": "docId", "type": { "array": ["u8", 32] } },
-        { "name": "docHash", "type": { "array": ["u8", 32] } },
-        { "name": "irysTxId", "type": "string" },
-        { "name": "docType", "type": "string" },
-        { "name": "cartorioId", "type": "string" },
-        { "name": "viewkeyPayload", "type": "string" },
-        { "name": "signerCommitment", "type": "string" }
+        {
+          "name": "doc_id",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        },
+        {
+          "name": "doc_hash",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        },
+        {
+          "name": "irys_tx_id",
+          "type": "string"
+        },
+        {
+          "name": "doc_type",
+          "type": "string"
+        },
+        {
+          "name": "cartorio_id",
+          "type": "string"
+        },
+        {
+          "name": "viewkey_payload",
+          "type": "string"
+        },
+        {
+          "name": "signer_commitment",
+          "type": "string"
+        }
       ]
     },
     {
-      "name": "verifyDocument",
-      "discriminator": [190, 95, 163, 221, 147, 229, 57, 162],
+      "name": "revoke_document",
+      "docs": [
+        "Revoga um documento. Apenas o signatário original pode revogar.",
+        "O registro permanece no ledger (imutabilidade preservada)."
+      ],
+      "discriminator": [
+        120,
+        144,
+        209,
+        186,
+        62,
+        51,
+        209,
+        182
+      ],
+      "accounts": [
+        {
+          "name": "document",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  100,
+                  111,
+                  99,
+                  117,
+                  109,
+                  101,
+                  110,
+                  116
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "doc_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "signer": true,
+          "relations": [
+            "document"
+          ]
+        }
+      ],
+      "args": [
+        {
+          "name": "doc_id",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        },
+        {
+          "name": "reason",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "verify_document",
+      "docs": [
+        "Verifica se o hash informado corresponde ao registrado. Falha se revogado."
+      ],
+      "discriminator": [
+        190,
+        95,
+        163,
+        221,
+        147,
+        229,
+        57,
+        162
+      ],
       "accounts": [
         {
           "name": "document",
           "pda": {
             "seeds": [
-              { "kind": "const", "value": [100, 111, 99, 117, 109, 101, 110, 116] },
-              { "kind": "arg", "path": "docId" }
+              {
+                "kind": "const",
+                "value": [
+                  100,
+                  111,
+                  99,
+                  117,
+                  109,
+                  101,
+                  110,
+                  116
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "doc_id"
+              }
             ]
           }
         }
       ],
       "args": [
-        { "name": "docId", "type": { "array": ["u8", 32] } },
-        { "name": "docHash", "type": { "array": ["u8", 32] } }
-      ],
-      "returns": "bool"
-    },
-    {
-      "name": "revokeDocument",
-      "discriminator": [120, 144, 209, 186, 62, 51, 209, 182],
-      "accounts": [
         {
-          "name": "document",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              { "kind": "const", "value": [100, 111, 99, 117, 109, 101, 110, 116] },
-              { "kind": "arg", "path": "docId" }
+          "name": "doc_id",
+          "type": {
+            "array": [
+              "u8",
+              32
             ]
           }
         },
-        { "name": "authority", "writable": true, "signer": true }
+        {
+          "name": "doc_hash",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        }
       ],
-      "args": [
-        { "name": "docId", "type": { "array": ["u8", 32] } },
-        { "name": "reason", "type": "string" }
-      ]
+      "returns": "bool"
     }
   ],
   "accounts": [
     {
       "name": "DocumentRecord",
-      "discriminator": [13, 153, 55, 14, 109, 39, 136, 125]
+      "discriminator": [
+        13,
+        153,
+        55,
+        14,
+        109,
+        39,
+        136,
+        125
+      ]
+    }
+  ],
+  "events": [
+    {
+      "name": "DocumentRegistered",
+      "discriminator": [
+        39,
+        98,
+        72,
+        173,
+        200,
+        16,
+        169,
+        166
+      ]
+    },
+    {
+      "name": "DocumentRevoked",
+      "discriminator": [
+        240,
+        121,
+        35,
+        70,
+        117,
+        0,
+        11,
+        240
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "HashMismatch",
+      "msg": "Hash do documento não confere com o registrado"
+    },
+    {
+      "code": 6001,
+      "name": "AlreadyRevoked",
+      "msg": "Documento já foi revogado"
+    },
+    {
+      "code": 6002,
+      "name": "Unauthorized",
+      "msg": "Apenas o signatário original pode revogar"
+    },
+    {
+      "code": 6003,
+      "name": "EmptyRevokeReason",
+      "msg": "Motivo de revogação não pode ser vazio"
+    },
+    {
+      "code": 6004,
+      "name": "InvalidDocType",
+      "msg": "Tipo de documento inválido"
+    },
+    {
+      "code": 6005,
+      "name": "InvalidCartorioId",
+      "msg": "ID do cartório inválido"
     }
   ],
   "types": [
@@ -88,27 +312,113 @@
       "type": {
         "kind": "struct",
         "fields": [
-          { "name": "docHash", "type": { "array": ["u8", 32] } },
-          { "name": "irysTxId", "type": "string" },
-          { "name": "docType", "type": "string" },
-          { "name": "cartorioId", "type": "string" },
-          { "name": "authority", "type": "pubkey" },
-          { "name": "registeredAt", "type": "i64" },
-          { "name": "revoked", "type": "bool" },
-          { "name": "revokeReason", "type": "string" },
-          { "name": "viewkeyPayload", "type": "string" },
-          { "name": "signerCommitment", "type": "string" },
-          { "name": "bump", "type": "u8" }
+          {
+            "name": "doc_hash",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "irys_tx_id",
+            "type": "string"
+          },
+          {
+            "name": "doc_type",
+            "type": "string"
+          },
+          {
+            "name": "cartorio_id",
+            "type": "string"
+          },
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "registered_at",
+            "type": "i64"
+          },
+          {
+            "name": "revoked",
+            "type": "bool"
+          },
+          {
+            "name": "revoke_reason",
+            "type": "string"
+          },
+          {
+            "name": "viewkey_payload",
+            "docs": [
+              "Dados do signatário cifrados com ZCash ViewKey (LGPD)"
+            ],
+            "type": "string"
+          },
+          {
+            "name": "signer_commitment",
+            "docs": [
+              "Pedersen commitment do pubkey — anchor point do ZK proof"
+            ],
+            "type": "string"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "DocumentRegistered",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "doc_id",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "doc_hash",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "DocumentRevoked",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
         ]
       }
     }
-  ],
-  "errors": [
-    { "code": 6000, "name": "HashMismatch", "msg": "Hash do documento nao confere" },
-    { "code": 6001, "name": "AlreadyRevoked", "msg": "Documento ja revogado" },
-    { "code": 6002, "name": "Unauthorized", "msg": "Apenas o signatario original pode revogar" },
-    { "code": 6003, "name": "EmptyRevokeReason", "msg": "Motivo de revogacao nao pode ser vazio" },
-    { "code": 6004, "name": "InvalidDocType", "msg": "Tipo de documento invalido ou muito longo" },
-    { "code": 6005, "name": "InvalidCartorioId", "msg": "Cartorio ID invalido ou muito longo" }
   ]
 }
