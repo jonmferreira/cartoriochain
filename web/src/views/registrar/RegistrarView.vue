@@ -32,7 +32,7 @@
       <div v-if="etapa === 1" class="anim-slide-up" style="display:flex; flex-direction:column; gap:20px;">
         <div class="card">
           <label class="label">Documento</label>
-          <div class="upload-area" :class="{ 'has-file': !!arquivo }" @click="$refs.fileInput.click()" @dragover.prevent @drop.prevent="onDrop">
+          <div class="upload-area" :class="{ 'has-file': !!arquivo }" @click="($refs.fileInput as HTMLInputElement).click()" @dragover.prevent @drop.prevent="onDrop">
             <input ref="fileInput" type="file" accept=".pdf,.doc,.docx,.txt" @change="onArquivoChange" />
             <div v-if="!arquivo" style="display:flex; flex-direction:column; align-items:center; gap:10px;">
               <span style="font-size:32px; color:#4F5E50;">⬆</span>
