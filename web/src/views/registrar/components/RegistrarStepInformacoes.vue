@@ -39,15 +39,12 @@
         <p style="font-size:12px; color:#D1C09F; margin-top:6px; line-height:1.5;">
           Cifra os dados do signatário. Só você pode acessá-los com sua chave pessoal — LGPD nativa.
         </p>
-        <div v-if="vkAberto" style="margin-top:12px;">
-          <label class="label" style="color:#D1C09F;">Payload cifrado</label>
-          <textarea
-            v-model="store.viewkeyPayload"
-            rows="3"
-            class="inp inp-mono"
-            placeholder='{"v":"zcash-vk-v1","payload":"...","hint":"zxviews1..."}'
-            style="background:#2C3A2F; border-color:#4F5E50; color:#F7EACB; resize:none;"
-          />
+        <div v-if="vkAberto" style="margin-top:12px; display:flex; align-items:center; gap:8px; padding:10px 14px; background:#2C3A2F; border:1.5px solid #4F5E50;">
+          <svg width="14" height="14" viewBox="0 0 13 13" fill="none" stroke="#008C4C" stroke-width="1.8" stroke-linecap="square" aria-hidden="true">
+            <rect x="1.5" y="5.5" width="10" height="6"/>
+            <path d="M4 5.5V3.5a2.5 2.5 0 0 1 5 0v2"/>
+          </svg>
+          <span style="font-size:12px; font-weight:700; color:#008C4C; text-transform:uppercase; letter-spacing:0.06em;">Privacidade ativa</span>
         </div>
       </div>
     </div>

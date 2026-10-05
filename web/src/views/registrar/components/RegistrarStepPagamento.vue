@@ -3,25 +3,23 @@
 
     <div class="card" style="display:flex; flex-direction:column; gap:0; overflow:hidden;">
 
-      <!-- Cabeçalho verde com valor -->
-      <div style="background:#008C4C; padding:20px 24px;">
-        <div style="font-size:11px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:#A8D5B5; margin-bottom:6px;">
-          Taxa de autenticação
+      <!-- Cabeçalho verde com valor + QR -->
+      <div style="background:#008C4C; padding:20px 24px; display:flex; align-items:center; justify-content:space-between; gap:20px;">
+        <div style="flex:1;">
+          <div style="font-size:11px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:#A8D5B5; margin-bottom:6px;">
+            Taxa de autenticação
+          </div>
+          <div style="font-size:40px; font-weight:900; color:white; font-family:var(--font-display); letter-spacing:-1px;">
+            R$&nbsp;5,00
+          </div>
+          <div style="font-size:13px; color:#A8D5B5; margin-top:4px;">
+            {{ store.docType }} — CartórioChain
+          </div>
         </div>
-        <div style="font-size:40px; font-weight:900; color:white; font-family:var(--font-display); letter-spacing:-1px;">
-          R$&nbsp;5,00
-        </div>
-        <div style="font-size:13px; color:#A8D5B5; margin-top:4px;">
-          {{ store.docType }} — CartórioChain
-        </div>
-      </div>
-
-      <!-- QR + chave PIX -->
-      <div style="padding:24px; display:flex; flex-direction:column; align-items:center; gap:20px;">
 
         <!-- QR code mock -->
-        <div style="width:160px; height:160px; border:3px solid #1B231D; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; background:white;">
-          <svg width="100" height="100" viewBox="0 0 100 100" fill="none">
+        <div style="width:120px; height:120px; background:#FFD23F; padding:8px; flex-shrink:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;">
+          <svg width="88" height="88" viewBox="0 0 100 100" fill="none">
             <rect x="5"  y="5"  width="30" height="30" fill="none" stroke="#1B231D" stroke-width="4"/>
             <rect x="12" y="12" width="16" height="16" fill="#1B231D"/>
             <rect x="65" y="5"  width="30" height="30" fill="none" stroke="#1B231D" stroke-width="4"/>
@@ -49,8 +47,12 @@
             <rect x="84" y="76" width="6" height="6" fill="#1B231D"/>
             <rect x="84" y="84" width="6" height="6" fill="#1B231D"/>
           </svg>
-          <div style="font-size:9px; font-weight:800; color:#4F5E50; letter-spacing:0.05em;">PIX</div>
+          <div style="font-size:8px; font-weight:800; color:#1B231D; letter-spacing:0.08em;">PIX</div>
         </div>
+      </div>
+
+      <!-- Chave PIX -->
+      <div style="padding:24px; display:flex; flex-direction:column; gap:20px;">
 
         <!-- Chave PIX -->
         <div style="width:100%; display:flex; flex-direction:column; gap:6px;">
@@ -71,6 +73,7 @@
           Escaneie o QR code ou copie a chave PIX.<br>
           O registro é confirmado automaticamente após o pagamento.
         </div>
+
       </div>
     </div>
 

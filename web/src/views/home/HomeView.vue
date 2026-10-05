@@ -117,24 +117,25 @@
     </section>
 
     <!-- Loop econômico ─────────────────────────────────── -->
-    <section style="background:#EFE0BA; border-bottom:2px solid #D1C09F; padding:48px 24px;">
-      <div style="max-width:900px; margin:0 auto;">
+    <section style="background:#EFE0BA; border-bottom:2px solid #D1C09F; padding:48px 0;">
+      <div style="max-width:900px; margin:0 auto; padding:0 24px; margin-bottom:28px;">
         <div style="font-size:11px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:#4F5E50; margin-bottom:8px;">Onde vai o R$5</div>
-        <h2 style="font-family:var(--font-display); font-weight:900; font-size:24px; text-transform:uppercase; letter-spacing:-0.5px; color:#1B231D; margin-bottom:32px; line-height:1.1;">Cada centavo é rastreável.</h2>
-        <div style="display:flex; align-items:stretch; gap:0; overflow-x:auto; padding-bottom:4px;">
-
-          <div v-for="(no, i) in loopEconomico" :key="i" style="display:flex; align-items:center; flex-shrink:0;">
-            <!-- Nó -->
-            <div style="display:flex; flex-direction:column; align-items:center; gap:10px; min-width:140px; max-width:160px; text-align:center;">
-              <div :style="`width:52px; height:52px; border:3px solid #1B231D; background:${no.bg}; display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:900; font-family:var(--font-display); color:#1B231D; flex-shrink:0;`">{{ no.icone }}</div>
-              <div style="font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:-0.2px; color:#1B231D; line-height:1.2;">{{ no.titulo }}</div>
-              <div style="font-size:11px; color:#4F5E50; line-height:1.4;">{{ no.descricao }}</div>
-              <span v-if="no.tag" style="font-size:9px; font-weight:800; letter-spacing:0.08em; text-transform:uppercase; background:#1B231D; color:#FFD23F; padding:2px 8px;">{{ no.tag }}</span>
+        <h2 style="font-family:var(--font-display); font-weight:900; font-size:24px; text-transform:uppercase; letter-spacing:-0.5px; color:#1B231D; line-height:1.1;">Cada centavo é rastreável.</h2>
+      </div>
+      <div class="loop-marquee-outer">
+        <div class="loop-marquee-track">
+          <template v-for="n in 2" :key="n">
+            <div v-for="(no, i) in loopEconomico" :key="`${n}-${i}`" class="loop-item">
+              <div class="loop-node" :style="`background:${no.bg}`">
+                <div class="loop-icon">{{ no.icone }}</div>
+                <div class="loop-titulo">{{ no.titulo }}</div>
+                <div class="loop-desc">{{ no.descricao }}</div>
+                <span v-if="no.tag" class="loop-tag">{{ no.tag }}</span>
+              </div>
+              <div v-if="i < loopEconomico.length - 1" class="loop-arrow">→</div>
             </div>
-            <!-- Seta -->
-            <div v-if="i < loopEconomico.length - 1" style="font-size:20px; color:#D1C09F; font-weight:900; padding:0 12px; flex-shrink:0;">→</div>
-          </div>
-
+            <div class="loop-spacer"></div>
+          </template>
         </div>
       </div>
     </section>
@@ -255,11 +256,11 @@ export default defineComponent({
         { label: 'Privacidade',        valor: 'Total' },
       ],
       loopEconomico: [
-        { icone: 'R$5', bg: '#FFD23F', titulo: 'Você paga', descricao: 'Taxa única via PIX por documento', tag: null },
-        { icone: '✓',  bg: '#F0FAF4', titulo: 'Autenticado', descricao: 'ZK proof gerado e vinculado ao arquivo', tag: 'ZK Proof' },
-        { icone: '◎',  bg: '#FFFDF6', titulo: 'Registrado', descricao: 'Timestamp imutável na Solana', tag: '~R$0,001' },
-        { icone: '∞',  bg: '#FFFDF6', titulo: 'Armazenado', descricao: 'Documento permanente via Irys', tag: '~R$0,10' },
-        { icone: '↗',  bg: '#EFE0BA', titulo: 'Verificável', descricao: 'Link público para qualquer pessoa, para sempre', tag: 'Grátis' },
+        { icone: 'R$5', bg: '#FFD23F', titulo: 'Promocional', descricao: 'Taxa única via PIX por documento', tag: null },
+        { icone: '✓',  bg: '#C6ECD8', titulo: 'Autenticado', descricao: 'ZK proof gerado e vinculado ao arquivo', tag: 'ZK Proof' },
+        { icone: '◎',  bg: '#C5DCF0', titulo: 'Registrado', descricao: 'Timestamp imutável na Solana', tag: '~R$0,001' },
+        { icone: '∞',  bg: '#E8D5F5', titulo: 'Armazenado', descricao: 'Documento permanente via Irys', tag: '~R$0,10' },
+        { icone: '↗',  bg: '#F7EACB', titulo: 'Verificável', descricao: 'Link público para qualquer pessoa, para sempre', tag: 'Grátis' },
       ],
       passos: [
         { titulo: 'Envie o documento',        descricao: 'Geramos uma impressão digital única do arquivo — o conteúdo nunca sai do seu dispositivo.',         tech: 'SHA-256' },
@@ -278,3 +279,104 @@ export default defineComponent({
   },
 })
 </script>
+
+<style scoped>
+.loop-marquee-outer {
+  overflow: hidden;
+  width: 100%;
+  padding: 4px 0;
+}
+
+.loop-marquee-track {
+  display: flex;
+  align-items: stretch;
+  width: max-content;
+  animation: loop-scroll 38s linear infinite;
+}
+
+.loop-marquee-track:hover {
+  animation-play-state: paused;
+}
+
+.loop-item {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.loop-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 172px;
+  text-align: center;
+  padding: 32px 16px;
+  border: 2px solid #1B231D;
+  box-sizing: border-box;
+}
+
+.loop-icon {
+  width: 60px;
+  height: 60px;
+  border: 3px solid #1B231D;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 900;
+  font-family: var(--font-display);
+  color: #1B231D;
+  flex-shrink: 0;
+}
+
+.loop-titulo {
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.2px;
+  color: #1B231D;
+  line-height: 1.2;
+}
+
+.loop-desc {
+  font-size: 11px;
+  color: #4F5E50;
+  line-height: 1.4;
+}
+
+.loop-tag {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: #1B231D;
+  color: #FFD23F;
+  padding: 2px 8px;
+}
+
+.loop-arrow {
+  font-size: 20px;
+  color: #D1C09F;
+  font-weight: 900;
+  padding: 0 14px;
+  flex-shrink: 0;
+}
+
+.loop-spacer {
+  width: 90vw;
+  flex-shrink: 0;
+}
+
+@keyframes loop-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loop-marquee-track {
+    animation: none;
+    overflow-x: auto;
+  }
+}
+</style>

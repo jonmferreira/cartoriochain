@@ -23,35 +23,50 @@ async function recordDemo() {
 
   const browser = await chromium.launch({
     headless: false,
-    args: ['--window-size=1280,720', '--window-position=0,0', '--disable-blink-features=AutomationControlled'],
+    args: [
+      '--window-size=1920,1080',
+      '--window-position=0,0',
+      '--start-fullscreen',
+      '--disable-blink-features=AutomationControlled',
+    ],
   });
 
   const context = await browser.newContext({
-    viewport: { width: 1280, height: 720 },
-    recordVideo: { dir: OUTPUT_DIR, size: { width: 1280, height: 720 } },
+    viewport: { width: 1920, height: 1080 },
+    recordVideo: { dir: OUTPUT_DIR, size: { width: 1920, height: 1080 } },
     permissions: ['clipboard-read', 'clipboard-write'],
   });
 
   const page = await context.newPage();
 
-  // ── Cena 1: Home — problema e solução (12s) ───────────────────────
+  // Oculta scrollbar em todas as páginas (sem afetar scroll funcional)
+  await page.addInitScript(() => {
+    const style = document.createElement('style');
+    style.textContent = '::-webkit-scrollbar { display: none !important; } * { scrollbar-width: none !important; }';
+    document.head.appendChild(style);
+  });
+
+  // ── Cena 1: Home — problema e solução (8s) ────────────────────────
   console.log('[1/6] Home...');
   await page.goto(`${BASE_URL}/`);
-  await sleep(3000);
+  await sleep(1500); // hero visível
 
-  await smoothScroll(page, 500);
-  await sleep(3000); // seção problema/solução
+  await smoothScroll(page, 400);
+  await sleep(1500); // seção problema
 
-  await smoothScroll(page, 1000);
-  await sleep(3000); // comparativo R$5 vs R$2.400
+  await smoothScroll(page, 800);
+  await sleep(1500); // comparativo R$5 vs R$2.400
+
+  await smoothScroll(page, 1200);
+  await sleep(1000); // mais conteúdo
 
   await smoothScroll(page, 0);
-  await sleep(2000);
+  await sleep(1000);
 
-  // ── Cena 2: Registrar — Step 1 upload (8s) ────────────────────────
+  // ── Cena 2: Registrar — Step 1 upload (4s) ────────────────────────
   console.log('[2/6] Step 1 — upload...');
   await page.goto(`${BASE_URL}/registrar?demo=mcmv`);
-  await sleep(3000); // arquivo pré-carregado visível
+  await sleep(1500); // arquivo pré-carregado visível
 
   await page.locator('button:has-text("Avançar")').click();
 
@@ -141,6 +156,15 @@ async function recordDemo() {
     }
   }
 
+  await sleep(2000);
+
+  // ── Cena final: volta para a home ─────────────────────────────────
+  console.log('[fim] Voltando para home...');
+  await page.goto(`${BASE_URL}/`);
+  await sleep(1000);
+  await smoothScroll(page, 400);
+  await sleep(1500);
+  await smoothScroll(page, 0);
   await sleep(2000);
 
   // ── Salva ─────────────────────────────────────────────────────────

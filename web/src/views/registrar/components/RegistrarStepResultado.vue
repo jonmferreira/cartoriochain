@@ -68,7 +68,7 @@
       </div>
 
       <!-- Detalhes técnicos (colapsável) -->
-      <div style="background:#EFE0BA; border-top:2px solid #D1C09F; padding:16px 24px;">
+      <div style="border-top:2px solid #EFE0BA; padding:16px 24px;">
         <button class="tech-toggle" @click="detalhesAbertos = !detalhesAbertos">
           <span>{{ detalhesAbertos ? '▲' : '▼' }}</span>
           Detalhes técnicos
