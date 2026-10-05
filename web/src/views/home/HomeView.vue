@@ -1,5 +1,5 @@
 <template>
-  <div style="background:#F7EACB; min-height:100vh;">
+  <div style="background:#1B231D; min-height:100vh;">
 
     <!-- Hero ───────────────────────────────────────────── -->
     <section style="padding:64px 24px 48px; max-width:900px; margin:0 auto;">
@@ -10,13 +10,13 @@
           <div style="margin-bottom:20px;">
             <span class="tag tag-green">Hackathon Colosseum · ZCash Track</span>
           </div>
-          <h1 style="font-family:var(--font-display); font-weight:900; font-size:clamp(36px,4.5vw,58px); line-height:1; letter-spacing:-2px; text-transform:uppercase; color:#1B231D; margin-bottom:8px; word-break:break-word;">
+          <h1 style="font-family:var(--font-display); font-weight:900; font-size:clamp(36px,4.5vw,58px); line-height:1; letter-spacing:-2px; text-transform:uppercase; color:#F7EACB; margin-bottom:8px; word-break:break-word;">
             Autentique<br/>
             <span style="background:#FFD23F; padding:0 6px; display:inline-block; margin:4px 0;">documentos</span><br/>
             com prova<br/>criptográfica.<br/>
             <span style="font-size:0.55em; letter-spacing:-0.5px; color:#4F5E50;">Sem intermediário.</span>
           </h1>
-          <p style="font-size:16px; color:#4F5E50; max-width:420px; margin-top:16px; line-height:1.6;">
+          <p style="font-size:16px; color:#8A9E8C; max-width:420px; margin-top:16px; line-height:1.6;">
             Cartório digital descentralizado para o mercado brasileiro.
             Prova criptográfica de autenticidade. Dados do signatário protegidos por ZCash ViewKey — LGPD nativa.
           </p>
@@ -32,15 +32,15 @@
 
         <!-- Sticker card -->
         <div class="anim-slide-up anim-delay-2" style="width:240px; flex-shrink:0;">
-          <div style="border:2px solid #1B231D; background:#FFFDF6; padding:20px; position:relative;">
+          <div style="border:2px solid #3A4F3E; background:#2C3A2E; padding:20px; position:relative; box-shadow:0 12px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05);">
             <div style="position:absolute; top:-10px; left:16px; background:#FFD23F; border:2px solid #1B231D; padding:2px 10px; font-size:10px; font-weight:800; letter-spacing:0.08em; text-transform:uppercase;">CartórioChain</div>
             <div style="margin-top:8px; display:flex; flex-direction:column; gap:14px;">
               <div v-for="stat in stats" :key="stat.label">
                 <div style="font-size:10px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:#4F5E50;">{{ stat.label }}</div>
-                <div style="font-size:22px; font-weight:900; color:#1B231D; margin-top:2px;">{{ stat.valor }}</div>
+                <div style="font-size:22px; font-weight:900; color:#F7EACB; margin-top:2px;">{{ stat.valor }}</div>
               </div>
             </div>
-            <div style="margin-top:16px; padding-top:14px; border-top:1.5px solid #D1C09F; font-size:10px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:#008C4C;">
+            <div style="margin-top:16px; padding-top:14px; border-top:1.5px solid #3A4F3E; font-size:10px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:#008C4C;">
               ✓ Sem conta · Sem carteira
             </div>
           </div>
@@ -50,24 +50,24 @@
     </section>
 
     <!-- Problema ─────────────────────────────────────── -->
-    <section style="background:#EFE0BA; border-top:2px solid #D1C09F; border-bottom:2px solid #D1C09F; padding:48px 24px;">
+    <section style="background:#243029; border-top:3px solid #008C4C; border-bottom:3px solid #008C4C; padding:48px 24px;">
       <div style="max-width:900px; margin:0 auto;">
         <div class="anim-slide-up grid-2">
           <div>
-            <div style="font-size:11px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:#4F5E50; margin-bottom:12px;">O problema</div>
-            <h2 style="font-family:var(--font-display); font-weight:900; font-size:28px; text-transform:uppercase; letter-spacing:-0.5px; color:#1B231D; line-height:1.1; margin-bottom:12px;">
+            <div style="font-size:11px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:#6B8A6E; margin-bottom:12px;">O problema</div>
+            <h2 style="font-family:var(--font-display); font-weight:900; font-size:28px; text-transform:uppercase; letter-spacing:-0.5px; color:#F7EACB; line-height:1.1; margin-bottom:12px;">
               Documentos falsificados, perdidos ou inacessíveis.
             </h2>
-            <p style="color:#4F5E50; font-size:14px; line-height:1.6;">
+            <p style="color:#8A9E8C; font-size:14px; line-height:1.6;">
               Programas como o <strong>Minha Casa Minha Vida</strong> movimentam bilhões em contratos. Cartórios tradicionais são lentos, caros e centralizados. Um documento pode ser falsificado e nunca ser detectado.
             </p>
           </div>
           <div>
-            <div style="font-size:11px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:#4F5E50; margin-bottom:12px;">A solução</div>
-            <h2 style="font-family:var(--font-display); font-weight:900; font-size:28px; text-transform:uppercase; letter-spacing:-0.5px; color:#1B231D; line-height:1.1; margin-bottom:12px;">
+            <div style="font-size:11px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:#6B8A6E; margin-bottom:12px;">A solução</div>
+            <h2 style="font-family:var(--font-display); font-weight:900; font-size:28px; text-transform:uppercase; letter-spacing:-0.5px; color:#F7EACB; line-height:1.1; margin-bottom:12px;">
               ZK Proof + ZCash ViewKey + Armazenamento permanente.
             </h2>
-            <p style="color:#4F5E50; font-size:14px; line-height:1.6;">
+            <p style="color:#8A9E8C; font-size:14px; line-height:1.6;">
               Cada documento gera uma prova criptográfica verificável por qualquer pessoa. Os dados do signatário ficam cifrados on-chain — só o titular da ViewKey pode ver.
             </p>
           </div>
@@ -78,12 +78,12 @@
     <!-- Como funciona ─────────────────────────────────── -->
     <section style="padding:56px 24px;">
       <div style="max-width:900px; margin:0 auto;">
-        <div style="font-size:11px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:#4F5E50; margin-bottom:32px; text-align:center;">Como funciona</div>
+        <div style="font-size:11px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:#6B8A6E; margin-bottom:32px; text-align:center;">Como funciona</div>
         <div class="grid-3">
-          <div v-for="(passo, i) in passos" :key="i" class="anim-slide-up" :class="`anim-delay-${i+1}`" style="background:#FFFDF6; border:2px solid #1B231D; padding:28px 20px; position:relative;">
+          <div v-for="(passo, i) in passos" :key="i" class="anim-slide-up" :class="`anim-delay-${i+1}`" style="background:#2C3A2E; border:2px solid #3A4F3E; border-top:3px solid #008C4C; padding:28px 20px; position:relative; box-shadow:0 8px 32px rgba(0,0,0,0.45)">
             <div style="font-size:48px; font-weight:900; color:#D1C09F; line-height:1; margin-bottom:12px; font-family:var(--font-display);">0{{ i+1 }}</div>
-            <div style="font-size:15px; font-weight:800; text-transform:uppercase; letter-spacing:-0.2px; color:#1B231D; margin-bottom:8px;">{{ passo.titulo }}</div>
-            <p style="font-size:13px; color:#4F5E50; line-height:1.5;">{{ passo.descricao }}</p>
+            <div style="font-size:15px; font-weight:800; text-transform:uppercase; letter-spacing:-0.2px; color:#F7EACB; margin-bottom:8px;">{{ passo.titulo }}</div>
+            <p style="font-size:13px; color:#8A9E8C; line-height:1.5;">{{ passo.descricao }}</p>
             <div style="margin-top:14px;">
               <span class="tag tag-muted">{{ passo.tech }}</span>
             </div>
@@ -117,10 +117,10 @@
     </section>
 
     <!-- Loop econômico ─────────────────────────────────── -->
-    <section style="background:#EFE0BA; border-bottom:2px solid #D1C09F; padding:48px 0;">
+    <section style="background:#1B231D; border-bottom:3px solid #008C4C; padding:48px 0;">
       <div style="max-width:900px; margin:0 auto; padding:0 24px; margin-bottom:28px;">
         <div style="font-size:11px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:#4F5E50; margin-bottom:8px;">Onde vai o R$5</div>
-        <h2 style="font-family:var(--font-display); font-weight:900; font-size:24px; text-transform:uppercase; letter-spacing:-0.5px; color:#1B231D; line-height:1.1;">Cada centavo é rastreável.</h2>
+        <h2 style="font-family:var(--font-display); font-weight:900; font-size:24px; text-transform:uppercase; letter-spacing:-0.5px; color:#F7EACB; line-height:1.1;">Cada centavo é rastreável.</h2>
       </div>
       <div class="loop-marquee-outer">
         <div class="loop-marquee-track">
@@ -231,7 +231,7 @@
     <section style="padding:56px 24px; text-align:center;">
       <div style="max-width:500px; margin:0 auto;">
         <div style="font-size:11px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:#4F5E50; margin-bottom:16px;">Experimente agora</div>
-        <h3 style="font-family:var(--font-display); font-weight:900; font-size:28px; text-transform:uppercase; letter-spacing:-0.5px; color:#1B231D; margin-bottom:24px;">Registro em menos de 30 segundos.</h3>
+        <h3 style="font-family:var(--font-display); font-weight:900; font-size:28px; text-transform:uppercase; letter-spacing:-0.5px; color:#F7EACB; margin-bottom:24px;">Registro em menos de 30 segundos.</h3>
         <button class="btn btn-primary btn-lg" style="font-size:16px; padding:20px 40px;" @click="$router.push('/registrar?demo=mcmv')">
           ↗ Ver demo: escritura MCMV
         </button>
@@ -260,7 +260,7 @@ export default defineComponent({
         { icone: '✓',  bg: '#C6ECD8', titulo: 'Autenticado', descricao: 'ZK proof gerado e vinculado ao arquivo', tag: 'ZK Proof' },
         { icone: '◎',  bg: '#C5DCF0', titulo: 'Registrado', descricao: 'Timestamp imutável na Solana', tag: '~R$0,001' },
         { icone: '∞',  bg: '#E8D5F5', titulo: 'Armazenado', descricao: 'Documento permanente via Irys', tag: '~R$0,10' },
-        { icone: '↗',  bg: '#F7EACB', titulo: 'Verificável', descricao: 'Link público para qualquer pessoa, para sempre', tag: 'Grátis' },
+        { icone: '↗',  bg: '#D4E8D0', titulo: 'Verificável', descricao: 'Link público para qualquer pessoa, para sempre', tag: 'Grátis' },
       ],
       passos: [
         { titulo: 'Envie o documento',        descricao: 'Geramos uma impressão digital única do arquivo — o conteúdo nunca sai do seu dispositivo.',         tech: 'SHA-256' },

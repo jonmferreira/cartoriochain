@@ -16,7 +16,7 @@
             <path d="M9 15 L18 6 L27 15"/>
             <path d="M6 30 L30 30"/>
           </svg>
-          <div style="font-size:13px; font-weight:700; color:#1B231D;">Clique ou arraste o documento aqui</div>
+          <div style="font-size:13px; font-weight:700; color:#F7EACB;">Clique ou arraste o documento aqui</div>
           <div style="font-size:11px; color:#4F5E50;">PDF, DOC, DOCX, TXT</div>
         </div>
         <div v-else style="display:flex; flex-direction:column; align-items:center; gap:8px;">

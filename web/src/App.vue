@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen flex flex-col" style="background:#F7EACB">
+  <div class="min-h-screen flex flex-col" style="background:#1B231D">
     <nav style="background:#1B231D; padding: 0 24px; height:52px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:50;">
       <router-link to="/" style="display:flex; align-items:center; gap:10px; text-decoration:none;">
         <span style="font-family:var(--font-display); font-weight:900; font-size:16px; letter-spacing:0.04em; text-transform:uppercase; color:#F7EACB;">CartórioChain</span>

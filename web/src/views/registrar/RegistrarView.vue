@@ -1,5 +1,5 @@
 <template>
-  <div style="background:#F7EACB; min-height:100vh; padding:40px 24px;">
+  <div style="background:#1B231D; min-height:100vh; padding:40px 24px;">
     <div style="max-width:600px; margin:0 auto; display:flex; flex-direction:column; gap:28px;">
 
       <!-- Header -->
@@ -7,7 +7,7 @@
         <div style="font-size:11px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:#4F5E50; margin-bottom:8px;">
           Cartório Digital
         </div>
-        <h1 style="font-family:var(--font-display); font-weight:900; font-size:32px; text-transform:uppercase; letter-spacing:-1px; color:#1B231D; line-height:1;">
+        <h1 style="font-family:var(--font-display); font-weight:900; font-size:32px; text-transform:uppercase; letter-spacing:-1px; color:#F7EACB; line-height:1;">
           Registrar documento
         </h1>
       </div>

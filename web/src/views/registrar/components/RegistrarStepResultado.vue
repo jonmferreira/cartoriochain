@@ -2,7 +2,7 @@
   <div>
     <!-- Loading -->
     <div v-if="store.carregando" class="anim-fade card" style="display:flex; flex-direction:column; gap:20px;">
-      <div style="font-size:13px; font-weight:800; text-transform:uppercase; letter-spacing:0.06em; color:#1B231D;">
+      <div style="font-size:13px; font-weight:800; text-transform:uppercase; letter-spacing:0.06em; color:#F7EACB;">
         Autenticando...
       </div>
       <div class="progress-track">
@@ -16,7 +16,7 @@
           :class="{ active: store.loadingEtapa === i, done: store.loadingEtapa > i }"
         >
           <div class="loading-dot" />
-          <span style="font-size:13px; font-weight:600; color:#1B231D;">{{ step }}</span>
+          <span style="font-size:13px; font-weight:600; color:#F7EACB;">{{ step }}</span>
         </div>
       </div>
     </div>
@@ -31,7 +31,7 @@
     <div v-if="store.resultado && !store.carregando" class="certificate">
       <div style="padding:24px 24px 0;">
 
-        <div style="display:flex; align-items:flex-start; gap:16px; padding-bottom:20px; border-bottom:2px solid #1B231D;">
+        <div style="display:flex; align-items:flex-start; gap:16px; padding-bottom:20px; border-bottom:2px solid #3A4F3E;">
           <div class="certificate-check">
             <span style="color:white; font-size:24px;">✓</span>
           </div>
@@ -39,7 +39,7 @@
             <div style="font-size:11px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:#008C4C; margin-bottom:4px;">
               Documento autenticado
             </div>
-            <div style="font-size:20px; font-weight:900; text-transform:uppercase; letter-spacing:-0.5px; color:#1B231D;">
+            <div style="font-size:20px; font-weight:900; text-transform:uppercase; letter-spacing:-0.5px; color:#F7EACB;">
               {{ store.docType }}
             </div>
             <div style="font-size:13px; color:#4F5E50; margin-top:4px;">CartórioChain</div>
@@ -49,7 +49,7 @@
         <div style="padding:16px 0; display:flex; flex-direction:column; gap:10px;">
           <div style="display:flex; justify-content:space-between; align-items:center;">
             <span style="font-size:12px; color:#4F5E50; font-weight:600;">Registrado em</span>
-            <span style="font-size:13px; font-weight:700; color:#1B231D;">{{ formatarData(store.resultado.registered_at) }}</span>
+            <span style="font-size:13px; font-weight:700; color:#F7EACB;">{{ formatarData(store.resultado.registered_at) }}</span>
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center;">
             <span style="font-size:12px; color:#4F5E50; font-weight:600;">Pagamento</span>
@@ -61,14 +61,14 @@
           </div>
         </div>
 
-        <div style="padding:16px 0 0; border-top:2px solid #EFE0BA; display:flex; gap:10px; flex-wrap:wrap;">
+        <div style="padding:16px 0 0; border-top:2px solid #3A4F3E; display:flex; gap:10px; flex-wrap:wrap;">
           <button class="btn btn-primary btn-sm" @click="copiarLink">↗ Copiar link de verificação</button>
           <button class="btn btn-secondary btn-sm" @click="verificarAgora">◎ Verificar agora</button>
         </div>
       </div>
 
       <!-- Detalhes técnicos (colapsável) -->
-      <div style="border-top:2px solid #EFE0BA; padding:16px 24px;">
+      <div style="border-top:2px solid #3A4F3E; padding:16px 24px;">
         <button class="tech-toggle" @click="detalhesAbertos = !detalhesAbertos">
           <span>{{ detalhesAbertos ? '▲' : '▼' }}</span>
           Detalhes técnicos

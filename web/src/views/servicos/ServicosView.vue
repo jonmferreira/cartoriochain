@@ -1,28 +1,28 @@
 <template>
-  <div style="background:#F7EACB; min-height:100vh; padding:48px 24px;">
+  <div style="background:#1B231D; min-height:100vh; padding:48px 24px;">
     <div style="max-width:900px; margin:0 auto; display:flex; flex-direction:column; gap:40px;">
 
       <!-- Header -->
       <div class="anim-slide-up">
         <div style="font-size:11px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:#4F5E50; margin-bottom:8px;">Cobertura do produto</div>
-        <h1 style="font-family:var(--font-display); font-weight:900; font-size:clamp(32px,5vw,56px); text-transform:uppercase; letter-spacing:-1.5px; color:#1B231D; line-height:1; margin-bottom:16px;">Serviços<br/>cartoriais</h1>
+        <h1 style="font-family:var(--font-display); font-weight:900; font-size:clamp(32px,5vw,56px); text-transform:uppercase; letter-spacing:-1.5px; color:#F7EACB; line-height:1; margin-bottom:16px;">Serviços<br/>cartoriais</h1>
         <p style="font-size:15px; color:#4F5E50; max-width:520px; line-height:1.6;">12 serviços de cartório físico brasileiro mapeados para o protocolo CartórioChain. Cada serviço mapeia diretamente para uma combinação de ZK Proof, ZCash ViewKey, Solana e Irys.</p>
       </div>
 
       <!-- Cobertura summary -->
       <div class="anim-slide-up anim-delay-1 grid-4">
-        <div v-for="c in cobertura" :key="c.label" style="border:2px solid #1B231D; padding:20px 16px; background:#FFFDF6;">
+        <div v-for="c in cobertura" :key="c.label" style="border:2px solid #3A4F3E; padding:20px 16px; background:#243029;">
           <div :style="`font-size:28px; font-weight:900; color:${c.cor}; font-family:var(--font-display);`">{{ c.qtd }}</div>
           <div style="font-size:10px; font-weight:800; letter-spacing:0.08em; text-transform:uppercase; color:#4F5E50; margin-top:6px; line-height:1.3;">{{ c.label }}</div>
         </div>
       </div>
 
       <!-- Tech legend -->
-      <div class="anim-slide-up anim-delay-2" style="background:#EFE0BA; border:2px solid #D1C09F; padding:20px 24px;">
+      <div class="anim-slide-up anim-delay-2" style="background:#243029; border:2px solid #3A4F3E; padding:20px 24px;">
         <div style="font-size:11px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:#4F5E50; margin-bottom:14px;">Stack tecnológico</div>
         <div style="display:flex; flex-wrap:wrap; gap:8px;">
-          <div v-for="t in techStack" :key="t.nome" style="border:2px solid #1B231D; padding:6px 12px; background:#FFFDF6; display:flex; flex-direction:column; gap:2px;">
-            <span style="font-size:12px; font-weight:800; color:#1B231D;">{{ t.nome }}</span>
+          <div v-for="t in techStack" :key="t.nome" style="border:2px solid #3A4F3E; padding:6px 12px; background:#1B231D; display:flex; flex-direction:column; gap:2px;">
+            <span style="font-size:12px; font-weight:800; color:#F7EACB;">{{ t.nome }}</span>
             <span style="font-size:11px; color:#4F5E50;">{{ t.papel }}</span>
           </div>
         </div>
@@ -31,7 +31,7 @@
       <!-- Transparência de custos (Ponto 3) ──────────── -->
       <div class="anim-slide-up anim-delay-2">
         <div style="font-size:11px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:#4F5E50; margin-bottom:16px;">Transparência de custos</div>
-        <div style="border:2px solid #1B231D; background:#FFFDF6; overflow:hidden;">
+        <div style="border:2px solid #3A4F3E; background:#243029; overflow:hidden;">
           <!-- Cabeçalho -->
           <div style="background:#1B231D; padding:20px 24px; display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:12px;">
             <div>
@@ -43,22 +43,22 @@
           <!-- Breakdown -->
           <div style="display:flex; flex-direction:column;">
             <div v-for="(item, i) in custosBreakdown" :key="i"
-              style="display:flex; align-items:center; gap:0; border-bottom:1.5px solid #EFE0BA;"
+              style="display:flex; align-items:center; gap:0; border-bottom:1.5px solid #3A4F3E;"
               :style="i === custosBreakdown.length-1 ? 'border-bottom:none;' : ''"
             >
               <!-- Barra de proporção -->
               <div :style="`width:${item.pct}%; min-width:4px; background:${item.cor}; height:100%; min-height:56px; flex-shrink:0;`" />
               <div style="flex:1; padding:14px 20px; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
                 <div>
-                  <div style="font-size:13px; font-weight:800; color:#1B231D;">{{ item.destino }}</div>
+                  <div style="font-size:13px; font-weight:800; color:#F7EACB;">{{ item.destino }}</div>
                   <div style="font-size:12px; color:#4F5E50; margin-top:2px;">{{ item.descricao }}</div>
                 </div>
-                <div style="font-size:14px; font-weight:900; color:#1B231D; font-family:var(--font-display); white-space:nowrap;">{{ item.valor }}</div>
+                <div style="font-size:14px; font-weight:900; color:#F7EACB; font-family:var(--font-display); white-space:nowrap;">{{ item.valor }}</div>
               </div>
             </div>
           </div>
           <!-- Rodapé -->
-          <div style="background:#EFE0BA; border-top:2px solid #D1C09F; padding:12px 24px;">
+          <div style="background:#2C3A2E; border-top:2px solid #3A4F3E; padding:12px 24px;">
             <p style="font-size:12px; color:#4F5E50; line-height:1.6; margin:0;">
               Custo on-chain verificável a qualquer momento. O custo real de registro (Solana + Irys) é <strong>~R$0,10</strong> por documento — a diferença sustenta o protocolo, desenvolvimento e suporte.
             </p>
@@ -72,14 +72,14 @@
         <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:2px;">
 
           <div v-for="plano in planos" :key="plano.nome"
-            style="border:2px solid #D1C09F; padding:24px 20px; background:#FFFDF6; display:flex; flex-direction:column; gap:14px;"
-            :style="plano.destaque ? 'border-color:#008C4C; background:#F0FAF4;' : ''"
+            style="border:2px solid #3A4F3E; padding:24px 20px; background:#243029; display:flex; flex-direction:column; gap:14px;"
+            :style="plano.destaque ? 'border-color:#008C4C; background:#0D2B1A;' : ''"
           >
             <div>
               <div v-if="plano.destaque" style="font-size:9px; font-weight:800; letter-spacing:0.12em; text-transform:uppercase; background:#008C4C; color:white; padding:2px 8px; display:inline-block; margin-bottom:8px;">Mais popular</div>
-              <div style="font-size:14px; font-weight:900; text-transform:uppercase; letter-spacing:-0.2px; color:#1B231D;">{{ plano.nome }}</div>
+              <div style="font-size:14px; font-weight:900; text-transform:uppercase; letter-spacing:-0.2px; color:#F7EACB;">{{ plano.nome }}</div>
               <div style="display:flex; align-items:baseline; gap:4px; margin-top:8px;">
-                <span style="font-family:var(--font-display); font-size:32px; font-weight:900; color:#1B231D; letter-spacing:-1px;">{{ plano.preco }}</span>
+                <span style="font-family:var(--font-display); font-size:32px; font-weight:900; color:#F7EACB; letter-spacing:-1px;">{{ plano.preco }}</span>
                 <span style="font-size:12px; color:#4F5E50; font-weight:700;">{{ plano.unidade }}</span>
               </div>
             </div>
@@ -104,15 +104,15 @@
         <div style="font-size:11px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:#4F5E50; margin-bottom:16px;">Todos os serviços</div>
         <div style="display:flex; flex-direction:column; gap:2px;">
           <div v-for="s in servicos" :key="s.nome"
-            style="border:2px solid #D1C09F; padding:18px 20px; background:#FFFDF6; display:grid; gap:12px; transition:border-color 0.2s cubic-bezier(0.32,0.72,0,1);"
+            style="border:2px solid #3A4F3E; padding:18px 20px; background:#243029; display:grid; gap:12px; transition:border-color 0.2s cubic-bezier(0.32,0.72,0,1);"
             :style="[
               { gridTemplateColumns: '1fr auto' },
-              s.status === 'mvp' ? 'border-color:#008C4C; background:#F0FAF4;' : ''
+              s.status === 'mvp' ? 'border-color:#008C4C; background:#0D2B1A;' : ''
             ]"
           >
             <div>
               <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px; flex-wrap:wrap;">
-                <span style="font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:-0.2px; color:#1B231D;">{{ s.nome }}</span>
+                <span style="font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:-0.2px; color:#F7EACB;">{{ s.nome }}</span>
                 <span :class="`badge-status badge-${s.status}`">{{ statusLabel(s.status) }}</span>
               </div>
               <p style="font-size:13px; color:#4F5E50; line-height:1.5; margin-bottom:10px;">{{ s.descricao }}</p>
@@ -288,6 +288,12 @@ export default defineComponent({
           descricao: 'Nascimento, casamento, óbito com identidade ZK vinculada ao CPF/RNPN. Requer integração gov.',
           tech: ['Gov API', 'ZK identity'],
         },
+        {
+          nome: 'Registro de patente / propriedade intelectual',
+          status: 'futuro',
+          descricao: 'Prova de anterioridade criptográfica para inventores e pesquisadores. Hash do documento registrado on-chain antes do protocolo INPI — evidência imutável de prior art em disputas de propriedade intelectual.',
+          tech: ['SHA-256', 'Solana', 'Irys', 'ZCash ViewKey'],
+        },
       ],
     }
   },
@@ -314,8 +320,8 @@ export default defineComponent({
   padding: 2px 8px;
   border: 2px solid;
 }
-.badge-mvp     { color: #008C4C; border-color: #008C4C; background: #F0FAF4; }
-.badge-proximo { color: #996A00; border-color: #FFD23F; background: #FFFBEA; }
-.badge-roadmap { color: #4F5E50; border-color: #B0B8B1; background: #F4F6F4; }
-.badge-futuro  { color: #9AA3A1; border-color: #D1C09F; background: #FAF8F3; }
+.badge-mvp     { color: #008C4C; border-color: #008C4C; background: rgba(0,140,76,0.1); }
+.badge-proximo { color: #FFD23F; border-color: #FFD23F; background: rgba(255,210,63,0.08); }
+.badge-roadmap { color: #4F5E50; border-color: #3A4F3E; background: transparent; }
+.badge-futuro  { color: #4F5E50; border-color: #3A4F3E; background: transparent; }
 </style>

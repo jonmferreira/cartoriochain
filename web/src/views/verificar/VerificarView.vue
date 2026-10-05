@@ -1,11 +1,11 @@
 <template>
-  <div style="background:#F7EACB; min-height:100vh; padding:40px 24px;">
+  <div style="background:#1B231D; min-height:100vh; padding:40px 24px;">
     <div style="max-width:600px; margin:0 auto; display:flex; flex-direction:column; gap:28px;">
 
       <!-- Header -->
       <div class="anim-slide-up">
         <div style="font-size:11px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:#4F5E50; margin-bottom:8px;">Verificação pública · Sem conta</div>
-        <h1 style="font-family:var(--font-display); font-weight:900; font-size:32px; text-transform:uppercase; letter-spacing:-1px; color:#1B231D; line-height:1;">Verificar documento</h1>
+        <h1 style="font-family:var(--font-display); font-weight:900; font-size:32px; text-transform:uppercase; letter-spacing:-1px; color:#F7EACB; line-height:1;">Verificar documento</h1>
       </div>
 
       <!-- Formulário de busca -->
@@ -83,9 +83,9 @@
         <!-- Não encontrado -->
         <div v-if="!resultado.documento && !resultado.erro" class="anim-slide-up card" style="border-color:#D1C09F;">
           <div style="display:flex; align-items:center; gap:16px;">
-            <div style="width:48px; height:48px; background:#EFE0BA; border:2px solid #D1C09F; display:flex; align-items:center; justify-content:center; font-size:24px; flex-shrink:0;">?</div>
+            <div style="width:48px; height:48px; background:#243029; border:2px solid #3A4F3E; display:flex; align-items:center; justify-content:center; font-size:24px; flex-shrink:0;">?</div>
             <div>
-              <div style="font-size:14px; font-weight:800; color:#1B231D;">Documento não encontrado</div>
+              <div style="font-size:14px; font-weight:800; color:#F7EACB;">Documento não encontrado</div>
               <div style="font-size:13px; color:#4F5E50; margin-top:4px;">Verifique se o código está correto. Se tiver o arquivo original, use a verificação avançada abaixo.</div>
             </div>
           </div>
@@ -98,7 +98,7 @@
           <div style="padding:24px;">
 
             <!-- Status -->
-            <div style="display:flex; align-items:flex-start; gap:16px; padding-bottom:20px; border-bottom:2px solid #EFE0BA; margin-bottom:20px;">
+            <div style="display:flex; align-items:flex-start; gap:16px; padding-bottom:20px; border-bottom:2px solid #3A4F3E; margin-bottom:20px;">
               <div :style="resultado.documento.revoked ? 'background:#9B1C1C' : 'background:#008C4C'" style="width:48px; height:48px; display:flex; align-items:center; justify-content:center; font-size:24px; flex-shrink:0; animation:checkPop 0.4s ease 0.2s both; color:white;">
                 {{ resultado.documento.revoked ? '✗' : '✓' }}
               </div>
@@ -106,22 +106,22 @@
                 <div :style="resultado.documento.revoked ? 'color:#9B1C1C' : 'color:#008C4C'" style="font-size:11px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:4px;">
                   {{ resultado.documento.revoked ? 'Documento revogado' : 'Documento válido e autenticado' }}
                 </div>
-                <div style="font-size:22px; font-weight:900; text-transform:uppercase; letter-spacing:-0.5px; color:#1B231D;">{{ resultado.documento.doc_type }}</div>
+                <div style="font-size:22px; font-weight:900; text-transform:uppercase; letter-spacing:-0.5px; color:#F7EACB;">{{ resultado.documento.doc_type }}</div>
                 <div style="font-size:14px; color:#4F5E50; margin-top:4px;">{{ resultado.documento.cartorio_id }}</div>
               </div>
             </div>
 
             <!-- Campos limpos -->
             <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:20px;">
-              <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #EFE0BA; padding-bottom:12px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #3A4F3E; padding-bottom:12px;">
                 <span style="font-size:12px; color:#4F5E50; font-weight:600;">Registrado em</span>
-                <span style="font-size:14px; font-weight:700; color:#1B231D;">{{ formatarData(resultado.documento.registered_at) }}</span>
+                <span style="font-size:14px; font-weight:700; color:#F7EACB;">{{ formatarData(resultado.documento.registered_at) }}</span>
               </div>
-              <div v-if="resultado.documento.viewkey_payload" style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #EFE0BA; padding-bottom:12px;">
+              <div v-if="resultado.documento.viewkey_payload" style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #3A4F3E; padding-bottom:12px;">
                 <span style="font-size:12px; color:#4F5E50; font-weight:600;">Privacidade do signatário</span>
                 <span class="tag tag-green">Dados protegidos ✓</span>
               </div>
-              <div v-if="resultado.documento.revoked" style="padding:12px; background:#FEF2F2; border:1.5px solid #9B1C1C;">
+              <div v-if="resultado.documento.revoked" style="padding:12px; background:#2B0D0D; border:1.5px solid #9B1C1C;">
                 <span style="font-size:13px; font-weight:700; color:#9B1C1C;">Motivo da revogação: {{ resultado.documento.revoke_reason || 'Não informado' }}</span>
               </div>
             </div>
@@ -129,7 +129,7 @@
           </div>
 
           <!-- Detalhes técnicos -->
-          <div style="border-top:2px solid #EFE0BA; padding:16px 24px;">
+          <div style="border-top:2px solid #3A4F3E; padding:16px 24px;">
             <button class="tech-toggle" @click="detalhesAbertos = !detalhesAbertos">
               <span>{{ detalhesAbertos ? '▲' : '▼' }}</span>
               Detalhes técnicos

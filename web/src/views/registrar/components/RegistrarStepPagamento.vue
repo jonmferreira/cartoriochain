@@ -59,8 +59,8 @@
           <div style="font-size:11px; font-weight:800; letter-spacing:0.08em; text-transform:uppercase; color:#4F5E50;">
             Chave PIX
           </div>
-          <div style="display:flex; align-items:center; gap:8px; background:#EFE0BA; border:2px solid #D1C09F; padding:12px 14px;">
-            <span style="flex:1; font-size:14px; font-weight:700; color:#1B231D; font-family:monospace; word-break:break-all;">
+          <div style="display:flex; align-items:center; gap:8px; background:#1B231D; border:2px solid #3A4F3E; padding:12px 14px;">
+            <span style="flex:1; font-size:14px; font-weight:700; color:#F7EACB; font-family:monospace; word-break:break-all;">
               {{ pixKey }}
             </span>
             <button class="btn btn-secondary btn-sm" style="flex-shrink:0;" @click="copiarChave">
@@ -78,9 +78,9 @@
     </div>
 
     <!-- Confirmando... -->
-    <div v-if="confirmando" class="anim-fade" style="display:flex; align-items:center; gap:12px; padding:14px 18px; background:#EFE0BA; border:2px solid #D1C09F;">
+    <div v-if="confirmando" class="anim-fade" style="display:flex; align-items:center; gap:12px; padding:14px 18px; background:#243029; border:2px solid #008C4C;">
       <div class="spinner" />
-      <span style="font-size:13px; font-weight:700; color:#1B231D;">Confirmando pagamento...</span>
+      <span style="font-size:13px; font-weight:700; color:#F7EACB;">Confirmando pagamento...</span>
     </div>
 
     <div v-if="!confirmando" style="display:flex; gap:12px; justify-content:space-between;">
