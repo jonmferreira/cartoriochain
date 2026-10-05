@@ -1,23 +1,19 @@
 <template>
-  <div style="background:#1B231D; min-height:100vh; padding:40px 24px;">
-    <div style="max-width:600px; margin:0 auto; display:flex; flex-direction:column; gap:28px;">
+  <div class="page" style="padding:40px 24px;">
+    <div class="wrap-sm" style="display:flex; flex-direction:column; gap:28px;">
 
       <!-- Header -->
       <div class="anim-slide-up">
-        <div style="font-size:11px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:#4F5E50; margin-bottom:8px;">
-          Cartório Digital
-        </div>
-        <h1 style="font-family:var(--font-display); font-weight:900; font-size:32px; text-transform:uppercase; letter-spacing:-1px; color:#F7EACB; line-height:1;">
-          Registrar documento
-        </h1>
+        <div class="eyebrow" style="margin-bottom:8px;">Cartório Digital</div>
+        <h1 class="page-title">Registrar documento</h1>
       </div>
 
       <RegistrarSteps class="anim-slide-up anim-delay-1" :etapa="store.etapa" :etapas="ETAPAS" />
 
       <!-- Banner demo MCMV -->
-      <div v-if="store.modoDemo" class="anim-fade" style="background:#FFD23F; border:2px solid #1B231D; padding:12px 16px; display:flex; align-items:center; gap:10px;">
+      <div v-if="store.modoDemo" class="anim-fade" style="background:var(--color-yellow); border:2px solid var(--color-ink); padding:12px 16px; display:flex; align-items:center; gap:10px;">
         <span style="font-size:16px;">🏠</span>
-        <span style="font-size:13px; font-weight:700; color:#1B231D;">
+        <span style="font-size:13px; font-weight:700; color:var(--color-ink);">
           Demo MCMV — Escritura pré-preenchida. Clique em avançar para ver o fluxo completo.
         </span>
       </div>
@@ -58,12 +54,10 @@ export default defineComponent({
     const store = useRegistrarStore()
     const route = useRoute()
 
-    // Pré-preenche dados do demo MCMV se ?demo=mcmv
     if (route.query.demo === 'mcmv') {
       store.preencherDemo()
     }
 
-    // Limpa o store ao sair da página
     onBeforeUnmount(() => store.limpar())
 
     return { store, ETAPAS }

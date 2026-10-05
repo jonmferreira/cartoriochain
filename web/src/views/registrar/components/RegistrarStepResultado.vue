@@ -2,9 +2,7 @@
   <div>
     <!-- Loading -->
     <div v-if="store.carregando" class="anim-fade card" style="display:flex; flex-direction:column; gap:20px;">
-      <div style="font-size:13px; font-weight:800; text-transform:uppercase; letter-spacing:0.06em; color:#F7EACB;">
-        Autenticando...
-      </div>
+      <div class="eyebrow" style="letter-spacing:0.06em;">Autenticando...</div>
       <div class="progress-track">
         <div class="progress-fill" :style="`width:${progressoPct}%;`" />
       </div>
@@ -16,7 +14,7 @@
           :class="{ active: store.loadingEtapa === i, done: store.loadingEtapa > i }"
         >
           <div class="loading-dot" />
-          <span style="font-size:13px; font-weight:600; color:#F7EACB;">{{ step }}</span>
+          <span class="body-sm" style="color:var(--color-text);">{{ step }}</span>
         </div>
       </div>
     </div>
@@ -31,44 +29,42 @@
     <div v-if="store.resultado && !store.carregando" class="certificate">
       <div style="padding:24px 24px 0;">
 
-        <div style="display:flex; align-items:flex-start; gap:16px; padding-bottom:20px; border-bottom:2px solid #3A4F3E;">
+        <div style="display:flex; align-items:flex-start; gap:16px; padding-bottom:20px; border-bottom:2px solid var(--color-ink-3);">
           <div class="certificate-check">
             <span style="color:white; font-size:24px;">✓</span>
           </div>
           <div>
-            <div style="font-size:11px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:#008C4C; margin-bottom:4px;">
-              Documento autenticado
-            </div>
-            <div style="font-size:20px; font-weight:900; text-transform:uppercase; letter-spacing:-0.5px; color:#F7EACB;">
+            <div class="eyebrow" style="color:var(--color-emerald); margin-bottom:4px;">Documento autenticado</div>
+            <div style="font-size:20px; font-weight:900; text-transform:uppercase; letter-spacing:-0.5px; color:var(--color-text);">
               {{ store.docType }}
             </div>
-            <div style="font-size:13px; color:#4F5E50; margin-top:4px;">CartórioChain</div>
+            <div class="body-sm" style="margin-top:4px;">CartórioChain</div>
           </div>
         </div>
 
         <div style="padding:16px 0; display:flex; flex-direction:column; gap:10px;">
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <span style="font-size:12px; color:#4F5E50; font-weight:600;">Registrado em</span>
-            <span style="font-size:13px; font-weight:700; color:#F7EACB;">{{ formatarData(store.resultado.registered_at) }}</span>
+          <div class="data-row">
+            <span class="data-row-label">Registrado em</span>
+            <span class="data-row-value">{{ formatarData(store.resultado.registered_at) }}</span>
           </div>
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <span style="font-size:12px; color:#4F5E50; font-weight:600;">Pagamento</span>
+          <div class="data-row">
+            <span class="data-row-label">Pagamento</span>
             <span class="tag tag-green">PIX confirmado ✓</span>
           </div>
-          <div v-if="store.resultado.viewkey_payload" style="display:flex; justify-content:space-between; align-items:center;">
-            <span style="font-size:12px; color:#4F5E50; font-weight:600;">Privacidade</span>
+          <div v-if="store.resultado.viewkey_payload" class="data-row">
+            <span class="data-row-label">Privacidade</span>
             <span class="tag tag-green">Dados protegidos ✓</span>
           </div>
         </div>
 
-        <div style="padding:16px 0 0; border-top:2px solid #3A4F3E; display:flex; gap:10px; flex-wrap:wrap;">
+        <div style="padding:16px 0 0; border-top:2px solid var(--color-ink-3); display:flex; gap:10px; flex-wrap:wrap;">
           <button class="btn btn-primary btn-sm" @click="copiarLink">↗ Copiar link de verificação</button>
           <button class="btn btn-secondary btn-sm" @click="verificarAgora">◎ Verificar agora</button>
         </div>
       </div>
 
-      <!-- Detalhes técnicos (colapsável) -->
-      <div style="border-top:2px solid #3A4F3E; padding:16px 24px;">
+      <!-- Detalhes técnicos -->
+      <div style="border-top:2px solid var(--color-ink-3); padding:16px 24px;">
         <button class="tech-toggle" @click="detalhesAbertos = !detalhesAbertos">
           <span>{{ detalhesAbertos ? '▲' : '▼' }}</span>
           Detalhes técnicos

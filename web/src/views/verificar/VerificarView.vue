@@ -1,11 +1,11 @@
 <template>
-  <div style="background:#1B231D; min-height:100vh; padding:40px 24px;">
-    <div style="max-width:600px; margin:0 auto; display:flex; flex-direction:column; gap:28px;">
+  <div class="page" style="padding:40px 24px;">
+    <div class="wrap-sm" style="display:flex; flex-direction:column; gap:28px;">
 
       <!-- Header -->
       <div class="anim-slide-up">
-        <div style="font-size:11px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:#4F5E50; margin-bottom:8px;">Verificação pública · Sem conta</div>
-        <h1 style="font-family:var(--font-display); font-weight:900; font-size:32px; text-transform:uppercase; letter-spacing:-1px; color:#F7EACB; line-height:1;">Verificar documento</h1>
+        <div class="eyebrow" style="margin-bottom:8px;">Verificação pública · Sem conta</div>
+        <h1 class="page-title">Verificar documento</h1>
       </div>
 
       <!-- Formulário de busca -->
@@ -25,9 +25,9 @@
         </button>
 
         <div style="display:flex; align-items:center; gap:10px;">
-          <div style="flex:1; height:1px; background:#D1C09F;"></div>
-          <span style="font-size:11px; font-weight:700; color:#D1C09F; text-transform:uppercase; letter-spacing:0.06em;">ou</span>
-          <div style="flex:1; height:1px; background:#D1C09F;"></div>
+          <div style="flex:1; height:1px; background:var(--color-kraft);"></div>
+          <span class="eyebrow" style="letter-spacing:0.06em;">ou</span>
+          <div style="flex:1; height:1px; background:var(--color-kraft);"></div>
         </div>
 
         <div>
@@ -52,11 +52,11 @@
           </div>
         </div>
 
-
         <!-- Verificação avançada — auditores -->
         <div>
           <button
-            style="font-size:11px; font-weight:700; color:#4F5E50; background:none; border:none; cursor:pointer; padding:0; letter-spacing:0.04em;"
+            class="eyebrow"
+            style="background:none; border:none; cursor:pointer; padding:0; letter-spacing:0.04em;"
             @click="avancadoAberto = !avancadoAberto"
           >{{ avancadoAberto ? '▲' : '▼' }} Verificação avançada (auditores)</button>
           <div v-if="avancadoAberto" style="margin-top:10px;">
@@ -66,10 +66,10 @@
         </div>
       </div>
 
-      <!-- Loading shimmer -->
+      <!-- Loading -->
       <div v-if="carregando" class="anim-fade" style="display:flex; flex-direction:column; gap:12px;">
         <div class="progress-track"><div class="progress-fill" style="width:70%; animation:progressFill 1.8s ease infinite;" /></div>
-        <div style="font-size:13px; font-weight:700; color:#4F5E50; text-align:center;">Verificando autenticidade...</div>
+        <div class="eyebrow" style="text-align:center; letter-spacing:0.04em;">Verificando autenticidade...</div>
       </div>
 
       <!-- Erro -->
@@ -81,55 +81,55 @@
       <div v-if="resultado && !carregando">
 
         <!-- Não encontrado -->
-        <div v-if="!resultado.documento && !resultado.erro" class="anim-slide-up card" style="border-color:#D1C09F;">
+        <div v-if="!resultado.documento && !resultado.erro" class="anim-slide-up card" style="border-color:var(--color-kraft);">
           <div style="display:flex; align-items:center; gap:16px;">
-            <div style="width:48px; height:48px; background:#243029; border:2px solid #3A4F3E; display:flex; align-items:center; justify-content:center; font-size:24px; flex-shrink:0;">?</div>
+            <div style="width:48px; height:48px; background:var(--color-ink-1); border:2px solid var(--color-ink-3); display:flex; align-items:center; justify-content:center; font-size:24px; flex-shrink:0;">?</div>
             <div>
-              <div style="font-size:14px; font-weight:800; color:#F7EACB;">Documento não encontrado</div>
-              <div style="font-size:13px; color:#4F5E50; margin-top:4px;">Verifique se o código está correto. Se tiver o arquivo original, use a verificação avançada abaixo.</div>
+              <div style="font-size:14px; font-weight:800; color:var(--color-text);">Documento não encontrado</div>
+              <p class="body-sm" style="margin-top:4px;">Verifique se o código está correto. Se tiver o arquivo original, use a verificação avançada abaixo.</p>
             </div>
           </div>
         </div>
 
         <!-- Válido / Revogado -->
-        <div v-if="resultado.documento" class="certificate" :style="resultado.documento.revoked ? 'border-color:#9B1C1C;' : ''">
-          <div v-if="resultado.documento.revoked" style="height:6px; background:#9B1C1C; margin:-1px -1px 0;" />
+        <div v-if="resultado.documento" class="certificate" :style="resultado.documento.revoked ? 'border-color:var(--color-danger);' : ''">
+          <div v-if="resultado.documento.revoked" style="height:6px; background:var(--color-danger); margin:-1px -1px 0;" />
 
           <div style="padding:24px;">
 
             <!-- Status -->
-            <div style="display:flex; align-items:flex-start; gap:16px; padding-bottom:20px; border-bottom:2px solid #3A4F3E; margin-bottom:20px;">
-              <div :style="resultado.documento.revoked ? 'background:#9B1C1C' : 'background:#008C4C'" style="width:48px; height:48px; display:flex; align-items:center; justify-content:center; font-size:24px; flex-shrink:0; animation:checkPop 0.4s ease 0.2s both; color:white;">
+            <div style="display:flex; align-items:flex-start; gap:16px; padding-bottom:20px; border-bottom:2px solid var(--color-ink-3); margin-bottom:20px;">
+              <div :style="resultado.documento.revoked ? 'background:var(--color-danger)' : 'background:var(--color-emerald)'" style="width:48px; height:48px; display:flex; align-items:center; justify-content:center; font-size:24px; flex-shrink:0; animation:checkPop 0.4s ease 0.2s both; color:white;">
                 {{ resultado.documento.revoked ? '✗' : '✓' }}
               </div>
               <div>
-                <div :style="resultado.documento.revoked ? 'color:#9B1C1C' : 'color:#008C4C'" style="font-size:11px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:4px;">
+                <div class="eyebrow" :style="resultado.documento.revoked ? 'color:var(--color-danger)' : 'color:var(--color-emerald)'" style="margin-bottom:4px;">
                   {{ resultado.documento.revoked ? 'Documento revogado' : 'Documento válido e autenticado' }}
                 </div>
-                <div style="font-size:22px; font-weight:900; text-transform:uppercase; letter-spacing:-0.5px; color:#F7EACB;">{{ resultado.documento.doc_type }}</div>
-                <div style="font-size:14px; color:#4F5E50; margin-top:4px;">{{ resultado.documento.cartorio_id }}</div>
+                <div style="font-size:22px; font-weight:900; text-transform:uppercase; letter-spacing:-0.5px; color:var(--color-text);">{{ resultado.documento.doc_type }}</div>
+                <div class="body-sm" style="margin-top:4px;">{{ resultado.documento.cartorio_id }}</div>
               </div>
             </div>
 
-            <!-- Campos limpos -->
+            <!-- Campos -->
             <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:20px;">
-              <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #3A4F3E; padding-bottom:12px;">
-                <span style="font-size:12px; color:#4F5E50; font-weight:600;">Registrado em</span>
-                <span style="font-size:14px; font-weight:700; color:#F7EACB;">{{ formatarData(resultado.documento.registered_at) }}</span>
+              <div class="data-row">
+                <span class="data-row-label">Registrado em</span>
+                <span class="data-row-value" style="font-size:14px;">{{ formatarData(resultado.documento.registered_at) }}</span>
               </div>
-              <div v-if="resultado.documento.viewkey_payload" style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #3A4F3E; padding-bottom:12px;">
-                <span style="font-size:12px; color:#4F5E50; font-weight:600;">Privacidade do signatário</span>
+              <div v-if="resultado.documento.viewkey_payload" class="data-row">
+                <span class="data-row-label">Privacidade do signatário</span>
                 <span class="tag tag-green">Dados protegidos ✓</span>
               </div>
-              <div v-if="resultado.documento.revoked" style="padding:12px; background:#2B0D0D; border:1.5px solid #9B1C1C;">
-                <span style="font-size:13px; font-weight:700; color:#9B1C1C;">Motivo da revogação: {{ resultado.documento.revoke_reason || 'Não informado' }}</span>
+              <div v-if="resultado.documento.revoked" style="padding:12px; background:#2B0D0D; border:1.5px solid var(--color-danger);">
+                <span style="font-size:13px; font-weight:700; color:var(--color-danger);">Motivo da revogação: {{ resultado.documento.revoke_reason || 'Não informado' }}</span>
               </div>
             </div>
 
           </div>
 
           <!-- Detalhes técnicos -->
-          <div style="border-top:2px solid #3A4F3E; padding:16px 24px;">
+          <div style="border-top:2px solid var(--color-ink-3); padding:16px 24px;">
             <button class="tech-toggle" @click="detalhesAbertos = !detalhesAbertos">
               <span>{{ detalhesAbertos ? '▲' : '▼' }}</span>
               Detalhes técnicos
@@ -147,24 +147,23 @@
 
     </div>
 
-    <!-- Overlay câmera QR — dentro do root, Teleport move pro body em runtime -->
+    <!-- Overlay câmera QR -->
     <Teleport to="body">
     <div v-if="qrAtivo" class="qr-overlay" @click.self="fecharScanner">
     <div class="qr-modal">
-      <div style="font-size:11px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:#A8D5B5; margin-bottom:12px;">Aponte para o QR code do documento</div>
-      <div style="position:relative; width:280px; height:280px; border:3px solid #FFD23F;">
+      <div class="eyebrow" style="color:#A8D5B5; margin-bottom:12px;">Aponte para o QR code do documento</div>
+      <div style="position:relative; width:280px; height:280px; border:3px solid var(--color-yellow);">
         <video ref="videoEl" autoplay playsinline muted style="width:100%; height:100%; object-fit:cover; display:block;" />
-        <!-- mira -->
         <div style="position:absolute; inset:0; pointer-events:none;">
-          <div style="position:absolute; top:16px; left:16px; width:24px; height:24px; border-top:3px solid #FFD23F; border-left:3px solid #FFD23F;"></div>
-          <div style="position:absolute; top:16px; right:16px; width:24px; height:24px; border-top:3px solid #FFD23F; border-right:3px solid #FFD23F;"></div>
-          <div style="position:absolute; bottom:16px; left:16px; width:24px; height:24px; border-bottom:3px solid #FFD23F; border-left:3px solid #FFD23F;"></div>
-          <div style="position:absolute; bottom:16px; right:16px; width:24px; height:24px; border-bottom:3px solid #FFD23F; border-right:3px solid #FFD23F;"></div>
+          <div style="position:absolute; top:16px; left:16px; width:24px; height:24px; border-top:3px solid var(--color-yellow); border-left:3px solid var(--color-yellow);"></div>
+          <div style="position:absolute; top:16px; right:16px; width:24px; height:24px; border-top:3px solid var(--color-yellow); border-right:3px solid var(--color-yellow);"></div>
+          <div style="position:absolute; bottom:16px; left:16px; width:24px; height:24px; border-bottom:3px solid var(--color-yellow); border-left:3px solid var(--color-yellow);"></div>
+          <div style="position:absolute; bottom:16px; right:16px; width:24px; height:24px; border-bottom:3px solid var(--color-yellow); border-right:3px solid var(--color-yellow);"></div>
         </div>
       </div>
       <canvas ref="canvasEl" style="display:none;" />
-      <div v-if="qrErro" style="font-size:12px; color:#FFD23F; margin-top:12px; text-align:center; max-width:260px;">{{ qrErro }}</div>
-      <button class="btn btn-secondary btn-sm" style="margin-top:16px; border-color:#4F5E50; color:#D1C09F; cursor:pointer;" @click="fecharScanner">✕ Cancelar</button>
+      <div v-if="qrErro" class="body-xs" style="color:var(--color-yellow); margin-top:12px; text-align:center; max-width:260px;">{{ qrErro }}</div>
+      <button class="btn btn-secondary btn-sm" style="margin-top:16px; border-color:var(--color-text-muted); color:var(--color-kraft); cursor:pointer;" @click="fecharScanner">✕ Cancelar</button>
     </div>
     </div>
     </Teleport>
@@ -284,9 +283,9 @@ export default defineComponent({
   gap: 10px;
   width: 100%;
   padding: 14px 20px;
-  background: #1B231D;
-  color: #F7EACB;
-  border: 2px solid #1B231D;
+  background: var(--color-ink);
+  color: var(--color-text);
+  border: 2px solid var(--color-ink);
   font-size: 13px;
   font-weight: 800;
   text-transform: uppercase;
@@ -295,11 +294,11 @@ export default defineComponent({
   transition: background 0.15s cubic-bezier(0.32,0.72,0,1), color 0.15s;
 }
 .btn-qr:hover {
-  background: #008C4C;
-  border-color: #008C4C;
+  background: var(--color-emerald);
+  border-color: var(--color-emerald);
 }
 .btn-qr:focus-visible {
-  outline: 3px solid #FFD23F;
+  outline: 3px solid var(--color-yellow);
   outline-offset: 3px;
 }
 
@@ -317,8 +316,8 @@ export default defineComponent({
   flex-direction: column;
   align-items: center;
   padding: 32px 24px;
-  background: #1B231D;
-  border: 2px solid #2C3A2F;
+  background: var(--color-ink);
+  border: 2px solid var(--color-ink-2);
 }
 
 @media (prefers-reduced-motion: reduce) {

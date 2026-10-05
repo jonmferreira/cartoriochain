@@ -11,18 +11,18 @@
       >
         <input ref="fileInput" type="file" accept=".pdf,.doc,.docx,.txt" @change="onArquivoChange" />
         <div v-if="!store.arquivo" style="display:flex; flex-direction:column; align-items:center; gap:10px;">
-          <svg width="36" height="36" viewBox="0 0 36 36" fill="none" stroke="#4F5E50" stroke-width="2" stroke-linecap="square" aria-hidden="true">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none" stroke-width="2" stroke-linecap="square" aria-hidden="true" style="stroke:var(--color-text-label);">
             <path d="M18 6 L18 26"/>
             <path d="M9 15 L18 6 L27 15"/>
             <path d="M6 30 L30 30"/>
           </svg>
-          <div style="font-size:13px; font-weight:700; color:#F7EACB;">Clique ou arraste o documento aqui</div>
-          <div style="font-size:11px; color:#4F5E50;">PDF, DOC, DOCX, TXT</div>
+          <div style="font-size:13px; font-weight:700; color:var(--color-text);">Clique ou arraste o documento aqui</div>
+          <div style="font-size:11px; color:var(--color-text-muted);">PDF, DOC, DOCX, TXT</div>
         </div>
         <div v-else style="display:flex; flex-direction:column; align-items:center; gap:8px;">
           <span style="font-size:32px;">✓</span>
-          <div style="font-size:13px; font-weight:800; color:#008C4C;">{{ store.arquivo.name }}</div>
-          <div style="font-size:11px; color:#4F5E50;">{{ (store.arquivo.size / 1024).toFixed(1) }} KB — clique para trocar</div>
+          <div style="font-size:13px; font-weight:800; color:var(--color-emerald);">{{ store.arquivo.name }}</div>
+          <div style="font-size:11px; color:var(--color-text-muted);">{{ (store.arquivo.size / 1024).toFixed(1) }} KB — clique para trocar</div>
         </div>
       </div>
     </div>
