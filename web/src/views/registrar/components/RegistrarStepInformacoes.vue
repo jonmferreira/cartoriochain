@@ -1,5 +1,5 @@
 <template>
-  <div class="anim-slide-up" style="display:flex; flex-direction:column; gap:20px;">
+  <div class="anim-slide-up reg-step-doc">
     <div class="card" style="display:flex; flex-direction:column; gap:18px;">
 
       <div>
@@ -23,7 +23,48 @@
           <option value="Ata Notarial"/>
           <option value="Reconhecimento de Firma"/>
           <option value="Escritura MCMV"/>
+          <option value="Prova de Anterioridade — Ideia"/>
+          <option value="Prova de Anterioridade — Obra"/>
+          <option value="Prova de Anterioridade — Software"/>
+          <option value="Prova de Anterioridade — Invenção"/>
         </datalist>
+      </div>
+
+      <!-- Guide block: Propriedade Intelectual -->
+      <div v-if="isPI" class="reg-pi-guide">
+        <div class="reg-pi-guide-head">
+          <span class="reg-pi-guide-icon">◈</span>
+          <span class="reg-pi-guide-title">Prova de Anterioridade Criptográfica</span>
+        </div>
+        <p class="reg-pi-guide-body">
+          CartórioChain registra um timestamp imutável da sua ideia on-chain por R$5.
+          Quando você chegar no INPI, ninguém vai poder contestar que a ideia não era sua.
+        </p>
+        <div class="reg-pi-steps">
+          <div class="reg-pi-step-head">
+            <span>Serviço INPI</span>
+            <span>Custo</span>
+            <span>Prazo</span>
+          </div>
+          <div class="reg-pi-step">
+            <span class="reg-pi-step-tipo">Software (e-Software)</span>
+            <span class="reg-pi-step-custo">R$160</span>
+            <span class="reg-pi-step-prazo">Menos de 7 dias</span>
+          </div>
+          <div class="reg-pi-step">
+            <span class="reg-pi-step-tipo">Marca (por classe)</span>
+            <span class="reg-pi-step-custo">R$440–1.720</span>
+            <span class="reg-pi-step-prazo">18–36 meses</span>
+          </div>
+          <div class="reg-pi-step">
+            <span class="reg-pi-step-tipo">Patente de Invenção</span>
+            <span class="reg-pi-step-custo">R$500–2.400</span>
+            <span class="reg-pi-step-prazo">7–10 anos</span>
+          </div>
+        </div>
+        <div class="reg-pi-guide-foot">
+          Registre aqui primeiro. Leve a prova ao INPI com o timestamp já garantido em blockchain.
+        </div>
       </div>
 
       <!-- Privacidade — painel avançado (sem menção a ZCash para o usuário comum) -->
@@ -34,22 +75,22 @@
             <path d="M4 5.5V3.5a2.5 2.5 0 0 1 5 0v2"/>
           </svg>
           <span>Privacidade avançada</span>
-          <span style="margin-left:4px; color:#D1C09F;">{{ vkAberto ? '▲' : '▼' }}</span>
+          <span style="margin-left:4px; color:var(--color-kraft);">{{ vkAberto ? '▲' : '▼' }}</span>
         </button>
-        <p style="font-size:12px; color:#D1C09F; margin-top:6px; line-height:1.5;">
+        <p style="font-size:12px; color:var(--color-kraft); margin-top:6px; line-height:1.5;">
           Cifra os dados do signatário. Só você pode acessá-los com sua chave pessoal — LGPD nativa.
         </p>
-        <div v-if="vkAberto" style="margin-top:12px; display:flex; align-items:center; gap:8px; padding:10px 14px; background:#2C3A2F; border:1.5px solid #4F5E50;">
-          <svg width="14" height="14" viewBox="0 0 13 13" fill="none" stroke="#008C4C" stroke-width="1.8" stroke-linecap="square" aria-hidden="true">
+        <div v-if="vkAberto" style="margin-top:12px; display:flex; align-items:center; gap:8px; padding:10px 14px; background:var(--color-ink-2); border:1.5px solid var(--color-ink-4);">
+          <svg width="14" height="14" viewBox="0 0 13 13" fill="none" stroke-width="1.8" stroke-linecap="square" aria-hidden="true" style="stroke:var(--color-emerald);">
             <rect x="1.5" y="5.5" width="10" height="6"/>
             <path d="M4 5.5V3.5a2.5 2.5 0 0 1 5 0v2"/>
           </svg>
-          <span style="font-size:12px; font-weight:700; color:#008C4C; text-transform:uppercase; letter-spacing:0.06em;">Privacidade ativa</span>
+          <span style="font-size:12px; font-weight:700; color:var(--color-emerald); text-transform:uppercase; letter-spacing:0.06em;">Privacidade ativa</span>
         </div>
       </div>
     </div>
 
-    <div style="display:flex; gap:12px; justify-content:space-between;">
+    <div class="reg-pag-actions">
       <button class="btn btn-secondary btn-sm" @click="store.etapa = 1">← Voltar</button>
       <button
         class="btn btn-primary"
@@ -63,13 +104,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, computed } from 'vue'
 import { useRegistrarStore } from '../../../stores/registrar'
 
 export default defineComponent({
   name: 'RegistrarStepInformacoes',
   setup() {
-    return { store: useRegistrarStore(), vkAberto: ref(false) }
+    const store = useRegistrarStore()
+    const vkAberto = ref(false)
+    const isPI = computed(() => store.docType.startsWith('Prova de Anterioridade'))
+    return { store, vkAberto, isPI }
   },
 })
 </script>

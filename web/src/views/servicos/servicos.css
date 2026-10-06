@@ -1,0 +1,74 @@
+/* ── Layout ──────────────────────────────────────── */
+.svc-root           { padding: 48px 24px; }
+.svc-stack          { display: flex; flex-direction: column; gap: 40px; }
+
+/* ── Header ──────────────────────────────────────── */
+.svc-h1             {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(32px, 5vw, 56px);
+  text-transform: uppercase;
+  letter-spacing: -1.5px;
+  color: var(--color-text);
+  line-height: 1;
+  margin-bottom: 16px;
+}
+
+/* ── Cobertura ───────────────────────────────────── */
+.svc-cob-card       { border: 2px solid var(--color-ink-3); padding: 20px 16px; background: var(--color-ink-1); }
+.svc-cob-qty        { font-size: 28px; font-weight: 900; font-family: var(--font-display); }
+.svc-cob-label      { margin-top: 6px; line-height: 1.3; }
+
+/* ── Tech legend ─────────────────────────────────── */
+.svc-tech-panel     { background: var(--color-ink-1); border: 2px solid var(--color-ink-3); padding: 20px 24px; }
+.svc-tech-list      { display: flex; flex-wrap: wrap; gap: 8px; }
+.svc-tech-item      { border: 2px solid var(--color-ink-3); padding: 6px 12px; background: var(--color-ink); display: flex; flex-direction: column; gap: 2px; }
+.svc-tech-nome      { font-size: 12px; font-weight: 800; color: var(--color-text); }
+
+/* ── Custos ──────────────────────────────────────── */
+.svc-custos-wrap    { border: 2px solid var(--color-ink-3); background: var(--color-ink-1); overflow: hidden; }
+.svc-custos-head    { background: var(--color-ink); padding: 20px 24px; display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 12px; }
+.svc-custos-r5      { font-family: var(--font-display); font-size: 40px; font-weight: 900; color: var(--color-yellow); letter-spacing: -1px; }
+.svc-custos-per     { font-size: 13px; font-weight: 700; color: var(--color-kraft); margin-left: 10px; }
+.svc-custos-formula { letter-spacing: 0.06em; }
+.svc-custos-rows    { display: flex; flex-direction: column; }
+.svc-custos-row     { display: flex; align-items: center; gap: 0; border-bottom: 1.5px solid var(--color-ink-3); }
+.svc-custos-row:last-child { border-bottom: none; }
+.svc-custos-bar     { min-width: 4px; height: 100%; min-height: 56px; flex-shrink: 0; }
+.svc-custos-info    { flex: 1; padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.svc-custos-destino { font-size: 13px; font-weight: 800; color: var(--color-text); }
+.svc-custos-valor   { font-size: 14px; font-weight: 900; color: var(--color-text); font-family: var(--font-display); white-space: nowrap; }
+.svc-custos-foot    { background: var(--color-ink-2); border-top: 2px solid var(--color-ink-3); padding: 12px 24px; }
+
+/* ── Planos ──────────────────────────────────────── */
+.svc-planos-grid    { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 2px; }
+.svc-plano-card     { border: 2px solid var(--color-ink-3); padding: 24px 20px; background: var(--color-ink-1); display: flex; flex-direction: column; gap: 14px; }
+.svc-plano-card--destaque { border-color: var(--color-emerald); background: #0D2B1A; }
+.svc-plano-nome     { font-size: 14px; font-weight: 900; text-transform: uppercase; letter-spacing: -0.2px; color: var(--color-text); }
+.svc-plano-price-row { display: flex; align-items: baseline; gap: 4px; margin-top: 8px; }
+.svc-plano-price    { font-family: var(--font-display); font-size: 32px; font-weight: 900; color: var(--color-text); letter-spacing: -1px; }
+.svc-plano-features { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.svc-plano-feat     { font-size: 12px; color: var(--color-text-muted); display: flex; gap: 8px; align-items: flex-start; line-height: 1.5; }
+.svc-plano-btn      { cursor: pointer; margin-top: auto; }
+
+/* ── Serviços tabela ─────────────────────────────── */
+.svc-list           { display: flex; flex-direction: column; gap: 2px; }
+.svc-item           {
+  border: 2px solid var(--color-ink-3);
+  padding: 18px 20px;
+  background: var(--color-ink-1);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  transition: border-color 0.2s cubic-bezier(0.32,0.72,0,1);
+}
+.svc-item--mvp      { border-color: var(--color-emerald); background: #0D2B1A; }
+.svc-item-head      { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; flex-wrap: wrap; }
+.svc-item-nome      { font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: -0.2px; color: var(--color-text); }
+.svc-item-techs     { display: flex; flex-wrap: wrap; gap: 6px; }
+.svc-item-action    { display: flex; align-items: flex-start; padding-top: 2px; }
+.svc-item-demo      { cursor: pointer; white-space: nowrap; }
+
+/* ── CTA ─────────────────────────────────────────── */
+.svc-cta            { background: var(--color-ink); border: 2px solid var(--color-ink-3); padding: 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+.svc-cta-nome       { font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: -0.2px; color: var(--color-text); margin-bottom: 6px; }

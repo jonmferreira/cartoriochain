@@ -1,8 +1,8 @@
 <template>
   <div>
     <!-- Loading -->
-    <div v-if="store.carregando" class="anim-fade card" style="display:flex; flex-direction:column; gap:20px;">
-      <div class="eyebrow" style="letter-spacing:0.06em;">Autenticando...</div>
+    <div v-if="store.carregando" class="anim-fade card reg-loading-card">
+      <div class="eyebrow reg-loading-label">Autenticando...</div>
       <div class="progress-track">
         <div class="progress-fill" :style="`width:${progressoPct}%;`" />
       </div>
@@ -27,44 +27,74 @@
 
     <!-- Certificado -->
     <div v-if="store.resultado && !store.carregando" class="certificate">
-      <div style="padding:24px 24px 0;">
+      <div class="reg-cert-padding">
 
-        <div style="display:flex; align-items:flex-start; gap:16px; padding-bottom:20px; border-bottom:2px solid var(--color-ink-3);">
+        <div class="reg-cert-header">
           <div class="certificate-check">
             <span style="color:white; font-size:24px;">✓</span>
           </div>
           <div>
-            <div class="eyebrow" style="color:var(--color-emerald); margin-bottom:4px;">Documento autenticado</div>
-            <div style="font-size:20px; font-weight:900; text-transform:uppercase; letter-spacing:-0.5px; color:var(--color-text);">
-              {{ store.docType }}
+            <div class="eyebrow reg-cert-label" :class="{ 'reg-cert-label--pi': isPI }">
+              {{ isPI ? 'Prova de Anterioridade Criptográfica' : 'Documento autenticado' }}
             </div>
-            <div class="body-sm" style="margin-top:4px;">CartórioChain</div>
+            <div class="reg-cert-doctype">{{ store.docType }}</div>
+            <div class="body-sm reg-cert-cartorio">CartórioChain</div>
           </div>
         </div>
 
-        <div style="padding:16px 0; display:flex; flex-direction:column; gap:10px;">
+        <div class="reg-cert-fields">
           <div class="data-row">
             <span class="data-row-label">Registrado em</span>
             <span class="data-row-value">{{ formatarData(store.resultado.registered_at) }}</span>
           </div>
           <div class="data-row">
             <span class="data-row-label">Pagamento</span>
-            <span class="tag tag-green">PIX confirmado ✓</span>
+            <span class="data-row-value" style="color:var(--color-emerald);">PIX confirmado ✓</span>
           </div>
           <div v-if="store.resultado.viewkey_payload" class="data-row">
             <span class="data-row-label">Privacidade</span>
-            <span class="tag tag-green">Dados protegidos ✓</span>
+            <span class="data-row-value" style="color:var(--color-emerald);">Dados protegidos ✓</span>
           </div>
         </div>
 
-        <div style="padding:16px 0 0; border-top:2px solid var(--color-ink-3); display:flex; gap:10px; flex-wrap:wrap;">
+        <div class="reg-cert-actions">
           <button class="btn btn-primary btn-sm" @click="copiarLink">↗ Copiar link de verificação</button>
           <button class="btn btn-secondary btn-sm" @click="verificarAgora">◎ Verificar agora</button>
+        </div>
+
+        <!-- INPI guide — só aparece para registros de Propriedade Intelectual -->
+        <div v-if="isPI" class="reg-cert-inpi">
+          <div class="reg-cert-inpi-head">Próximos passos no INPI</div>
+          <p class="reg-cert-inpi-desc">
+            Seu timestamp criptográfico está on-chain. Use este registro como prova de anterioridade ao protocolar no INPI.
+          </p>
+          <div class="reg-pi-steps">
+            <div class="reg-pi-step-head">
+              <span>Serviço</span>
+              <span>Custo</span>
+              <span>Prazo</span>
+            </div>
+            <div class="reg-pi-step">
+              <span class="reg-pi-step-tipo">Software (e-Software)</span>
+              <span class="reg-pi-step-custo">R$160</span>
+              <span class="reg-pi-step-prazo">Menos de 7 dias</span>
+            </div>
+            <div class="reg-pi-step">
+              <span class="reg-pi-step-tipo">Marca (por classe)</span>
+              <span class="reg-pi-step-custo">R$440–1.720</span>
+              <span class="reg-pi-step-prazo">18–36 meses</span>
+            </div>
+            <div class="reg-pi-step">
+              <span class="reg-pi-step-tipo">Patente de Invenção</span>
+              <span class="reg-pi-step-custo">R$500–2.400</span>
+              <span class="reg-pi-step-prazo">7–10 anos</span>
+            </div>
+          </div>
         </div>
       </div>
 
       <!-- Detalhes técnicos -->
-      <div style="border-top:2px solid var(--color-ink-3); padding:16px 24px;">
+      <div class="reg-cert-tech">
         <button class="tech-toggle" @click="detalhesAbertos = !detalhesAbertos">
           <span>{{ detalhesAbertos ? '▲' : '▼' }}</span>
           Detalhes técnicos
@@ -99,6 +129,8 @@ export default defineComponent({
       Math.round(((store.loadingEtapa + 0.5) / LOADING_STEPS.length) * 100)
     )
 
+    const isPI = computed(() => store.docType.startsWith('Prova de Anterioridade'))
+
     function formatarData(ts: number) {
       return new Date(ts * 1000).toLocaleString('pt-BR', { dateStyle: 'long', timeStyle: 'short' })
     }
@@ -111,7 +143,7 @@ export default defineComponent({
       if (store.resultado) router.push(`/verificar/${store.resultado.docId}`)
     }
 
-    return { store, steps: LOADING_STEPS, progressoPct, detalhesAbertos, formatarData, copiarLink, verificarAgora }
+    return { store, steps: LOADING_STEPS, progressoPct, detalhesAbertos, isPI, formatarData, copiarLink, verificarAgora }
   },
 })
 </script>

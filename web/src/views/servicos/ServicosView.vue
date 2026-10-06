@@ -1,60 +1,57 @@
 <template>
-  <div class="page" style="padding:48px 24px;">
-    <div class="wrap" style="display:flex; flex-direction:column; gap:40px;">
+  <div class="page svc-root">
+    <div class="wrap svc-stack">
 
       <!-- Header -->
       <div class="anim-slide-up">
         <div class="eyebrow" style="margin-bottom:8px;">Cobertura do produto</div>
-        <h1 style="font-family:var(--font-display); font-weight:900; font-size:clamp(32px,5vw,56px); text-transform:uppercase; letter-spacing:-1.5px; color:var(--color-text); line-height:1; margin-bottom:16px;">Serviços<br/>cartoriais</h1>
+        <h1 class="svc-h1">Serviços<br/>cartoriais</h1>
         <p class="body-muted" style="max-width:520px;">12 serviços de cartório físico brasileiro mapeados para o protocolo CartórioChain. Cada serviço mapeia diretamente para uma combinação de ZK Proof, ZCash ViewKey, Solana e Irys.</p>
       </div>
 
       <!-- Cobertura summary -->
       <div class="anim-slide-up anim-delay-1 grid-4">
-        <div v-for="c in cobertura" :key="c.label" style="border:2px solid var(--color-ink-3); padding:20px 16px; background:var(--color-ink-1);">
-          <div :style="`font-size:28px; font-weight:900; color:${c.cor}; font-family:var(--font-display);`">{{ c.qtd }}</div>
-          <div class="eyebrow" style="margin-top:6px; line-height:1.3;">{{ c.label }}</div>
+        <div v-for="c in cobertura" :key="c.label" class="svc-cob-card">
+          <div class="svc-cob-qty" :style="`color:${c.cor};`">{{ c.qtd }}</div>
+          <div class="eyebrow svc-cob-label">{{ c.label }}</div>
         </div>
       </div>
 
       <!-- Tech legend -->
-      <div class="anim-slide-up anim-delay-2" style="background:var(--color-ink-1); border:2px solid var(--color-ink-3); padding:20px 24px;">
+      <div class="anim-slide-up anim-delay-2 svc-tech-panel">
         <div class="eyebrow" style="margin-bottom:14px;">Stack tecnológico</div>
-        <div style="display:flex; flex-wrap:wrap; gap:8px;">
-          <div v-for="t in techStack" :key="t.nome" style="border:2px solid var(--color-ink-3); padding:6px 12px; background:var(--color-ink); display:flex; flex-direction:column; gap:2px;">
-            <span style="font-size:12px; font-weight:800; color:var(--color-text);">{{ t.nome }}</span>
+        <div class="svc-tech-list">
+          <div v-for="t in techStack" :key="t.nome" class="svc-tech-item">
+            <span class="svc-tech-nome">{{ t.nome }}</span>
             <span class="body-xs">{{ t.papel }}</span>
           </div>
         </div>
       </div>
 
-      <!-- Transparência de custos ──────────── -->
+      <!-- Transparência de custos -->
       <div class="anim-slide-up anim-delay-2">
         <div class="eyebrow" style="margin-bottom:16px;">Transparência de custos</div>
-        <div style="border:2px solid var(--color-ink-3); background:var(--color-ink-1); overflow:hidden;">
-          <div style="background:var(--color-ink); padding:20px 24px; display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:12px;">
+        <div class="svc-custos-wrap">
+          <div class="svc-custos-head">
             <div>
-              <span style="font-family:var(--font-display); font-size:40px; font-weight:900; color:var(--color-yellow); letter-spacing:-1px;">R$5</span>
-              <span style="font-size:13px; font-weight:700; color:var(--color-kraft); margin-left:10px;">por documento registrado</span>
+              <span class="svc-custos-r5">R$5</span>
+              <span class="svc-custos-per">por documento registrado</span>
             </div>
-            <div class="eyebrow" style="letter-spacing:0.06em;">Fórmula pública · auditável on-chain</div>
+            <div class="eyebrow svc-custos-formula">Fórmula pública · auditável on-chain</div>
           </div>
-          <div style="display:flex; flex-direction:column;">
-            <div v-for="(item, i) in custosBreakdown" :key="i"
-              style="display:flex; align-items:center; gap:0; border-bottom:1.5px solid var(--color-ink-3);"
-              :style="i === custosBreakdown.length-1 ? 'border-bottom:none;' : ''"
-            >
-              <div :style="`width:${item.pct}%; min-width:4px; background:${item.cor}; height:100%; min-height:56px; flex-shrink:0;`" />
-              <div style="flex:1; padding:14px 20px; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
+          <div class="svc-custos-rows">
+            <div v-for="(item, i) in custosBreakdown" :key="i" class="svc-custos-row">
+              <div class="svc-custos-bar" :style="`width:${item.pct}%; background:${item.cor};`" />
+              <div class="svc-custos-info">
                 <div>
-                  <div style="font-size:13px; font-weight:800; color:var(--color-text);">{{ item.destino }}</div>
+                  <div class="svc-custos-destino">{{ item.destino }}</div>
                   <div class="body-xs" style="margin-top:2px;">{{ item.descricao }}</div>
                 </div>
-                <div style="font-size:14px; font-weight:900; color:var(--color-text); font-family:var(--font-display); white-space:nowrap;">{{ item.valor }}</div>
+                <div class="svc-custos-valor">{{ item.valor }}</div>
               </div>
             </div>
           </div>
-          <div style="background:var(--color-ink-2); border-top:2px solid var(--color-ink-3); padding:12px 24px;">
+          <div class="svc-custos-foot">
             <p class="body-xs" style="line-height:1.6; margin:0;">
               Custo on-chain verificável a qualquer momento. O custo real de registro (Solana + Irys) é <strong>~R$0,10</strong> por documento — a diferença sustenta o protocolo, desenvolvimento e suporte.
             </p>
@@ -62,62 +59,53 @@
         </div>
       </div>
 
-      <!-- Planos B2B ──────────────────────────────────── -->
+      <!-- Planos B2B -->
       <div class="anim-slide-up anim-delay-3">
         <div class="eyebrow" style="margin-bottom:16px;">Planos</div>
-        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:2px;">
-
+        <div class="svc-planos-grid">
           <div v-for="plano in planos" :key="plano.nome"
-            style="border:2px solid var(--color-ink-3); padding:24px 20px; background:var(--color-ink-1); display:flex; flex-direction:column; gap:14px;"
-            :style="plano.destaque ? 'border-color:var(--color-emerald); background:#0D2B1A;' : ''"
+            class="svc-plano-card"
+            :class="{ 'svc-plano-card--destaque': plano.destaque }"
           >
             <div>
               <div v-if="plano.destaque" class="badge badge-emerald" style="margin-bottom:8px;">Mais popular</div>
-              <div style="font-size:14px; font-weight:900; text-transform:uppercase; letter-spacing:-0.2px; color:var(--color-text);">{{ plano.nome }}</div>
-              <div style="display:flex; align-items:baseline; gap:4px; margin-top:8px;">
-                <span style="font-family:var(--font-display); font-size:32px; font-weight:900; color:var(--color-text); letter-spacing:-1px;">{{ plano.preco }}</span>
+              <div class="svc-plano-nome">{{ plano.nome }}</div>
+              <div class="svc-plano-price-row">
+                <span class="svc-plano-price">{{ plano.preco }}</span>
                 <span class="body-xs">{{ plano.unidade }}</span>
               </div>
             </div>
-            <ul class="check-list" style="flex:1;">
+            <ul class="svc-plano-features">
               <li v-for="f in plano.features" :key="f" class="check-item" style="color:var(--color-text-muted);">
                 <span class="check-icon">✓</span> {{ f }}
               </li>
             </ul>
             <button
-              class="btn btn-sm"
+              class="btn btn-sm svc-plano-btn"
               :class="plano.destaque ? 'btn-primary' : 'btn-secondary'"
-              style="cursor:pointer; margin-top:auto;"
               @click="$router.push(plano.cta)"
             >{{ plano.ctaLabel }}</button>
           </div>
-
         </div>
       </div>
 
       <!-- Serviços table -->
       <div class="anim-slide-up anim-delay-3">
         <div class="eyebrow" style="margin-bottom:16px;">Todos os serviços</div>
-        <div style="display:flex; flex-direction:column; gap:2px;">
+        <div class="svc-list">
           <div v-for="s in servicos" :key="s.nome"
-            style="border:2px solid var(--color-ink-3); padding:18px 20px; background:var(--color-ink-1); display:grid; gap:12px; transition:border-color 0.2s cubic-bezier(0.32,0.72,0,1);"
-            :style="[
-              { gridTemplateColumns: '1fr auto' },
-              s.status === 'mvp' ? 'border-color:var(--color-emerald); background:#0D2B1A;' : ''
-            ]"
+            class="svc-item"
+            :class="{ 'svc-item--mvp': s.status === 'mvp' }"
           >
             <div>
-              <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px; flex-wrap:wrap;">
-                <span style="font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:-0.2px; color:var(--color-text);">{{ s.nome }}</span>
+              <div class="svc-item-head">
+                <span class="svc-item-nome">{{ s.nome }}</span>
                 <span :class="`badge-status badge-${s.status}`">{{ statusLabel(s.status) }}</span>
               </div>
-              <p class="body-sm" style="margin-bottom:10px;">{{ s.descricao }}</p>
-              <div style="display:flex; flex-wrap:wrap; gap:6px;">
-                <span v-for="t in s.tech" :key="t" class="tag tag-muted">{{ t }}</span>
-              </div>
+              <p class="body-sm">{{ s.descricao }}</p>
             </div>
-            <div style="display:flex; align-items:flex-start; padding-top:2px;">
-              <button v-if="s.status === 'mvp'" class="btn btn-primary btn-sm" style="cursor:pointer; white-space:nowrap;" @click="$router.push('/registrar?demo=mcmv')">
+            <div class="svc-item-action">
+              <button v-if="s.status === 'mvp'" class="btn btn-primary btn-sm svc-item-demo" @click="$router.push('/registrar?demo=mcmv')">
                 ↗ Ver demo
               </button>
             </div>
@@ -126,12 +114,12 @@
       </div>
 
       <!-- CTA -->
-      <div class="anim-slide-up" style="background:var(--color-ink); border:2px solid var(--color-ink-3); padding:32px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
+      <div class="anim-slide-up svc-cta">
         <div>
-          <div style="font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:-0.2px; color:var(--color-text); margin-bottom:6px;">Experimente o MVP agora</div>
+          <div class="svc-cta-nome">Experimente o MVP agora</div>
           <p class="body-sm" style="color:var(--color-kraft);">Autenticação + Escritura MCMV funcionando em produção.</p>
         </div>
-        <button class="btn btn-primary btn-sm" style="cursor:pointer;" @click="$router.push('/registrar?demo=mcmv')">
+        <button class="btn btn-primary btn-sm" @click="$router.push('/registrar?demo=mcmv')">
           ↗ Abrir demo MCMV
         </button>
       </div>
@@ -184,19 +172,19 @@ export default defineComponent({
         },
       ],
       servicos: [
-        { nome: 'Autenticação de documento', status: 'mvp', descricao: 'Hash SHA-256 do documento registrado on-chain com prova de autenticidade verificável por qualquer pessoa.', tech: ['SHA-256', 'Solana', 'Irys'] },
-        { nome: 'Escritura pública (MCMV / Imóvel)', status: 'mvp', descricao: 'Escrituras de transferência de imóvel com metadados cifrados. Caso de uso Minha Casa Minha Vida já demonstrado em produção.', tech: ['Solana', 'ZCash ViewKey', 'Irys'] },
-        { nome: 'Reconhecimento de firma', status: 'proximo', descricao: 'ZK proof vincula assinante ao documento sem revelar identidade. Equivalente digital do reconhecimento presencial.', tech: ['Noir ZK', 'ZCash ViewKey'] },
-        { nome: 'Procuração', status: 'proximo', descricao: 'Outorgante protegido por ViewKey — terceiros verificam a validade sem acessar dados pessoais do titular.', tech: ['ZCash ViewKey', 'Noir ZK'] },
-        { nome: 'Ata notarial', status: 'proximo', descricao: 'Registro de fato com timestamp imutável on-chain. Substitui a ata lavrada em cartório para fins de prova.', tech: ['Solana', 'Irys'] },
-        { nome: 'Apostila de Haia', status: 'roadmap', descricao: 'Hash + ZK proof exportáveis para verificação internacional. Elimina burocracia de autenticação entre países.', tech: ['SHA-256', 'ZK proof público'] },
-        { nome: 'Testamento', status: 'roadmap', descricao: 'Documento cifrado com ViewKey — conteúdo fica sigiloso até a abertura. Revelação condicionada a evento on-chain.', tech: ['ZCash ViewKey', 'time-lock'] },
-        { nome: 'Registro de imóveis', status: 'roadmap', descricao: 'NFT de propriedade com histórico completo on-chain. Cadeia de custódia auditável desde o primeiro registro.', tech: ['Solana NFT', 'Irys'] },
-        { nome: 'Contrato particular autenticado', status: 'roadmap', descricao: 'Multi-party ZK commitment — todas as partes provam assinatura sem expor dados umas às outras.', tech: ['Noir multi-party', 'ZCash ViewKey'] },
-        { nome: 'Divórcio extrajudicial', status: 'futuro', descricao: 'Escritura consensual com privacidade das partes garantida por ViewKey. Requer fluxo multi-party.', tech: ['ZCash ViewKey', 'multi-party'] },
-        { nome: 'Inventário extrajudicial', status: 'futuro', descricao: 'Partilha de bens documentada on-chain com privacidade dos herdeiros protegida.', tech: ['Solana', 'ZCash ViewKey'] },
-        { nome: 'Registro civil', status: 'futuro', descricao: 'Nascimento, casamento, óbito com identidade ZK vinculada ao CPF/RNPN. Requer integração gov.', tech: ['Gov API', 'ZK identity'] },
-        { nome: 'Registro de patente / propriedade intelectual', status: 'futuro', descricao: 'Prova de anterioridade criptográfica para inventores e pesquisadores. Hash do documento registrado on-chain antes do protocolo INPI — evidência imutável de prior art em disputas de propriedade intelectual.', tech: ['SHA-256', 'Solana', 'Irys', 'ZCash ViewKey'] },
+        { nome: 'Autenticação de documento', status: 'mvp', descricao: 'Hash SHA-256 do documento registrado on-chain com prova de autenticidade verificável por qualquer pessoa.' },
+        { nome: 'Escritura pública (MCMV / Imóvel)', status: 'mvp', descricao: 'Escrituras de transferência de imóvel com metadados cifrados. Caso de uso Minha Casa Minha Vida já demonstrado em produção.' },
+        { nome: 'Reconhecimento de firma', status: 'proximo', descricao: 'ZK proof vincula assinante ao documento sem revelar identidade. Equivalente digital do reconhecimento presencial.' },
+        { nome: 'Procuração', status: 'proximo', descricao: 'Outorgante protegido por ViewKey — terceiros verificam a validade sem acessar dados pessoais do titular.' },
+        { nome: 'Ata notarial', status: 'proximo', descricao: 'Registro de fato com timestamp imutável on-chain. Substitui a ata lavrada em cartório para fins de prova.' },
+        { nome: 'Apostila de Haia', status: 'roadmap', descricao: 'Hash + ZK proof exportáveis para verificação internacional. Elimina burocracia de autenticação entre países.' },
+        { nome: 'Testamento', status: 'roadmap', descricao: 'Documento cifrado com ViewKey — conteúdo fica sigiloso até a abertura. Revelação condicionada a evento on-chain.' },
+        { nome: 'Registro de imóveis', status: 'roadmap', descricao: 'NFT de propriedade com histórico completo on-chain. Cadeia de custódia auditável desde o primeiro registro.' },
+        { nome: 'Contrato particular autenticado', status: 'roadmap', descricao: 'Multi-party ZK commitment — todas as partes provam assinatura sem expor dados umas às outras.' },
+        { nome: 'Divórcio extrajudicial', status: 'futuro', descricao: 'Escritura consensual com privacidade das partes garantida por ViewKey. Requer fluxo multi-party.' },
+        { nome: 'Inventário extrajudicial', status: 'futuro', descricao: 'Partilha de bens documentada on-chain com privacidade dos herdeiros protegida.' },
+        { nome: 'Registro civil', status: 'futuro', descricao: 'Nascimento, casamento, óbito com identidade ZK vinculada ao CPF/RNPN. Requer integração gov.' },
+        { nome: 'Registro de patente / propriedade intelectual', status: 'futuro', descricao: 'Prova de anterioridade criptográfica para inventores e pesquisadores. Hash do documento registrado on-chain antes do protocolo INPI — evidência imutável de prior art em disputas de propriedade intelectual.' },
       ],
     }
   },
@@ -208,6 +196,8 @@ export default defineComponent({
   },
 })
 </script>
+
+<style src="./servicos.css"></style>
 
 <style scoped>
 .badge-status {

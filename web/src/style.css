@@ -121,9 +121,9 @@ body {
   padding: 4px 10px;
   border: 1.5px solid currentColor;
 }
-.tag-green  { color: var(--color-emerald); background: rgba(0,140,76,0.08); }
+.tag-green  { color: #00C46A; background: rgba(0,140,76,0.18); border-color: rgba(0,140,76,0.5); }
 .tag-yellow { color: var(--color-ink); background: var(--color-yellow); border-color: var(--color-ink); }
-.tag-muted  { color: var(--color-text-muted); border-color: var(--color-ink-4); }
+.tag-muted  { color: var(--color-text-muted); border-color: var(--color-ink-4); background: var(--color-ink-2); }
 
 /* ── Animações ──────────────────────────────────── */
 @keyframes fadeSlideUp {

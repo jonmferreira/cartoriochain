@@ -1,5 +1,5 @@
 <template>
-  <div class="anim-slide-up" style="display:flex; flex-direction:column; gap:20px;">
+  <div class="anim-slide-up reg-step-doc">
     <div class="card">
       <label class="label">Documento</label>
       <div
@@ -10,24 +10,24 @@
         @drop.prevent="onDrop"
       >
         <input ref="fileInput" type="file" accept=".pdf,.doc,.docx,.txt" @change="onArquivoChange" />
-        <div v-if="!store.arquivo" style="display:flex; flex-direction:column; align-items:center; gap:10px;">
+        <div v-if="!store.arquivo" class="reg-upload-idle">
           <svg width="36" height="36" viewBox="0 0 36 36" fill="none" stroke-width="2" stroke-linecap="square" aria-hidden="true" style="stroke:var(--color-text-label);">
             <path d="M18 6 L18 26"/>
             <path d="M9 15 L18 6 L27 15"/>
             <path d="M6 30 L30 30"/>
           </svg>
-          <div style="font-size:13px; font-weight:700; color:var(--color-text);">Clique ou arraste o documento aqui</div>
-          <div style="font-size:11px; color:var(--color-text-muted);">PDF, DOC, DOCX, TXT</div>
+          <div class="reg-upload-title">Clique ou arraste o documento aqui</div>
+          <div class="reg-upload-hint">PDF, DOC, DOCX, TXT</div>
         </div>
-        <div v-else style="display:flex; flex-direction:column; align-items:center; gap:8px;">
-          <span style="font-size:32px;">✓</span>
-          <div style="font-size:13px; font-weight:800; color:var(--color-emerald);">{{ store.arquivo.name }}</div>
-          <div style="font-size:11px; color:var(--color-text-muted);">{{ (store.arquivo.size / 1024).toFixed(1) }} KB — clique para trocar</div>
+        <div v-else class="reg-upload-done">
+          <span class="reg-upload-emoji">✓</span>
+          <div class="reg-upload-name">{{ store.arquivo.name }}</div>
+          <div class="reg-upload-size">{{ (store.arquivo.size / 1024).toFixed(1) }} KB — clique para trocar</div>
         </div>
       </div>
     </div>
 
-    <button class="btn btn-primary" style="align-self:flex-end;" :disabled="!store.arquivo" @click="store.etapa = 2">
+    <button class="btn btn-primary reg-advance" :disabled="!store.arquivo" @click="store.etapa = 2">
       Avançar →
     </button>
   </div>

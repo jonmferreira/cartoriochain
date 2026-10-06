@@ -1,0 +1,131 @@
+/* ── RegistrarView ───────────────────────────────── */
+.reg-root           { padding: 40px 24px; }
+.reg-stack          { display: flex; flex-direction: column; gap: 28px; }
+.reg-demo-banner    {
+  background: var(--color-yellow);
+  border: 2px solid var(--color-ink);
+  padding: 12px 16px;
+  display: flex; align-items: center; gap: 10px;
+}
+.reg-demo-text      { font-size: 13px; font-weight: 700; color: var(--color-ink); }
+
+/* ── StepDocumento ───────────────────────────────── */
+.reg-step-doc       { display: flex; flex-direction: column; gap: 20px; }
+.reg-upload-idle    { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.reg-upload-icon    { stroke: var(--color-text-label); }
+.reg-upload-title   { font-size: 13px; font-weight: 700; color: var(--color-text); }
+.reg-upload-hint    { font-size: 11px; color: var(--color-text-muted); }
+.reg-upload-done    { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.reg-upload-emoji   { font-size: 32px; }
+.reg-upload-name    { font-size: 13px; font-weight: 800; color: var(--color-emerald); }
+.reg-upload-size    { font-size: 11px; color: var(--color-text-muted); }
+.reg-advance        { align-self: flex-end; }
+
+/* ── StepPagamento ───────────────────────────────── */
+.reg-step-pag       { display: flex; flex-direction: column; gap: 20px; }
+.reg-pix-card       { display: flex; flex-direction: column; gap: 0; overflow: hidden; }
+.reg-pix-header     {
+  background: var(--color-emerald);
+  padding: 20px 24px;
+  display: flex; align-items: center; justify-content: space-between; gap: 20px;
+}
+.reg-pix-header-info { flex: 1; }
+.reg-pix-eyebrow    { font-size: 11px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: #A8D5B5; margin-bottom: 6px; }
+.reg-pix-amount     { font-size: 40px; font-weight: 900; color: white; font-family: var(--font-display); letter-spacing: -1px; }
+.reg-pix-subtitle   { font-size: 13px; color: #A8D5B5; margin-top: 4px; }
+.reg-pix-qr         { width: 120px; height: 120px; background: var(--color-yellow); padding: 8px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; }
+.reg-pix-qr-label   { font-size: 8px; font-weight: 800; color: var(--color-ink); letter-spacing: 0.08em; }
+.reg-pix-body       { padding: 24px; display: flex; flex-direction: column; gap: 20px; }
+.reg-pix-key-row    { display: flex; align-items: center; gap: 8px; background: var(--color-ink); border: 2px solid var(--color-ink-3); padding: 12px 14px; }
+.reg-pix-key-val    { flex: 1; font-size: 14px; font-weight: 700; color: var(--color-text); font-family: monospace; word-break: break-all; }
+.reg-pix-hint       { font-size: 12px; color: var(--color-text-muted); text-align: center; line-height: 1.6; }
+.reg-confirming     { display: flex; align-items: center; gap: 12px; padding: 14px 18px; background: var(--color-ink-1); border: 2px solid var(--color-emerald); }
+.reg-confirming-txt { font-size: 13px; font-weight: 700; color: var(--color-text); }
+.reg-pag-actions    { display: flex; gap: 12px; justify-content: space-between; }
+
+/* ── StepResultado ───────────────────────────────── */
+.reg-step-res       {}
+.reg-loading-card   { display: flex; flex-direction: column; gap: 20px; }
+.reg-loading-label  { letter-spacing: 0.06em; }
+.reg-cert           {}
+.reg-cert-padding   { padding: 24px 24px 0; }
+.reg-cert-header    { display: flex; align-items: flex-start; gap: 16px; padding-bottom: 20px; border-bottom: 2px solid var(--color-ink-3); }
+.reg-cert-label     { color: var(--color-emerald); margin-bottom: 4px; }
+.reg-cert-doctype   { font-size: 20px; font-weight: 900; text-transform: uppercase; letter-spacing: -0.5px; color: var(--color-text); }
+.reg-cert-cartorio  { margin-top: 4px; }
+.reg-cert-fields    { padding: 16px 0; display: flex; flex-direction: column; gap: 10px; }
+.reg-cert-actions   { padding: 16px 0 0; border-top: 2px solid var(--color-ink-3); display: flex; gap: 10px; flex-wrap: wrap; }
+.reg-cert-tech      { border-top: 2px solid var(--color-ink-3); padding: 16px 24px; }
+
+/* ── Propriedade Intelectual / Prior Art ─────────── */
+.reg-cert-label--pi { color: var(--color-yellow); }
+
+.reg-cert-inpi      {
+  margin: 0 -0px;
+  padding: 18px 24px;
+  background: rgba(0,140,76,0.06);
+  border-top: 2px solid var(--color-emerald);
+}
+.reg-cert-inpi-head {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-emerald);
+  margin-bottom: 8px;
+}
+.reg-cert-inpi-desc {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+  margin-bottom: 14px;
+}
+
+.reg-pi-guide       {
+  border-left: 3px solid var(--color-emerald);
+  background: rgba(0,140,76,0.05);
+  padding: 14px 16px;
+}
+.reg-pi-guide-head  { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.reg-pi-guide-icon  { font-size: 15px; color: var(--color-emerald); line-height: 1; }
+.reg-pi-guide-title {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-emerald);
+}
+.reg-pi-guide-body  { font-size: 13px; color: var(--color-text-muted); line-height: 1.5; margin-bottom: 14px; }
+
+.reg-pi-steps       { display: flex; flex-direction: column; gap: 2px; }
+.reg-pi-step-head   {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 12px;
+  padding: 6px 10px;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+.reg-pi-step        {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 10px;
+  background: var(--color-ink-2);
+  border: 1px solid var(--color-ink-3);
+}
+.reg-pi-step-tipo   { font-size: 12px; font-weight: 700; color: var(--color-text); }
+.reg-pi-step-custo  { font-family: var(--font-display); font-size: 13px; font-weight: 900; color: var(--color-emerald); white-space: nowrap; }
+.reg-pi-step-prazo  { font-size: 11px; font-weight: 600; color: var(--color-kraft); white-space: nowrap; }
+
+.reg-pi-guide-foot  {
+  font-size: 11px;
+  color: var(--color-kraft);
+  margin-top: 12px;
+  font-style: italic;
+  line-height: 1.4;
+}

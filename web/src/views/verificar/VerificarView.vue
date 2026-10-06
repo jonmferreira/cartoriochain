@@ -1,15 +1,15 @@
 <template>
-  <div class="page" style="padding:40px 24px;">
-    <div class="wrap-sm" style="display:flex; flex-direction:column; gap:28px;">
+  <div class="page vrfy-root">
+    <div class="wrap-sm vrfy-stack">
 
       <!-- Header -->
-      <div class="anim-slide-up">
+      <div class="anim-slide-up vrfy-header">
         <div class="eyebrow" style="margin-bottom:8px;">Verificação pública · Sem conta</div>
         <h1 class="page-title">Verificar documento</h1>
       </div>
 
       <!-- Formulário de busca -->
-      <div class="anim-slide-up anim-delay-1 card" style="display:flex; flex-direction:column; gap:16px;">
+      <div class="anim-slide-up anim-delay-1 card vrfy-form">
 
         <!-- Scanner QR -->
         <button class="btn-qr" @click="abrirScanner">
@@ -24,26 +24,24 @@
           Escanear QR code do documento
         </button>
 
-        <div style="display:flex; align-items:center; gap:10px;">
-          <div style="flex:1; height:1px; background:var(--color-kraft);"></div>
+        <div class="vrfy-or-divider">
+          <div class="vrfy-or-line"></div>
           <span class="eyebrow" style="letter-spacing:0.06em;">ou</span>
-          <div style="flex:1; height:1px; background:var(--color-kraft);"></div>
+          <div class="vrfy-or-line"></div>
         </div>
 
         <div>
           <label class="label">Código de verificação</label>
-          <div style="display:flex; gap:0;">
+          <div class="vrfy-input-row">
             <input
               v-model="docId"
-              class="inp"
+              class="inp vrfy-input"
               type="text"
               placeholder="Cole o código do documento ou link de verificação"
-              style="flex:1; border-right:none;"
               @keyup.enter="verificar"
             />
             <button
-              class="btn btn-primary"
-              style="border-left:none; white-space:nowrap;"
+              class="btn btn-primary vrfy-submit-btn"
               :disabled="!docId.trim() || carregando"
               @click="verificar"
             >
@@ -54,12 +52,10 @@
 
         <!-- Verificação avançada — auditores -->
         <div>
-          <button
-            class="eyebrow"
-            style="background:none; border:none; cursor:pointer; padding:0; letter-spacing:0.04em;"
-            @click="avancadoAberto = !avancadoAberto"
-          >{{ avancadoAberto ? '▲' : '▼' }} Verificação avançada (auditores)</button>
-          <div v-if="avancadoAberto" style="margin-top:10px;">
+          <button class="eyebrow vrfy-advanced-btn" @click="avancadoAberto = !avancadoAberto">
+            {{ avancadoAberto ? '▲' : '▼' }} Verificação avançada (auditores)
+          </button>
+          <div v-if="avancadoAberto" class="vrfy-hash-wrap">
             <label class="label">Hash do arquivo <span style="font-weight:500; text-transform:none; letter-spacing:0;">— re-valida se o conteúdo não foi alterado</span></label>
             <input v-model="docHashHex" class="inp inp-mono" type="text" placeholder="SHA-256 hex do arquivo original" />
           </div>
@@ -67,9 +63,9 @@
       </div>
 
       <!-- Loading -->
-      <div v-if="carregando" class="anim-fade" style="display:flex; flex-direction:column; gap:12px;">
+      <div v-if="carregando" class="anim-fade vrfy-loading">
         <div class="progress-track"><div class="progress-fill" style="width:70%; animation:progressFill 1.8s ease infinite;" /></div>
-        <div class="eyebrow" style="text-align:center; letter-spacing:0.04em;">Verificando autenticidade...</div>
+        <div class="eyebrow vrfy-loading-text">Verificando autenticidade...</div>
       </div>
 
       <!-- Erro -->
@@ -81,9 +77,9 @@
       <div v-if="resultado && !carregando">
 
         <!-- Não encontrado -->
-        <div v-if="!resultado.documento && !resultado.erro" class="anim-slide-up card" style="border-color:var(--color-kraft);">
-          <div style="display:flex; align-items:center; gap:16px;">
-            <div style="width:48px; height:48px; background:var(--color-ink-1); border:2px solid var(--color-ink-3); display:flex; align-items:center; justify-content:center; font-size:24px; flex-shrink:0;">?</div>
+        <div v-if="!resultado.documento && !resultado.erro" class="anim-slide-up card vrfy-notfound">
+          <div class="vrfy-notfound-row">
+            <div class="vrfy-notfound-icon">?</div>
             <div>
               <div style="font-size:14px; font-weight:800; color:var(--color-text);">Documento não encontrado</div>
               <p class="body-sm" style="margin-top:4px;">Verifique se o código está correto. Se tiver o arquivo original, use a verificação avançada abaixo.</p>
@@ -92,44 +88,44 @@
         </div>
 
         <!-- Válido / Revogado -->
-        <div v-if="resultado.documento" class="certificate" :style="resultado.documento.revoked ? 'border-color:var(--color-danger);' : ''">
-          <div v-if="resultado.documento.revoked" style="height:6px; background:var(--color-danger); margin:-1px -1px 0;" />
+        <div v-if="resultado.documento" class="certificate" :class="{ 'vrfy-cert-revoked': resultado.documento.revoked }">
+          <div v-if="resultado.documento.revoked" class="vrfy-cert-revoked-bar" />
 
-          <div style="padding:24px;">
+          <div class="vrfy-cert-padding">
 
             <!-- Status -->
-            <div style="display:flex; align-items:flex-start; gap:16px; padding-bottom:20px; border-bottom:2px solid var(--color-ink-3); margin-bottom:20px;">
-              <div :style="resultado.documento.revoked ? 'background:var(--color-danger)' : 'background:var(--color-emerald)'" style="width:48px; height:48px; display:flex; align-items:center; justify-content:center; font-size:24px; flex-shrink:0; animation:checkPop 0.4s ease 0.2s both; color:white;">
+            <div class="vrfy-status-row">
+              <div class="vrfy-status-icon" :class="resultado.documento.revoked ? 'vrfy-status-icon--revoked' : 'vrfy-status-icon--valid'">
                 {{ resultado.documento.revoked ? '✗' : '✓' }}
               </div>
               <div>
-                <div class="eyebrow" :style="resultado.documento.revoked ? 'color:var(--color-danger)' : 'color:var(--color-emerald)'" style="margin-bottom:4px;">
+                <div class="eyebrow" :class="resultado.documento.revoked ? 'vrfy-status-label--revoked' : 'vrfy-status-label--valid'">
                   {{ resultado.documento.revoked ? 'Documento revogado' : 'Documento válido e autenticado' }}
                 </div>
-                <div style="font-size:22px; font-weight:900; text-transform:uppercase; letter-spacing:-0.5px; color:var(--color-text);">{{ resultado.documento.doc_type }}</div>
-                <div class="body-sm" style="margin-top:4px;">{{ resultado.documento.cartorio_id }}</div>
+                <div class="vrfy-doc-type">{{ resultado.documento.doc_type }}</div>
+                <div class="body-sm vrfy-cartorio">{{ resultado.documento.cartorio_id }}</div>
               </div>
             </div>
 
             <!-- Campos -->
-            <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:20px;">
+            <div class="vrfy-fields">
               <div class="data-row">
                 <span class="data-row-label">Registrado em</span>
                 <span class="data-row-value" style="font-size:14px;">{{ formatarData(resultado.documento.registered_at) }}</span>
               </div>
               <div v-if="resultado.documento.viewkey_payload" class="data-row">
                 <span class="data-row-label">Privacidade do signatário</span>
-                <span class="tag tag-green">Dados protegidos ✓</span>
+                <span class="data-row-value" style="color:var(--color-emerald);">Dados protegidos ✓</span>
               </div>
-              <div v-if="resultado.documento.revoked" style="padding:12px; background:#2B0D0D; border:1.5px solid var(--color-danger);">
-                <span style="font-size:13px; font-weight:700; color:var(--color-danger);">Motivo da revogação: {{ resultado.documento.revoke_reason || 'Não informado' }}</span>
+              <div v-if="resultado.documento.revoked" class="vrfy-revoke-reason">
+                Motivo da revogação: {{ resultado.documento.revoke_reason || 'Não informado' }}
               </div>
             </div>
 
           </div>
 
           <!-- Detalhes técnicos -->
-          <div style="border-top:2px solid var(--color-ink-3); padding:16px 24px;">
+          <div class="vrfy-cert-tech">
             <button class="tech-toggle" @click="detalhesAbertos = !detalhesAbertos">
               <span>{{ detalhesAbertos ? '▲' : '▼' }}</span>
               Detalhes técnicos
@@ -151,19 +147,19 @@
     <Teleport to="body">
     <div v-if="qrAtivo" class="qr-overlay" @click.self="fecharScanner">
     <div class="qr-modal">
-      <div class="eyebrow" style="color:#A8D5B5; margin-bottom:12px;">Aponte para o QR code do documento</div>
-      <div style="position:relative; width:280px; height:280px; border:3px solid var(--color-yellow);">
-        <video ref="videoEl" autoplay playsinline muted style="width:100%; height:100%; object-fit:cover; display:block;" />
-        <div style="position:absolute; inset:0; pointer-events:none;">
-          <div style="position:absolute; top:16px; left:16px; width:24px; height:24px; border-top:3px solid var(--color-yellow); border-left:3px solid var(--color-yellow);"></div>
-          <div style="position:absolute; top:16px; right:16px; width:24px; height:24px; border-top:3px solid var(--color-yellow); border-right:3px solid var(--color-yellow);"></div>
-          <div style="position:absolute; bottom:16px; left:16px; width:24px; height:24px; border-bottom:3px solid var(--color-yellow); border-left:3px solid var(--color-yellow);"></div>
-          <div style="position:absolute; bottom:16px; right:16px; width:24px; height:24px; border-bottom:3px solid var(--color-yellow); border-right:3px solid var(--color-yellow);"></div>
+      <div class="eyebrow vrfy-qr-header">Aponte para o QR code do documento</div>
+      <div class="vrfy-qr-frame">
+        <video ref="videoEl" autoplay playsinline muted class="vrfy-qr-video" />
+        <div class="vrfy-qr-crosshair">
+          <div class="vrfy-qr-corner vrfy-qr-corner--tl"></div>
+          <div class="vrfy-qr-corner vrfy-qr-corner--tr"></div>
+          <div class="vrfy-qr-corner vrfy-qr-corner--bl"></div>
+          <div class="vrfy-qr-corner vrfy-qr-corner--br"></div>
         </div>
       </div>
       <canvas ref="canvasEl" style="display:none;" />
-      <div v-if="qrErro" class="body-xs" style="color:var(--color-yellow); margin-top:12px; text-align:center; max-width:260px;">{{ qrErro }}</div>
-      <button class="btn btn-secondary btn-sm" style="margin-top:16px; border-color:var(--color-text-muted); color:var(--color-kraft); cursor:pointer;" @click="fecharScanner">✕ Cancelar</button>
+      <div v-if="qrErro" class="body-xs vrfy-qr-error">{{ qrErro }}</div>
+      <button class="btn btn-secondary btn-sm vrfy-qr-cancel" @click="fecharScanner">✕ Cancelar</button>
     </div>
     </div>
     </Teleport>
@@ -274,6 +270,8 @@ export default defineComponent({
   },
 })
 </script>
+
+<style src="./verificar.css"></style>
 
 <style scoped>
 .btn-qr {

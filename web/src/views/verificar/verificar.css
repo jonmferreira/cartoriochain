@@ -1,0 +1,76 @@
+/* ── Layout ──────────────────────────────────────── */
+.vrfy-root          { padding: 40px 24px; }
+.vrfy-stack         { display: flex; flex-direction: column; gap: 28px; }
+.vrfy-header        { margin-bottom: 0; }
+
+/* ── Formulário ──────────────────────────────────── */
+.vrfy-form          { display: flex; flex-direction: column; gap: 16px; }
+.vrfy-or-divider    { display: flex; align-items: center; gap: 10px; }
+.vrfy-or-line       { flex: 1; height: 1px; background: var(--color-kraft); }
+.vrfy-input-row     { display: flex; gap: 0; }
+.vrfy-input         { flex: 1; border-right: none; }
+.vrfy-submit-btn    { border-left: none; white-space: nowrap; }
+.vrfy-advanced-btn  { background: none; border: none; cursor: pointer; padding: 0; letter-spacing: 0.04em; }
+.vrfy-hash-wrap     { margin-top: 10px; }
+
+/* ── Loading ─────────────────────────────────────── */
+.vrfy-loading       { display: flex; flex-direction: column; gap: 12px; }
+.vrfy-loading-text  { text-align: center; letter-spacing: 0.04em; }
+
+/* ── Resultado: não encontrado ───────────────────── */
+.vrfy-notfound      { border-color: var(--color-kraft); }
+.vrfy-notfound-row  { display: flex; align-items: center; gap: 16px; }
+.vrfy-notfound-icon {
+  width: 48px; height: 48px;
+  background: var(--color-ink-1);
+  border: 2px solid var(--color-ink-3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; flex-shrink: 0;
+}
+
+/* ── Certificado válido / revogado ───────────────── */
+.vrfy-cert-padding  { padding: 24px; }
+.vrfy-cert-revoked  { border-color: var(--color-danger); }
+.vrfy-cert-revoked-bar { height: 6px; background: var(--color-danger); margin: -1px -1px 0; }
+.vrfy-status-row    {
+  display: flex; align-items: flex-start; gap: 16px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid var(--color-ink-3);
+  margin-bottom: 20px;
+}
+.vrfy-status-icon   {
+  width: 48px; height: 48px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; flex-shrink: 0;
+  animation: checkPop 0.4s ease 0.2s both;
+  color: white;
+}
+.vrfy-status-icon--valid   { background: var(--color-emerald); }
+.vrfy-status-icon--revoked { background: var(--color-danger); }
+.vrfy-status-label--valid   { color: var(--color-emerald); margin-bottom: 4px; }
+.vrfy-status-label--revoked { color: var(--color-danger); margin-bottom: 4px; }
+.vrfy-doc-type      { font-size: 22px; font-weight: 900; text-transform: uppercase; letter-spacing: -0.5px; color: var(--color-text); }
+.vrfy-cartorio      { margin-top: 4px; }
+.vrfy-fields        { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+.vrfy-revoke-reason {
+  padding: 12px;
+  background: #2B0D0D;
+  border: 1.5px solid var(--color-danger);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-danger);
+}
+.vrfy-cert-tech     { border-top: 2px solid var(--color-ink-3); padding: 16px 24px; }
+
+/* ── Modal QR ────────────────────────────────────── */
+.vrfy-qr-header     { color: #A8D5B5; margin-bottom: 12px; }
+.vrfy-qr-frame      { position: relative; width: 280px; height: 280px; border: 3px solid var(--color-yellow); }
+.vrfy-qr-video      { width: 100%; height: 100%; object-fit: cover; display: block; }
+.vrfy-qr-crosshair  { position: absolute; inset: 0; pointer-events: none; }
+.vrfy-qr-corner     { position: absolute; width: 24px; height: 24px; }
+.vrfy-qr-corner--tl { top: 16px; left: 16px; border-top: 3px solid var(--color-yellow); border-left: 3px solid var(--color-yellow); }
+.vrfy-qr-corner--tr { top: 16px; right: 16px; border-top: 3px solid var(--color-yellow); border-right: 3px solid var(--color-yellow); }
+.vrfy-qr-corner--bl { bottom: 16px; left: 16px; border-bottom: 3px solid var(--color-yellow); border-left: 3px solid var(--color-yellow); }
+.vrfy-qr-corner--br { bottom: 16px; right: 16px; border-bottom: 3px solid var(--color-yellow); border-right: 3px solid var(--color-yellow); }
+.vrfy-qr-error      { color: var(--color-yellow); margin-top: 12px; text-align: center; max-width: 260px; }
+.vrfy-qr-cancel     { margin-top: 16px; border-color: var(--color-text-muted); color: var(--color-kraft); cursor: pointer; }

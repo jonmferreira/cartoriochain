@@ -1,6 +1,6 @@
 <template>
-  <div class="page" style="padding:40px 24px;">
-    <div class="wrap-sm" style="display:flex; flex-direction:column; gap:28px;">
+  <div class="page reg-root">
+    <div class="wrap-sm reg-stack">
 
       <!-- Header -->
       <div class="anim-slide-up">
@@ -11,9 +11,9 @@
       <RegistrarSteps class="anim-slide-up anim-delay-1" :etapa="store.etapa" :etapas="ETAPAS" />
 
       <!-- Banner demo MCMV -->
-      <div v-if="store.modoDemo" class="anim-fade" style="background:var(--color-yellow); border:2px solid var(--color-ink); padding:12px 16px; display:flex; align-items:center; gap:10px;">
+      <div v-if="store.modoDemo" class="anim-fade reg-demo-banner">
         <span style="font-size:16px;">🏠</span>
-        <span style="font-size:13px; font-weight:700; color:var(--color-ink);">
+        <span class="reg-demo-text">
           Demo MCMV — Escritura pré-preenchida. Clique em avançar para ver o fluxo completo.
         </span>
       </div>
@@ -64,3 +64,5 @@ export default defineComponent({
   },
 })
 </script>
+
+<style src="./registrar.css"></style>

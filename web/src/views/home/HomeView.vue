@@ -2,46 +2,43 @@
   <div class="page">
 
     <!-- Hero ───────────────────────────────────────────── -->
-    <section style="padding:64px 24px 48px;">
+    <section class="home-s-hero">
       <div class="wrap">
-        <div class="anim-slide-up" style="display:flex; align-items:flex-start; gap:48px; flex-wrap:wrap;">
+        <div class="anim-slide-up home-hero-layout">
 
           <!-- Texto -->
-          <div style="flex:1; min-width:280px;">
-            <div style="margin-bottom:20px;">
-              <span class="tag tag-green">Hackathon Colosseum · ZCash Track</span>
-            </div>
-            <h1 style="font-family:var(--font-display); font-weight:900; font-size:clamp(36px,4.5vw,58px); line-height:1; letter-spacing:-2px; text-transform:uppercase; color:var(--color-text); margin-bottom:8px; word-break:break-word;">
+          <div class="home-hero-text">
+            <h1 class="home-hero-title">
               Autentique<br/>
-              <span style="background:var(--color-yellow); padding:0 6px; display:inline-block; margin:4px 0;">documentos</span><br/>
+              <span class="home-hero-highlight">documentos</span><br/>
               com prova<br/>criptográfica.<br/>
-              <span style="font-size:0.55em; letter-spacing:-0.5px; color:var(--color-text-muted);">Sem intermediário.</span>
+              <span class="home-hero-sub">Sem intermediário.</span>
             </h1>
-            <p class="body-muted" style="max-width:420px; margin-top:16px;">
+            <p class="body-muted home-hero-body">
               Cartório digital descentralizado para o mercado brasileiro.
               Prova criptográfica de autenticidade. Dados do signatário protegidos por ZCash ViewKey — LGPD nativa.
             </p>
-            <div style="display:flex; gap:12px; margin-top:32px; flex-wrap:wrap;">
-              <button class="btn btn-primary btn-lg" style="cursor:pointer;" @click="$router.push('/registrar?demo=mcmv')">
+            <div class="home-hero-ctas">
+              <button class="btn btn-primary btn-lg" @click="$router.push('/registrar?demo=mcmv')">
                 ↗ Registrar documento
               </button>
-              <button class="btn btn-secondary btn-lg" style="cursor:pointer;" @click="$router.push('/verificar')">
+              <button class="btn btn-secondary btn-lg" @click="$router.push('/verificar')">
                 ◎ Verificar autenticidade
               </button>
             </div>
           </div>
 
           <!-- Sticker card -->
-          <div class="anim-slide-up anim-delay-2" style="width:240px; flex-shrink:0;">
-            <div style="border:2px solid var(--color-ink-3); background:var(--color-ink-2); padding:20px; position:relative; box-shadow:0 12px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05);">
-              <div style="position:absolute; top:-10px; left:16px; background:var(--color-yellow); border:2px solid var(--color-ink); padding:2px 10px; font-size:10px; font-weight:800; letter-spacing:0.08em; text-transform:uppercase;">CartórioChain</div>
-              <div style="margin-top:8px; display:flex; flex-direction:column; gap:14px;">
+          <div class="anim-slide-up anim-delay-2 home-sticker-wrap">
+            <div class="home-sticker">
+              <div class="home-sticker-label">CartórioChain</div>
+              <div class="home-sticker-stats">
                 <div v-for="stat in stats" :key="stat.label">
                   <div class="eyebrow">{{ stat.label }}</div>
-                  <div style="font-size:22px; font-weight:900; color:var(--color-text); margin-top:2px;">{{ stat.valor }}</div>
+                  <div class="home-stat-valor">{{ stat.valor }}</div>
                 </div>
               </div>
-              <div style="margin-top:16px; padding-top:14px; border-top:1.5px solid var(--color-ink-3); font-size:10px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:var(--color-emerald);">
+              <div class="home-sticker-foot">
                 ✓ Sem conta · Sem carteira
               </div>
             </div>
@@ -52,7 +49,7 @@
     </section>
 
     <!-- Problema ─────────────────────────────────────── -->
-    <section style="background:var(--color-ink-1); border-top:3px solid var(--color-emerald); border-bottom:3px solid var(--color-emerald); padding:48px 24px;">
+    <section class="home-s-problema">
       <div class="wrap">
         <div class="anim-slide-up grid-2">
           <div>
@@ -78,50 +75,46 @@
     </section>
 
     <!-- Como funciona ─────────────────────────────────── -->
-    <section style="padding:56px 24px;">
+    <section class="home-s-como">
       <div class="wrap">
         <div class="eyebrow-label" style="margin-bottom:32px; text-align:center;">Como funciona</div>
         <div class="grid-3">
-          <div v-for="(passo, i) in passos" :key="i" class="anim-slide-up" :class="`anim-delay-${i+1}`"
-            style="background:var(--color-ink-2); border:2px solid var(--color-ink-3); border-top:3px solid var(--color-emerald); padding:28px 20px; position:relative; box-shadow:0 8px 32px rgba(0,0,0,0.45)">
-            <div style="font-size:48px; font-weight:900; color:var(--color-kraft); line-height:1; margin-bottom:12px; font-family:var(--font-display);">0{{ i+1 }}</div>
-            <div style="font-size:15px; font-weight:800; text-transform:uppercase; letter-spacing:-0.2px; color:var(--color-text); margin-bottom:8px;">{{ passo.titulo }}</div>
+          <div v-for="(passo, i) in passos" :key="i" class="anim-slide-up home-passo-card" :class="`anim-delay-${i+1}`">
+            <div class="home-passo-num">0{{ i+1 }}</div>
+            <div class="home-passo-titulo">{{ passo.titulo }}</div>
             <p class="body-sm">{{ passo.descricao }}</p>
-            <div style="margin-top:14px;">
-              <span class="tag tag-muted">{{ passo.tech }}</span>
-            </div>
           </div>
         </div>
       </div>
     </section>
 
     <!-- Comparativo de custo ──────────────────────────── -->
-    <section style="background:var(--color-yellow); border-top:3px solid var(--color-ink); border-bottom:3px solid var(--color-ink); padding:32px 24px;">
-      <div class="wrap" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:24px;">
+    <section class="home-s-custo">
+      <div class="wrap home-custo-inner">
         <div>
-          <div class="eyebrow" style="color:var(--color-ink); opacity:0.6; margin-bottom:6px;">Custo por escritura MCMV</div>
-          <div style="display:flex; align-items:baseline; gap:20px; flex-wrap:wrap;">
-            <div style="display:flex; align-items:baseline; gap:8px;">
-              <span style="font-family:var(--font-display); font-size:48px; font-weight:900; color:var(--color-ink); letter-spacing:-2px; line-height:1;">R$5</span>
-              <span class="eyebrow" style="color:var(--color-ink);">CartórioChain</span>
+          <div class="eyebrow home-custo-eyebrow">Custo por escritura MCMV</div>
+          <div class="home-custo-values">
+            <div class="home-custo-entry">
+              <span class="home-custo-amount">R$5</span>
+              <span class="eyebrow home-custo-label">CartórioChain</span>
             </div>
-            <div style="font-size:22px; font-weight:900; color:var(--color-ink); opacity:0.4;">vs</div>
-            <div style="display:flex; align-items:baseline; gap:8px; text-decoration:line-through; opacity:0.5;">
-              <span style="font-family:var(--font-display); font-size:48px; font-weight:900; color:var(--color-ink); letter-spacing:-2px; line-height:1;">R$2.400</span>
-              <span class="eyebrow" style="color:var(--color-ink);">Cartório tradicional</span>
+            <div class="home-custo-vs">vs</div>
+            <div class="home-custo-entry home-custo-old">
+              <span class="home-custo-amount">R$2.400</span>
+              <span class="eyebrow home-custo-label">Cartório tradicional</span>
             </div>
           </div>
         </div>
         <div style="text-align:right;">
-          <div style="font-family:var(--font-display); font-size:36px; font-weight:900; color:var(--color-ink); letter-spacing:-1px; line-height:1;">99,8%</div>
-          <div class="eyebrow" style="color:var(--color-ink); opacity:0.7; margin-top:4px;">mais barato</div>
+          <div class="home-pct">99,8%</div>
+          <div class="eyebrow home-pct-label">mais barato</div>
         </div>
       </div>
     </section>
 
     <!-- Loop econômico ─────────────────────────────────── -->
-    <section style="background:var(--color-ink); border-bottom:3px solid var(--color-emerald); padding:48px 0;">
-      <div class="wrap" style="margin-bottom:28px;">
+    <section class="home-s-loop">
+      <div class="wrap home-loop-header">
         <div class="eyebrow" style="margin-bottom:8px;">Onde vai o R$5</div>
         <h2 class="section-title">Cada centavo é rastreável.</h2>
       </div>
@@ -144,24 +137,24 @@
     </section>
 
     <!-- Serviços cobertos ────────────────────────────── -->
-    <section style="padding:48px 24px;">
+    <section class="home-s-servicos">
       <div class="wrap">
-        <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:28px; flex-wrap:wrap; gap:12px;">
+        <div class="home-srv-header">
           <div>
             <div class="eyebrow" style="margin-bottom:8px;">Cobertura cartorial</div>
             <h2 class="section-title">12 serviços mapeados.<br/>2 funcionando hoje.</h2>
           </div>
-          <button class="btn btn-secondary btn-sm" style="cursor:pointer;" @click="$router.push('/servicos')">Ver todos →</button>
+          <button class="btn btn-secondary btn-sm" @click="$router.push('/servicos')">Ver todos →</button>
         </div>
         <div class="grid-3">
           <div v-for="s in servicosDestaque" :key="s.nome"
-            style="border:2px solid var(--color-ink-2); padding:18px 16px; background:var(--color-ink-1); position:relative;"
-            :style="s.mvp ? 'border-color:var(--color-emerald);' : ''"
+            class="home-srv-card"
+            :class="{ 'home-srv-card--mvp': s.mvp }"
           >
-            <div v-if="s.mvp" style="position:absolute; top:-1px; right:-1px; background:var(--color-emerald); padding:2px 8px; font-size:9px; font-weight:800; letter-spacing:0.08em; text-transform:uppercase; color:white;">MVP</div>
-            <div style="font-size:13px; font-weight:800; text-transform:uppercase; letter-spacing:-0.2px; color:var(--color-text); margin-bottom:6px;">{{ s.nome }}</div>
-            <div style="display:flex; flex-wrap:wrap; gap:4px; margin-top:8px;">
-              <span v-for="t in s.tech" :key="t" style="font-size:10px; font-weight:700; color:var(--color-text-muted); border:1.5px solid var(--color-ink-2); padding:2px 6px;">{{ t }}</span>
+            <div v-if="s.mvp" class="home-srv-mvp-badge">MVP</div>
+            <div class="home-srv-nome">{{ s.nome }}</div>
+            <div class="home-srv-techs">
+              <span v-for="t in s.tech" :key="t" class="home-srv-tech-tag">{{ t }}</span>
             </div>
           </div>
         </div>
@@ -169,17 +162,17 @@
     </section>
 
     <!-- Para quem ─────────────────────────────────────── -->
-    <section style="padding:56px 24px;">
+    <section class="home-s-perfis">
       <div class="wrap">
         <div class="eyebrow" style="margin-bottom:8px;">Quem usa</div>
         <h2 class="section-title" style="margin-bottom:36px;">Três formas de usar.<br/>Uma infraestrutura.</h2>
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px,1fr)); gap:2px;">
+        <div class="home-perfis-grid">
 
           <!-- Cidadão -->
-          <div style="background:var(--color-ink-1); border:2px solid var(--color-ink-2); padding:28px 24px; display:flex; flex-direction:column; gap:16px; transition:border-color 0.2s cubic-bezier(0.32,0.72,0,1);" @mouseover="$el.style.borderColor='var(--color-emerald)'" @mouseleave="$el.style.borderColor='var(--color-ink-2)'">
+          <div class="home-perfil-card">
             <span class="badge badge-yellow">Cidadão</span>
             <div>
-              <div style="font-size:17px; font-weight:900; text-transform:uppercase; letter-spacing:-0.3px; color:var(--color-text); margin-bottom:8px;">Escrituras, contratos<br/>e procurações</div>
+              <div class="home-perfil-title">Escrituras, contratos<br/>e procurações</div>
               <p class="body-sm">Autentique documentos habitacionais, herança e contratos pessoais. R$5 por registro — sem conta, sem carteira digital.</p>
             </div>
             <ul class="check-list">
@@ -187,14 +180,14 @@
               <li class="check-item"><span class="check-icon">✓</span> Link público de verificação para qualquer pessoa</li>
               <li class="check-item"><span class="check-icon">✓</span> Dados pessoais protegidos — só o titular acessa</li>
             </ul>
-            <button class="btn btn-primary btn-sm" style="margin-top:auto; cursor:pointer;" @click="$router.push('/registrar?demo=mcmv')">↗ Registrar documento</button>
+            <button class="btn btn-primary btn-sm home-perfil-cta" @click="$router.push('/registrar?demo=mcmv')">↗ Registrar documento</button>
           </div>
 
           <!-- Construtora -->
-          <div style="background:var(--color-ink-1); border:2px solid var(--color-ink-2); padding:28px 24px; display:flex; flex-direction:column; gap:16px; transition:border-color 0.2s cubic-bezier(0.32,0.72,0,1);" @mouseover="$el.style.borderColor='var(--color-emerald)'" @mouseleave="$el.style.borderColor='var(--color-ink-2)'">
+          <div class="home-perfil-card">
             <span class="badge badge-emerald">Construtora · Escritório</span>
             <div>
-              <div style="font-size:17px; font-weight:900; text-transform:uppercase; letter-spacing:-0.3px; color:var(--color-text); margin-bottom:8px;">Volume de documentos<br/>com rastreabilidade</div>
+              <div class="home-perfil-title">Volume de documentos<br/>com rastreabilidade</div>
               <p class="body-sm">API batch para registrar centenas de contratos MCMV ou jurídicos por mês. Auditoria on-chain elimina passivo por fraude.</p>
             </div>
             <ul class="check-list">
@@ -202,14 +195,14 @@
               <li class="check-item"><span class="check-icon">✓</span> Painel de gestão por projeto / obra</li>
               <li class="check-item"><span class="check-icon">✓</span> R$3/doc em volume (vs R$300 em cartório)</li>
             </ul>
-            <button class="btn btn-secondary btn-sm" style="margin-top:auto; border-color:var(--color-text-muted); color:var(--color-kraft); cursor:pointer;" @click="$router.push('/servicos')">Ver planos B2B →</button>
+            <button class="btn btn-secondary btn-sm home-perfil-cta" style="border-color:var(--color-text-muted); color:var(--color-kraft);" @click="$router.push('/servicos')">Ver planos B2B →</button>
           </div>
 
           <!-- Banco / Seguradora -->
-          <div style="background:var(--color-ink-1); border:2px solid var(--color-ink-2); padding:28px 24px; display:flex; flex-direction:column; gap:16px; transition:border-color 0.2s cubic-bezier(0.32,0.72,0,1);" @mouseover="$el.style.borderColor='var(--color-emerald)'" @mouseleave="$el.style.borderColor='var(--color-ink-2)'">
+          <div class="home-perfil-card">
             <span class="badge badge-ink">Banco · Seguradora</span>
             <div>
-              <div style="font-size:17px; font-weight:900; text-transform:uppercase; letter-spacing:-0.3px; color:var(--color-text); margin-bottom:8px;">Verificação de autenticidade<br/>em lote</div>
+              <div class="home-perfil-title">Verificação de autenticidade<br/>em lote</div>
               <p class="body-sm">Confirme a autenticidade de escrituras e laudos antes de liberar financiamento ou pagar sinistros. Resposta em millisegundos.</p>
             </div>
             <ul class="check-list">
@@ -217,22 +210,134 @@
               <li class="check-item"><span class="check-icon">✓</span> API REST — integra com due diligence existente</li>
               <li class="check-item"><span class="check-icon">✓</span> Evidência imutável, auditável por qualquer parte</li>
             </ul>
-            <button class="btn btn-secondary btn-sm" style="margin-top:auto; border-color:var(--color-text-muted); color:var(--color-kraft); cursor:pointer;" @click="$router.push('/verificar')">◎ Verificar autenticidade</button>
+            <button class="btn btn-secondary btn-sm home-perfil-cta" style="border-color:var(--color-text-muted); color:var(--color-kraft);" @click="$router.push('/verificar')">◎ Verificar autenticidade</button>
           </div>
 
         </div>
       </div>
     </section>
 
+    <!-- INPI comparativo ───────────────────────────────── -->
+    <section class="home-s-inpi">
+      <div class="wrap">
+        <div class="eyebrow" style="margin-bottom:8px;">Propriedade intelectual</div>
+        <h2 class="section-title" style="margin-bottom:8px;">O registro hoje.<br/>O registro partindo daqui.</h2>
+        <p class="body-muted" style="max-width:480px; margin-bottom:32px;">O INPI não tem API. Não tem velocidade. Mas tem validade jurídica. O CartórioChain resolve tudo que vem antes — e garante que quando você chegar lá, ninguém vai poder contestar que a ideia não era sua.</p>
+
+        <div class="home-inpi-tables">
+
+          <!-- Tabela INPI — entra da direita -->
+          <div class="home-inpi-slide" ref="inpiTable">
+            <div class="home-inpi-block">
+              <div class="home-inpi-head">
+                <span class="home-inpi-headlabel">Via INPI direto</span>
+                <span class="home-inpi-headtag">burocracia tradicional</span>
+              </div>
+              <table class="home-inpi-table">
+                <thead>
+                  <tr>
+                    <th>Tipo de registro</th>
+                    <th>Custo</th>
+                    <th>Prazo</th>
+                    <th>Anterioridade garantida em</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="r in inpiRows" :key="r.tipo">
+                    <td>{{ r.tipo }}</td>
+                    <td class="home-inpi-td-cost home-inpi-td-cost--slow">{{ r.custo }}</td>
+                    <td>{{ r.prazo }}</td>
+                    <td>{{ r.anterior }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="home-inpi-arrow">
+            <div class="home-inpi-arrow-line"></div>
+            <span class="home-inpi-arrow-txt">↓ partindo do CartórioChain</span>
+            <div class="home-inpi-arrow-line"></div>
+          </div>
+
+          <!-- Tabela CartórioChain — entra da esquerda -->
+          <div class="home-cc-slide" ref="ccTable">
+            <div class="home-inpi-block home-inpi-block--cc">
+              <div class="home-inpi-head home-inpi-head--cc">
+                <span class="home-inpi-headlabel home-inpi-headlabel--cc">Via CartórioChain → INPI</span>
+                <span class="home-inpi-headtag home-inpi-headtag--cc">R$5 · imediato</span>
+              </div>
+              <table class="home-inpi-table">
+                <thead>
+                  <tr>
+                    <th>Etapa</th>
+                    <th>Custo</th>
+                    <th>Velocidade</th>
+                    <th>O que garante</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="home-cc-row--highlight">
+                    <td>Prova de anterioridade</td>
+                    <td>R$5</td>
+                    <td>Imediato</td>
+                    <td>Hash + timestamp imutável on-chain — prior art provado antes mesmo de protocolar</td>
+                  </tr>
+                  <tr>
+                    <td>Consulta de conflito</td>
+                    <td>incluído</td>
+                    <td>Segundos</td>
+                    <td>Checa se sua marca já existe no INPI antes de você gastar R$440+</td>
+                  </tr>
+                  <tr>
+                    <td>Pacote para protocolo</td>
+                    <td>incluído</td>
+                    <td>Automático</td>
+                    <td>Hash no formato e-Software + Declaração de Veracidade pré-preenchida</td>
+                  </tr>
+                  <tr>
+                    <td>Protocolo no INPI</td>
+                    <td>R$440+</td>
+                    <td>18–36 meses</td>
+                    <td>Com anterioridade já garantida desde o primeiro dia</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Visão de futuro ─────────────────────────────────── -->
+    <section class="home-s-futuro">
+      <div class="wrap">
+        <div class="eyebrow" style="margin-bottom:8px;">Para onde vamos</div>
+        <h2 class="section-title">Infraestrutura de confiança<br/>para o Brasil inteiro.</h2>
+        <div class="home-futuro-grid">
+          <div v-for="f in futuroCards" :key="f.titulo"
+            class="anim-slide-up home-futuro-card"
+            :class="{ 'home-futuro-card--active': f.ativo }"
+          >
+            <div class="home-futuro-num" :class="{ 'home-futuro-num--active': f.ativo }">{{ f.num }}</div>
+            <div class="home-futuro-title">{{ f.titulo }}</div>
+            <p class="home-futuro-desc">{{ f.desc }}</p>
+            <span class="home-futuro-status" :class="`home-futuro-status--${f.statusKey}`">{{ f.status }}</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- CTA final ─────────────────────────────────────── -->
-    <section style="padding:56px 24px; text-align:center;">
-      <div style="max-width:500px; margin:0 auto;">
+    <section class="home-s-cta">
+      <div class="home-cta-inner">
         <div class="eyebrow" style="margin-bottom:16px;">Experimente agora</div>
-        <h3 class="section-title" style="margin-bottom:24px;">Registro em menos de 30 segundos.</h3>
-        <button class="btn btn-primary btn-lg" style="font-size:16px; padding:20px 40px;" @click="$router.push('/registrar?demo=mcmv')">
+        <h3 class="section-title home-cta-title">Registro em menos de 30 segundos.</h3>
+        <button class="btn btn-primary btn-lg home-cta-btn" @click="$router.push('/registrar?demo=mcmv')">
           ↗ Ver demo: escritura MCMV
         </button>
-        <p class="body-xs" style="margin-top:14px;">É um demo — nenhum dado real é armazenado.</p>
+        <p class="body-xs home-cta-hint">É um demo — nenhum dado real é armazenado.</p>
       </div>
     </section>
 
@@ -244,6 +349,17 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'HomeView',
+
+  mounted() {
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible') })
+    }, { threshold: 0.15 })
+    const inpi = this.$refs.inpiTable as Element
+    const cc   = this.$refs.ccTable   as Element
+    if (inpi) obs.observe(inpi)
+    if (cc)   obs.observe(cc)
+  },
+
   data() {
     return {
       stats: [
@@ -260,9 +376,21 @@ export default defineComponent({
         { icone: '↗',  bg: '#D4E8D0', titulo: 'Verificável', descricao: 'Link público para qualquer pessoa, para sempre', tag: 'Grátis' },
       ],
       passos: [
-        { titulo: 'Envie o documento',           descricao: 'Geramos uma impressão digital única do arquivo — o conteúdo nunca sai do seu dispositivo.',         tech: 'SHA-256' },
-        { titulo: 'Gera prova de autenticidade', descricao: 'Uma prova criptográfica é gerada e vinculada ao documento. Qualquer pessoa pode verificar, sem intermediário.', tech: 'Noir / Circom' },
-        { titulo: 'Registra permanentemente',    descricao: 'A prova vai para Solana + Irys. Dados do signatário ficam protegidos — só o titular pode ver.',              tech: 'Solana · Irys' },
+        { titulo: 'Envie o documento',           descricao: 'Geramos uma impressão digital única do arquivo — o conteúdo nunca sai do seu dispositivo.' },
+        { titulo: 'Gera prova de autenticidade', descricao: 'Uma prova criptográfica é gerada e vinculada ao documento. Qualquer pessoa pode verificar, sem intermediário.' },
+        { titulo: 'Registra permanentemente',    descricao: 'A prova vai para Solana + Irys. Dados do signatário ficam protegidos — só o titular pode ver.' },
+      ],
+      inpiRows: [
+        { tipo: 'Registro de marca',     custo: 'R$440–1.720/classe', prazo: '18–36 meses', anterior: 'Data do protocolo' },
+        { tipo: 'Registro de software',  custo: '~R$160',             prazo: '< 7 dias',    anterior: 'Data do protocolo' },
+        { tipo: 'Patente de invenção',   custo: 'R$500–2.400',        prazo: '7–10 anos',   anterior: 'Data do protocolo' },
+      ],
+      futuroCards: [
+        { num: '01', ativo: true,  titulo: 'Autenticação e escrituras', desc: 'SHA-256 + ZK proof para documentos habitacionais, contratos MCMV e escrituras públicas. Funcionando em produção.', status: '✓ Disponível hoje', statusKey: 'now' },
+        { num: '02', ativo: false, titulo: 'Propriedade intelectual', desc: 'Prior art criptográfico para marcas, software e inventores — antes mesmo de protocolar no INPI. Prova instantânea, R$5.', status: '→ Em desenvolvimento', statusKey: 'soon' },
+        { num: '03', ativo: false, titulo: 'Identidade ZK on-chain', desc: 'Cidadão prova quem é sem revelar CPF. Vinculação com gov.br via ZK commitment — privacidade sem impunidade.', status: '○ Roadmap', statusKey: 'future' },
+        { num: '04', ativo: false, titulo: 'Multi-party e contratos', desc: 'Todas as partes assinam com ZK proof — nenhuma enxerga os dados da outra. Divórcio, inventário, partilha extrajudicial.', status: '○ Roadmap', statusKey: 'future' },
+        { num: '05', ativo: false, titulo: 'Integração governo', desc: 'Registro civil, certidões, apostila de Haia. CartórioChain como infraestrutura pública — cartório para 215 milhões de brasileiros.', status: '◌ Visão', statusKey: 'future' },
       ],
       servicosDestaque: [
         { nome: 'Autenticação', mvp: true,  tech: ['SHA-256', 'Solana', 'Irys'] },
@@ -276,6 +404,8 @@ export default defineComponent({
   },
 })
 </script>
+
+<style src="./home.css"></style>
 
 <style scoped>
 .loop-marquee-outer {
@@ -338,7 +468,8 @@ export default defineComponent({
 
 .loop-desc {
   font-size: 11px;
-  color: #4F5E50;
+  color: var(--color-ink);
+  opacity: 0.6;
   line-height: 1.4;
 }
 
