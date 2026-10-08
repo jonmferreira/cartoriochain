@@ -91,7 +91,7 @@ export default defineComponent({
 
 /* ── Page transitions ────────────────────────────── */
 .page-enter-active, .page-leave-active {
-  transition: opacity 0.28s cubic-bezier(0.32,0.72,0,1), transform 0.28s cubic-bezier(0.32,0.72,0,1);
+  transition: opacity 0.15s cubic-bezier(0.32,0.72,0,1), transform 0.15s cubic-bezier(0.32,0.72,0,1);
 }
 .page-enter-from { opacity: 0; transform: translateY(14px); }
 .page-leave-to  { opacity: 0; transform: translateY(-8px); }

@@ -20,7 +20,7 @@ export const useRegistrarStore = defineStore('registrar', {
   persist: {
     key: 'cartoriochain:registrar',
     // File não é serializável — excluir; resultado e loading são voláteis
-    omit: ['arquivo', 'carregando', 'loadingEtapa', 'resultado', 'erro'],
+    omit: ['etapa', 'modoDemo', 'arquivo', 'carregando', 'loadingEtapa', 'resultado', 'erro'],
   },
 
   state: () => ({

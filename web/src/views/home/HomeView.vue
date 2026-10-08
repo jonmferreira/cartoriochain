@@ -421,9 +421,6 @@ export default defineComponent({
   animation: loop-scroll 38s linear infinite;
 }
 
-.loop-marquee-track:hover {
-  animation-play-state: paused;
-}
 
 .loop-item {
   display: flex;
