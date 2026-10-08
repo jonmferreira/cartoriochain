@@ -102,9 +102,9 @@ test.describe('Fluxo registrar', () => {
     const toggle = page.locator('button:has-text("Privacidade avançada")')
     await expect(toggle).toBeVisible()
     await toggle.click()
-    await expect(page.locator('text=Payload cifrado')).toBeVisible()
+    await expect(page.locator('text=Privacidade ativa')).toBeVisible()
     await toggle.click()
-    await expect(page.locator('text=Payload cifrado')).not.toBeVisible()
+    await expect(page.locator('text=Privacidade ativa')).not.toBeVisible()
   })
 
   test('step 2 — tipo de documento é combobox com datalist', async ({ page }) => {
@@ -142,13 +142,13 @@ test.describe('Home — seções de negócio', () => {
   test('loop econômico — 5 nós visíveis', async ({ page }) => {
     await page.goto(BASE)
     await expect(page.locator('text=Cada centavo é rastreável')).toBeVisible()
-    await expect(page.locator('text=Você paga')).toBeVisible()
+    await expect(page.getByText('Promocional', { exact: true }).first()).toBeVisible()
     await expect(page.getByText('Verificável', { exact: true }).first()).toBeVisible()
   })
 
   test('3 perfis de usuário com CTAs individuais', async ({ page }) => {
     await page.goto(BASE)
-    await expect(page.locator('text=Cidadão')).toBeVisible()
+    await expect(page.getByText('Cidadão', { exact: true })).toBeVisible()
     await expect(page.locator('text=Construtora · Escritório')).toBeVisible()
     await expect(page.locator('text=Banco · Seguradora')).toBeVisible()
     await expect(page.locator('button:has-text("Registrar documento")').first()).toBeVisible()
