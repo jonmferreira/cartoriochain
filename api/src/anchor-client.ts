@@ -15,8 +15,10 @@ export function loadKeypair(privateKeyBase58OrPath: string): Keypair {
     return Keypair.fromSecretKey(new Uint8Array(raw));
   }
   // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const bs58 = require("bs58");
-  return Keypair.fromSecretKey(bs58.decode(privateKeyBase58OrPath));
+  const bs58mod = require("bs58");
+  // bs58 v6 é ESM: via require(), decode pode estar sob .default
+  const decode = typeof bs58mod.decode === "function" ? bs58mod.decode : bs58mod.default.decode;
+  return Keypair.fromSecretKey(decode(privateKeyBase58OrPath));
 }
 
 export function getProvider(keypair: Keypair, rpcUrl?: string): anchor.AnchorProvider {
