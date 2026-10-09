@@ -5,7 +5,7 @@ export default defineConfig({
   timeout: 15000,
   reporter: 'list',
   use: {
-    baseURL: 'http://localhost:5176',
+    baseURL: process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:5176',
     permissions: ['clipboard-read', 'clipboard-write'],
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',

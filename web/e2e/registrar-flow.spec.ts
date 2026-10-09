@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test'
 import path from 'path'
 
-const BASE = 'http://localhost:5176'
+const BASE = process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:5176'
 
 test.describe('Fluxo registrar', () => {
 
