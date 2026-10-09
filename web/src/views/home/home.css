@@ -14,7 +14,7 @@
   margin-bottom: 8px;
   word-break: break-word;
 }
-.home-hero-highlight { background: var(--color-yellow); padding: 0 6px; display: inline-block; margin: 4px 0; }
+.home-hero-highlight { background: var(--color-yellow); color: var(--color-ink); padding: 0 6px; display: inline-block; margin: 4px 0; }
 .home-hero-sub      { font-size: 0.55em; letter-spacing: -0.5px; color: var(--color-text-muted); }
 .home-hero-body     { max-width: 420px; margin-top: 16px; }
 .home-hero-ctas     { display: flex; gap: 12px; margin-top: 32px; flex-wrap: wrap; }
