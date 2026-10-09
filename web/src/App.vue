@@ -89,6 +89,22 @@ export default defineComponent({
 .nav-link--active { background: var(--color-yellow); color: var(--color-ink); }
 .nav-link--idle   { color: var(--color-kraft); }
 
+/* Mobile: compacta a nav e deixa os links rolarem dentro da barra
+   (evita overflow horizontal da página inteira em telas pequenas). */
+@media (max-width: 560px) {
+  .app-nav { padding: 0 12px; }
+  .app-nav-brand { font-size: 13px; }
+  .app-nav-links {
+    gap: 2px;
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .app-nav-links::-webkit-scrollbar { display: none; }
+  .nav-link { padding: 8px 10px; font-size: 10px; flex-shrink: 0; }
+}
+
 /* ── Page transitions ────────────────────────────── */
 .page-enter-active, .page-leave-active {
   transition: opacity 0.15s cubic-bezier(0.32,0.72,0,1), transform 0.15s cubic-bezier(0.32,0.72,0,1);

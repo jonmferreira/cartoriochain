@@ -15,7 +15,15 @@
   word-break: break-word;
 }
 .home-hero-highlight { background: var(--color-yellow); color: var(--color-ink); padding: 0 6px; display: inline-block; margin: 4px 0; }
-.home-hero-sub      { font-size: 0.55em; letter-spacing: -0.5px; color: var(--color-text-muted); }
+.home-hero-sub      {
+  display: inline-block;
+  font-size: 0.42em;
+  letter-spacing: 0;
+  color: var(--color-text);
+  border: 2px solid var(--color-yellow);
+  padding: 2px 12px;
+  margin-top: 10px;
+}
 .home-hero-body     { max-width: 420px; margin-top: 16px; }
 .home-hero-ctas     { display: flex; gap: 12px; margin-top: 32px; flex-wrap: wrap; }
 
@@ -207,6 +215,19 @@
 
 @media (prefers-reduced-motion: reduce) {
   .home-inpi-slide, .home-cc-slide { transform: none; opacity: 1; }
+}
+
+/* Mobile: tabela INPI rola dentro do próprio box (não empurra a página),
+   sem o deslize horizontal que estourava a viewport. */
+@media (max-width: 560px) {
+  .home-inpi-slide, .home-cc-slide {
+    transform: none;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .home-inpi-slide::-webkit-scrollbar, .home-cc-slide::-webkit-scrollbar { display: none; }
+  .home-inpi-table th, .home-inpi-table td { padding: 8px 10px; }
 }
 
 /* ── Visão de futuro ─────────────────────────────── */

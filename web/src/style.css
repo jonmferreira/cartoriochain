@@ -34,7 +34,9 @@ body {
   background: var(--color-ink);
   color: var(--color-text);
   -webkit-font-smoothing: antialiased;
+  scrollbar-width: none;          /* Firefox — esconde scrollbar da página */
 }
+body::-webkit-scrollbar { display: none; }  /* Chrome/Safari/Edge */
 
 /* ── Botões ─────────────────────────────────────── */
 .btn {
@@ -238,6 +240,13 @@ body {
   height: 2px;
   background: var(--color-ink-3);
   margin: 0 8px;
+}
+
+/* Mobile: esconde os labels dos passos (os círculos numerados + o conteúdo
+   abaixo já indicam o passo), evitando overflow horizontal do stepper. */
+@media (max-width: 560px) {
+  .step-label { display: none; }
+  .step-connector { margin: 0 4px; }
 }
 
 /* ── Loading steps ──────────────────────────────── */
