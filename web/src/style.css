@@ -94,7 +94,7 @@ body {
   outline: none;
   min-height: 44px;
 }
-.inp::placeholder { color: var(--color-text-label); opacity: 0.7; }
+.inp::placeholder { color: var(--color-text-label); }
 .inp:focus { border-color: var(--color-emerald); box-shadow: 0 0 0 4px rgba(0,140,76,0.2); }
 .inp-mono { font-family: var(--font-mono); font-size: 12px; }
 
@@ -246,11 +246,11 @@ body {
   align-items: center;
   gap: 12px;
   padding: 12px 0;
-  opacity: 0.4;
-  transition: opacity 0.3s;
+  color: var(--color-text-muted);
+  transition: color 0.3s;
 }
-.loading-step.active  { opacity: 1; }
-.loading-step.done    { opacity: 0.6; }
+.loading-step.active  { color: var(--color-text); }
+.loading-step.done    { color: var(--color-text-label); }
 .loading-dot {
   width: 8px; height: 8px;
   border-radius: 50%;
@@ -383,16 +383,16 @@ body {
 
 /* ── Typography utilities ────────────────────────── */
 .eyebrow {
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 800;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--color-text-muted);
 }
 .eyebrow-label {
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 800;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--color-text-label);
 }

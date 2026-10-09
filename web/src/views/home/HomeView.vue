@@ -464,14 +464,13 @@ export default defineComponent({
 }
 
 .loop-desc {
-  font-size: 11px;
-  color: var(--color-ink);
-  opacity: 0.6;
+  font-size: 12px;
+  color: var(--color-ink-4);
   line-height: 1.4;
 }
 
 .loop-tag {
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
