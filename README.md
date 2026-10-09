@@ -26,6 +26,8 @@ The user never sees a blockchain. They see document type, notary and date. Under
 
 **Privacy without impunity:** the holder controls who has access. A judge with the ViewKey can audit. A hacker without it gets nothing.
 
+> **On-chain privacy — how we got here.** Our first privacy layer encrypted signer data with ZCash ViewKey *semantics* (X25519 + AES-256-GCM). We then pursued a real **on-chain** integration: we evaluated a Zcash full node and a Zcash light client, hit external testnet-infrastructure limits (faucet drought + the NU7 upgrade), and are shipping the same guarantee through **Cloak**, a Solana-native privacy stack with viewing keys — reinforcing our Solana integration. **Full technical study & decision →** [`docs/zcash-integration-pivot.md`](./docs/zcash-integration-pivot.md)
+
 ---
 
 ## Velocity — how we iterate
