@@ -105,7 +105,7 @@ export default defineComponent({
 .nav-link--idle   { color: var(--color-kraft); }
 
 /* ── Idioma (PT/EN) ──────────────────────────────── */
-.app-nav-right { display: flex; align-items: center; gap: 12px; }
+.app-nav-right { display: flex; align-items: center; gap: 12px; min-width: 0; }
 .app-lang { display: flex; border: 1px solid var(--color-ink-3); flex-shrink: 0; }
 .app-lang-btn {
   font-family: var(--font-display);
@@ -128,6 +128,7 @@ export default defineComponent({
 @media (max-width: 560px) {
   .app-nav { padding: 0 12px; }
   .app-nav-brand { font-size: 13px; }
+  .app-nav-right { gap: 8px; }
   .app-nav-links {
     gap: 2px;
     min-width: 0;

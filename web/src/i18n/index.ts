@@ -30,6 +30,25 @@ const messages = {
       pqcBadgeTag: 'Proteção pós-quântica',
       pqcBadgeText:
         'Produzido com estratégia de proteção pós-quântica — abordagem híbrida alinhada às diretrizes de transição PQC do NIST ↗',
+      comoFunciona: 'Como funciona',
+      passos: [
+        { titulo: 'Envie o documento', descricao: 'Geramos uma impressão digital única do arquivo — o conteúdo nunca sai do seu dispositivo.' },
+        { titulo: 'Gera prova de autenticidade', descricao: 'Uma prova criptográfica é gerada e vinculada ao documento. Qualquer pessoa pode verificar, sem intermediário.' },
+        { titulo: 'Registra permanentemente', descricao: 'A prova vai para Solana + Irys. Dados do signatário ficam protegidos — só o titular pode ver.' },
+      ],
+      stats: [
+        { label: 'Custo por registro', valor: '~$0.001' },
+        { label: 'Tempo de registro', valor: '< 5 seg' },
+        { label: 'Armazenamento', valor: 'Permanente' },
+        { label: 'Privacidade', valor: 'Total' },
+      ],
+      paraOndeVamos: 'Para onde vamos',
+      futuroTitlePre: 'Infraestrutura de confiança',
+      futuroTitlePost: 'para o Brasil inteiro.',
+      experimente: 'Experimente agora',
+      ctaTitle: 'Registro em menos de 30 segundos.',
+      ctaBtn: '↗ Ver demo: escritura MCMV',
+      ctaHint: 'É um demo — nenhum dado real é armazenado.',
     },
   },
   en: {
@@ -56,6 +75,25 @@ const messages = {
       pqcBadgeTag: 'Post-quantum protection',
       pqcBadgeText:
         'Built with a post-quantum protection strategy — a hybrid approach aligned with NIST post-quantum transition guidance ↗',
+      comoFunciona: 'How it works',
+      passos: [
+        { titulo: 'Upload the document', descricao: 'We generate a unique fingerprint of the file — the content never leaves your device.' },
+        { titulo: 'Generates proof of authenticity', descricao: 'A cryptographic proof is created and bound to the document. Anyone can verify it, with no middleman.' },
+        { titulo: 'Registers permanently', descricao: 'The proof goes to Solana + Irys. Signer data stays protected — only the holder can see it.' },
+      ],
+      stats: [
+        { label: 'Cost per registration', valor: '~$0.001' },
+        { label: 'Registration time', valor: '< 5 sec' },
+        { label: 'Storage', valor: 'Permanent' },
+        { label: 'Privacy', valor: 'Full' },
+      ],
+      paraOndeVamos: 'Where we are going',
+      futuroTitlePre: 'Trust infrastructure',
+      futuroTitlePost: 'for all of Brazil.',
+      experimente: 'Try it now',
+      ctaTitle: 'Registration in under 30 seconds.',
+      ctaBtn: '↗ See demo: MCMV deed',
+      ctaHint: 'It is a demo — no real data is stored.',
     },
   },
 }
@@ -72,6 +110,11 @@ export const i18n = createI18n({
   fallbackLocale: 'pt',
   messages,
 })
+
+// Reflete o idioma inicial no <html lang> (a11y/SEO), não só ao trocar.
+if (typeof document !== 'undefined') {
+  document.documentElement.lang = initialLocale() === 'en' ? 'en' : 'pt-BR'
+}
 
 export function setLocale(locale: 'pt' | 'en') {
   i18n.global.locale.value = locale

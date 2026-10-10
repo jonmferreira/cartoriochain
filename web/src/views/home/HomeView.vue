@@ -85,7 +85,7 @@
     <!-- Como funciona ─────────────────────────────────── -->
     <section class="home-s-como">
       <div class="wrap">
-        <div class="eyebrow-label" style="margin-bottom:32px; text-align:center;">Como funciona</div>
+        <div class="eyebrow-label" style="margin-bottom:32px; text-align:center;">{{ $t('home.comoFunciona') }}</div>
         <div class="grid-3">
           <div v-for="(passo, i) in passos" :key="i" class="anim-slide-up home-passo-card" :class="`anim-delay-${i+1}`">
             <div class="home-passo-num">0{{ i+1 }}</div>
@@ -321,8 +321,8 @@
     <!-- Visão de futuro ─────────────────────────────────── -->
     <section class="home-s-futuro">
       <div class="wrap">
-        <div class="eyebrow" style="margin-bottom:8px;">Para onde vamos</div>
-        <h2 class="section-title">Infraestrutura de confiança<br/>para o Brasil inteiro.</h2>
+        <div class="eyebrow" style="margin-bottom:8px;">{{ $t('home.paraOndeVamos') }}</div>
+        <h2 class="section-title">{{ $t('home.futuroTitlePre') }}<br/>{{ $t('home.futuroTitlePost') }}</h2>
         <div class="home-futuro-grid">
           <div v-for="f in futuroCards" :key="f.titulo"
             class="anim-slide-up home-futuro-card"
@@ -340,12 +340,12 @@
     <!-- CTA final ─────────────────────────────────────── -->
     <section class="home-s-cta">
       <div class="home-cta-inner">
-        <div class="eyebrow" style="margin-bottom:16px;">Experimente agora</div>
-        <h3 class="section-title home-cta-title">Registro em menos de 30 segundos.</h3>
+        <div class="eyebrow" style="margin-bottom:16px;">{{ $t('home.experimente') }}</div>
+        <h3 class="section-title home-cta-title">{{ $t('home.ctaTitle') }}</h3>
         <button class="btn btn-primary btn-lg home-cta-btn" @click="$router.push('/registrar?demo=mcmv')">
-          ↗ Ver demo: escritura MCMV
+          {{ $t('home.ctaBtn') }}
         </button>
-        <p class="body-xs home-cta-hint">É um demo — nenhum dado real é armazenado.</p>
+        <p class="body-xs home-cta-hint">{{ $t('home.ctaHint') }}</p>
       </div>
     </section>
 
@@ -368,25 +368,19 @@ export default defineComponent({
     if (cc)   obs.observe(cc)
   },
 
+  computed: {
+    stats(): { label: string; valor: string }[] { return this.$tm('home.stats') as unknown as { label: string; valor: string }[] },
+    passos(): { titulo: string; descricao: string }[] { return this.$tm('home.passos') as unknown as { titulo: string; descricao: string }[] },
+  },
+
   data() {
     return {
-      stats: [
-        { label: 'Custo por registro', valor: '~$0.001' },
-        { label: 'Tempo de registro',  valor: '< 5 seg' },
-        { label: 'Armazenamento',      valor: 'Permanente' },
-        { label: 'Privacidade',        valor: 'Total' },
-      ],
       loopEconomico: [
         { icone: 'R$5', bg: 'var(--color-yellow)', titulo: 'Promocional', descricao: 'Taxa única via PIX por documento', tag: null },
         { icone: '✓',  bg: '#C6ECD8', titulo: 'Autenticado', descricao: 'ZK proof gerado e vinculado ao arquivo', tag: 'ZK Proof' },
         { icone: '◎',  bg: '#C5DCF0', titulo: 'Registrado', descricao: 'Timestamp imutável na Solana', tag: '~R$0,001' },
         { icone: '∞',  bg: '#E8D5F5', titulo: 'Armazenado', descricao: 'Documento permanente via Irys', tag: '~R$0,10' },
         { icone: '↗',  bg: '#D4E8D0', titulo: 'Verificável', descricao: 'Link público para qualquer pessoa, para sempre', tag: 'Grátis' },
-      ],
-      passos: [
-        { titulo: 'Envie o documento',           descricao: 'Geramos uma impressão digital única do arquivo — o conteúdo nunca sai do seu dispositivo.' },
-        { titulo: 'Gera prova de autenticidade', descricao: 'Uma prova criptográfica é gerada e vinculada ao documento. Qualquer pessoa pode verificar, sem intermediário.' },
-        { titulo: 'Registra permanentemente',    descricao: 'A prova vai para Solana + Irys. Dados do signatário ficam protegidos — só o titular pode ver.' },
       ],
       inpiRows: [
         { tipo: 'Registro de marca',     custo: 'R$440–1.720/classe', prazo: '18–36 meses', anterior: 'Data do protocolo' },
@@ -509,6 +503,9 @@ export default defineComponent({
   .loop-marquee-track {
     animation: none;
     overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
   }
+  .loop-marquee-track::-webkit-scrollbar { display: none; }
 }
 </style>
