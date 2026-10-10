@@ -26,7 +26,7 @@ The user never sees a blockchain. They see document type, notary and date. Under
 
 **Privacy without impunity:** the holder controls who has access. A judge with the ViewKey can audit. A hacker without it gets nothing.
 
-> **On-chain privacy — how we got here.** Our first privacy layer encrypted signer data with ZCash ViewKey *semantics* (X25519 + AES-256-GCM). We then pursued a real **on-chain** integration: we evaluated a Zcash full node and a Zcash light client, hit external testnet-infrastructure limits (faucet drought + the NU7 upgrade), and are shipping the same guarantee through **Cloak**, a Solana-native privacy stack with viewing keys — reinforcing our Solana integration. **Full technical study & decision →** [`docs/zcash-integration-pivot.md`](./docs/zcash-integration-pivot.md)
+> **On-chain privacy — how we got here (honest build log).** What ships today is a *real* selective-disclosure layer: signer data encrypted with X25519 + HKDF + AES-256-GCM following **ZCash ViewKey semantics** — the holder (or an authorized auditor) decrypts; everyone else sees ciphertext. We then pursued a *native* on-chain integration and documented it honestly: we funded a real Zcash testnet light wallet, evaluated a full node (`zcashd`) and a light client (`zingo-cli`), and evaluated **Cloak** (Solana-native privacy). All three are blocked by external infrastructure (zingolib's fail-closed Nym mixnet needing a nakednet rebuild; Cloak pinned to a mainnet-only endpoint) — not by our code — and stay resumable. We do **not** claim a native shielded broadcast we didn't land. **Full technical study & decision →** [`docs/zcash-integration-pivot.md`](./docs/zcash-integration-pivot.md)
 
 ---
 

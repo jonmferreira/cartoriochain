@@ -1,8 +1,9 @@
 # Zcash integration — attempt, effort & pivot decision
 
-> Honest engineering record. We attempted a **real** Zcash on-chain integration for the Zcash track,
-> hit **external testnet-infrastructure limits**, and decided to pivot the privacy feature to a
-> Solana-native privacy layer (Cloak). This folder keeps the Zcash work reproducible so we can resume.
+> Honest engineering record. We attempted a **real** Zcash on-chain integration for the Zcash track and
+> hit **external infrastructure limits** (zingolib's fail-closed Nym mixnet). For submission we ship the
+> real ViewKey-*semantics* selective-disclosure layer (`api/src/viewkey.ts`), labeled precisely, and keep
+> this native path fully reproducible so we can resume it. Decision record: `../../docs/zcash-integration-pivot.md`.
 
 ## Goal
 Deliver "privacy without impunity" on the **real Zcash chain**: write the signer-data commitment into
@@ -26,29 +27,29 @@ chains). See internal audit notes.
 - **Faucet automation** — drove the testnet faucet via the chrome-devtools browser tool.
 
 ## What blocked it (external, not our code)
-1. **Testnet funding is dry right now.** Valar faucet hit its daily payout cap (resets in hours); the Jino
-   Labs faucet is **paused for the NU7 network upgrade** ("Zallet has no NU7 release yet"). Without TAZ we
-   cannot broadcast the real shielded transaction that would make the integration count.
-2. **NU7 upgrade risk.** Zcash testnet is mid-upgrade (NU7); wallet/lightwalletd compatibility is uncertain
-   until we can actually sync and send.
+1. **Funding fluctuates — it is NOT a dead end.** Faucet daily caps reset in windows, so a "dry" reading is
+   point-in-time. Re-checking minutes later works: we obtained 0.125 TAZ from the Valar faucet
+   (tx `c45b65dfde3f4d2f1cfb1b3601f1eb7568f7d56cd9bacfd5753ed3254cb3ed65`). **Lesson: always re-poll the
+   faucet site before concluding it's unavailable.**
+2. **The real blocker — zingolib's fail-closed Nym mixnet.** Current zingolib ships the Nym mixnet
+   transport as a **default feature** (`default = ["nym"]`, ADR 0024/0026). Any *online* session demands a
+   `nym-proxy` binary (not bundled) and **fails closed with no runtime bypass** — so the funded wallet
+   can't sync/send as built. The documented fix is to recompile **`--no-default-features`** (nakednet).
+   That rebuild is correct but did not fit the submission window (OOM on first pass, then the deadline).
 
-## Decision — pivot the privacy feature to Cloak (Solana)
-`Cloak` (`@cloak.dev/sdk`) is a **Solana-native** privacy stack: shielded UTXO + zk-SNARK + **viewing keys
-with a compliance pathway** (an entity can open its history to an auditor without exposing others) — the
-exact "judge audits, hacker can't" property, delivered through a **TypeScript SDK** that drops into our
-Node backend. Advantages over the direct-Zcash path:
-- Runs on **Solana** (our strongest, already-working track) — reinforces it, no new chain to integrate.
-- **No faucet dependency** — Solana devnet SOL is instant.
-- **Real & shippable now** — no testnet drought, no NU7 blocker.
+## Decision — ship the honest ViewKey-semantics layer; keep this native path resumable
+For submission we ship the **real, working** selective-disclosure layer (`api/src/viewkey.ts`, X25519 +
+HKDF + AES-256-GCM, Zcash ViewKey *semantics*) and label it precisely — never as a native shielded
+broadcast. The native attempt here stays reproducible and is a short step from done: just the nakednet
+rebuild + a sync. We also evaluated **Cloak** (Solana-native privacy) — blocked on a mainnet-only endpoint
+pin; see `../../docs/cloak-integration-status.md`.
 
-The direct-Zcash attempt stays available (resume steps below) as a **bonus** for the Zcash track when the
-faucet resets.
-
-## How to resume the Zcash attempt
+## How to resume the native Zcash attempt
 ```powershell
-# 1. Build the wallet (once)
-powershell -File build-zingo.ps1
-# 2. Fund the shielded address via a testnet faucet (when not capped)
+# 1. Build the wallet WITHOUT the Nym mixnet feature (nakednet) — this is the fix for the blocker:
+#    docker exec zingo-build sh -c "cd /zingolib && cargo build --release -p zingo-cli --no-default-features -j 2"
+#    (or re-run build-zingo.ps1 after adding --no-default-features to its cargo invocation)
+# 2. Fund the shielded address via a testnet faucet (re-poll if it reports a cap):
 #    faucet.testnet.valargroup.dev  /  zcashfaucet.jinolabs.xyz
 # 3. Run the end-to-end test
 powershell -File test-flow.ps1
