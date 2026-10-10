@@ -228,9 +228,9 @@
     <!-- INPI comparativo ───────────────────────────────── -->
     <section class="home-s-inpi">
       <div class="wrap">
-        <div class="eyebrow" style="margin-bottom:8px;">Propriedade intelectual</div>
-        <h2 class="section-title" style="margin-bottom:8px;">O registro hoje.<br/>O registro partindo daqui.</h2>
-        <p class="body-muted" style="max-width:480px; margin-bottom:32px;">O INPI não tem API. Não tem velocidade. Mas tem validade jurídica. O CartórioChain resolve tudo que vem antes — e garante que quando você chegar lá, ninguém vai poder contestar que a ideia não era sua.</p>
+        <div class="eyebrow" style="margin-bottom:8px;">{{ $t('home.inpiEyebrow') }}</div>
+        <h2 class="section-title" style="margin-bottom:8px;">{{ $t('home.inpiTituloPre') }}<br/>{{ $t('home.inpiTituloPost') }}</h2>
+        <p class="body-muted" style="max-width:480px; margin-bottom:32px;">{{ $t('home.inpiBody') }}</p>
 
         <div class="home-inpi-tables">
 
@@ -238,16 +238,16 @@
           <div class="home-inpi-slide" ref="inpiTable">
             <div class="home-inpi-block">
               <div class="home-inpi-head">
-                <span class="home-inpi-headlabel">Via INPI direto</span>
-                <span class="home-inpi-headtag">burocracia tradicional</span>
+                <span class="home-inpi-headlabel">{{ $t('home.inpiT1Label') }}</span>
+                <span class="home-inpi-headtag">{{ $t('home.inpiT1Tag') }}</span>
               </div>
               <table class="home-inpi-table">
                 <thead>
                   <tr>
-                    <th>Tipo de registro</th>
-                    <th>Custo</th>
-                    <th>Prazo</th>
-                    <th>Anterioridade garantida em</th>
+                    <th>{{ $t('home.inpiColTipo') }}</th>
+                    <th>{{ $t('home.inpiColCusto') }}</th>
+                    <th>{{ $t('home.inpiColPrazo') }}</th>
+                    <th>{{ $t('home.inpiColAnterior') }}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -264,7 +264,7 @@
 
           <div class="home-inpi-arrow">
             <div class="home-inpi-arrow-line"></div>
-            <span class="home-inpi-arrow-txt">↓ partindo do CartórioChain</span>
+            <span class="home-inpi-arrow-txt">{{ $t('home.inpiArrow') }}</span>
             <div class="home-inpi-arrow-line"></div>
           </div>
 
@@ -272,42 +272,24 @@
           <div class="home-cc-slide" ref="ccTable">
             <div class="home-inpi-block home-inpi-block--cc">
               <div class="home-inpi-head home-inpi-head--cc">
-                <span class="home-inpi-headlabel home-inpi-headlabel--cc">Via CartórioChain → INPI</span>
-                <span class="home-inpi-headtag home-inpi-headtag--cc">R$5 · imediato</span>
+                <span class="home-inpi-headlabel home-inpi-headlabel--cc">{{ $t('home.inpiT2Label') }}</span>
+                <span class="home-inpi-headtag home-inpi-headtag--cc">{{ $t('home.inpiT2Tag') }}</span>
               </div>
               <table class="home-inpi-table">
                 <thead>
                   <tr>
-                    <th>Etapa</th>
-                    <th>Custo</th>
-                    <th>Velocidade</th>
-                    <th>O que garante</th>
+                    <th>{{ $t('home.inpiColEtapa') }}</th>
+                    <th>{{ $t('home.inpiColCusto') }}</th>
+                    <th>{{ $t('home.inpiColVelocidade') }}</th>
+                    <th>{{ $t('home.inpiColGarante') }}</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr class="home-cc-row--highlight">
-                    <td>Prova de anterioridade</td>
-                    <td>R$5</td>
-                    <td>Imediato</td>
-                    <td>Hash + timestamp imutável on-chain — prior art provado antes mesmo de protocolar</td>
-                  </tr>
-                  <tr>
-                    <td>Consulta de conflito</td>
-                    <td>incluído</td>
-                    <td>Segundos</td>
-                    <td>Checa se sua marca já existe no INPI antes de você gastar R$440+</td>
-                  </tr>
-                  <tr>
-                    <td>Pacote para protocolo</td>
-                    <td>incluído</td>
-                    <td>Automático</td>
-                    <td>Hash no formato e-Software + Declaração de Veracidade pré-preenchida</td>
-                  </tr>
-                  <tr>
-                    <td>Protocolo no INPI</td>
-                    <td>R$440+</td>
-                    <td>18–36 meses</td>
-                    <td>Com anterioridade já garantida desde o primeiro dia</td>
+                  <tr v-for="(r, i) in inpiCcRows" :key="r.etapa" :class="{ 'home-cc-row--highlight': i === 0 }">
+                    <td>{{ r.etapa }}</td>
+                    <td>{{ r.custo }}</td>
+                    <td>{{ r.velocidade }}</td>
+                    <td>{{ r.garante }}</td>
                   </tr>
                 </tbody>
               </table>
@@ -387,23 +369,27 @@ export default defineComponent({
       const mvp = [true, true, false, false, false, false]
       return txt.map((s, i) => ({ ...s, mvp: mvp[i] }))
     },
+    inpiRows(): { tipo: string; custo: string; prazo: string; anterior: string }[] {
+      return this.$tm('home.inpiRows') as unknown as { tipo: string; custo: string; prazo: string; anterior: string }[]
+    },
+    inpiCcRows(): { etapa: string; custo: string; velocidade: string; garante: string }[] {
+      return this.$tm('home.inpiCcRows') as unknown as { etapa: string; custo: string; velocidade: string; garante: string }[]
+    },
+    futuroCards(): { num: string; ativo: boolean; statusKey: string; titulo: string; desc: string; status: string }[] {
+      const txt = this.$tm('home.futuro') as unknown as { titulo: string; desc: string; status: string }[]
+      const vis = [
+        { num: '01', ativo: true,  statusKey: 'now' },
+        { num: '02', ativo: false, statusKey: 'soon' },
+        { num: '03', ativo: false, statusKey: 'future' },
+        { num: '04', ativo: false, statusKey: 'future' },
+        { num: '05', ativo: false, statusKey: 'future' },
+      ]
+      return vis.map((v, i) => ({ ...v, ...txt[i] }))
+    },
   },
 
   data() {
-    return {
-      inpiRows: [
-        { tipo: 'Registro de marca',     custo: 'R$440–1.720/classe', prazo: '18–36 meses', anterior: 'Data do protocolo' },
-        { tipo: 'Registro de software',  custo: '~R$160',             prazo: '< 7 dias',    anterior: 'Data do protocolo' },
-        { tipo: 'Patente de invenção',   custo: 'R$500–2.400',        prazo: '7–10 anos',   anterior: 'Data do protocolo' },
-      ],
-      futuroCards: [
-        { num: '01', ativo: true,  titulo: 'Autenticação e escrituras', desc: 'SHA-256 + ZK proof para documentos habitacionais, contratos MCMV e escrituras públicas. Funcionando em produção.', status: '✓ Disponível hoje', statusKey: 'now' },
-        { num: '02', ativo: false, titulo: 'Propriedade intelectual', desc: 'Prior art criptográfico para marcas, software e inventores — antes mesmo de protocolar no INPI. Prova instantânea, R$5.', status: '→ Em desenvolvimento', statusKey: 'soon' },
-        { num: '03', ativo: false, titulo: 'Identidade ZK on-chain', desc: 'Cidadão prova quem é sem revelar CPF. Vinculação com gov.br via ZK commitment — privacidade sem impunidade.', status: '○ Roadmap', statusKey: 'future' },
-        { num: '04', ativo: false, titulo: 'Multi-party e contratos', desc: 'Todas as partes assinam com ZK proof — nenhuma enxerga os dados da outra. Divórcio, inventário, partilha extrajudicial.', status: '○ Roadmap', statusKey: 'future' },
-        { num: '05', ativo: false, titulo: 'Integração governo', desc: 'Registro civil, certidões, apostila de Haia. CartórioChain como infraestrutura pública — cartório para 215 milhões de brasileiros.', status: '◌ Visão', statusKey: 'future' },
-      ],
-    }
+    return {}
   },
 })
 </script>
