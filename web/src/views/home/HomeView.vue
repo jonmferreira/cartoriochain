@@ -100,22 +100,22 @@
     <section class="home-s-custo">
       <div class="wrap home-custo-inner">
         <div>
-          <div class="eyebrow home-custo-eyebrow">Custo por escritura MCMV</div>
+          <div class="eyebrow home-custo-eyebrow">{{ $t('home.custoEyebrow') }}</div>
           <div class="home-custo-values">
             <div class="home-custo-entry">
               <span class="home-custo-amount">R$5</span>
-              <span class="eyebrow home-custo-label">CartórioChain</span>
+              <span class="eyebrow home-custo-label">{{ $t('home.custoCc') }}</span>
             </div>
-            <div class="home-custo-vs">vs</div>
+            <div class="home-custo-vs">{{ $t('home.custoVs') }}</div>
             <div class="home-custo-entry home-custo-old">
               <span class="home-custo-amount">R$2.400</span>
-              <span class="eyebrow home-custo-label">Cartório tradicional</span>
+              <span class="eyebrow home-custo-label">{{ $t('home.custoTrad') }}</span>
             </div>
           </div>
         </div>
         <div style="text-align:right;">
           <div class="home-pct">99,8%</div>
-          <div class="eyebrow home-pct-label">mais barato</div>
+          <div class="eyebrow home-pct-label">{{ $t('home.custoMaisBarato') }}</div>
         </div>
       </div>
     </section>
@@ -123,8 +123,8 @@
     <!-- Loop econômico ─────────────────────────────────── -->
     <section class="home-s-loop">
       <div class="wrap home-loop-header">
-        <div class="eyebrow" style="margin-bottom:8px;">Onde vai o R$5</div>
-        <h2 class="section-title">Cada centavo é rastreável.</h2>
+        <div class="eyebrow" style="margin-bottom:8px;">{{ $t('home.ondeVaiEyebrow') }}</div>
+        <h2 class="section-title">{{ $t('home.ondeVaiTitulo') }}</h2>
       </div>
       <div class="loop-marquee-outer">
         <div class="loop-marquee-track">
@@ -149,10 +149,10 @@
       <div class="wrap">
         <div class="home-srv-header">
           <div>
-            <div class="eyebrow" style="margin-bottom:8px;">Cobertura cartorial</div>
-            <h2 class="section-title">12 serviços mapeados.<br/>2 funcionando hoje.</h2>
+            <div class="eyebrow" style="margin-bottom:8px;">{{ $t('home.coberturaEyebrow') }}</div>
+            <h2 class="section-title">{{ $t('home.coberturaTituloPre') }}<br/>{{ $t('home.coberturaTituloPost') }}</h2>
           </div>
-          <button class="btn btn-secondary btn-sm" @click="$router.push('/servicos')">Ver todos →</button>
+          <button class="btn btn-secondary btn-sm" @click="$router.push('/servicos')">{{ $t('home.verTodos') }}</button>
         </div>
         <div class="grid-3">
           <div v-for="s in servicosDestaque" :key="s.nome"
