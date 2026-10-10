@@ -188,9 +188,10 @@ All frontend dependencies are pinned to exact versions (no `^`). Smart contract:
 
 | Track | Status |
 |---|---|
-| ZCash | ✅ ViewKey encryption of PII + ZK proof |
-| Solana | ✅ Smart contract on devnet |
 | Brazil | ✅ Minha Casa Minha Vida use case (Amazonas) |
+| Solana | ✅ Smart contract on devnet |
 | Tempo | ✅ USDC payment verification integrated in the backend |
 | Public Good | ✅ `/verificar/:id` public, no login, no wallet |
 | University | ✅ Computer Engineering thesis (UEA) — technical founder |
+
+> **Privacy** is a core product feature — PII encrypted with X25519 + AES-256-GCM following **Zcash's ViewKey model** (selective disclosure: a judge audits, a hacker can't). We pursued a *native* on-chain Zcash integration but did not land it within the deadline (external infra limits — see [`docs/zcash-integration-pivot.md`](./docs/zcash-integration-pivot.md)), so we are **not claiming the Zcash track** — the privacy model is Zcash-*inspired*, documented honestly, and resumable.
