@@ -44,13 +44,19 @@ teste real passando — mesma regra do resto do projeto.
 | —   | viewKey errado não decifra | decapsular com outro keypair → falha | 🛡️ |
 | R2  | ML-KEM-768 realmente presente (não só X25519) | tamanhos: pubKey 1216 B, kemCt 1120 B | 🛡️ |
 | —   | Round-trip íntegro | cifra → decifra = dado original | 🛡️ |
-| V1  | Decapsulação não vaza segredo por tempo (KyberSlash) | sanity de variância de tempo + versão da lib pós-patch + revisão de branch dependente de segredo | ⏳ |
-| V2  | X25519 de ordem baixa / zero não gera segredo previsível | injetar componente X25519 de ordem baixa → sem segredo previsível, erro limpo, híbrido segura | ⏳ |
-| V3  | Nunca reusa nonce/chave | cifrar 2× o mesmo dado → `nonce`/`kemCt`/`ciphertext` diferentes; nonce = 12 B | ⏳ |
-| —   | Randomness sempre de CSPRNG (não previsível) | artefatos independentes nunca colidem | ⏳ |
+| V1  | Decapsulação não vaza segredo por early-exit (KyberSlash) | ct inválido → **rejeição implícita** do ML-KEM (retorna segredo 32 B ≠ válido, sem throw/early-exit) + versão da lib | 🛡️ |
+| V2  | X25519 de ordem baixa / zero não gera segredo previsível | zerar o componente X25519 da pubkey → a lib **rejeita a chave de ordem baixa (falha limpa)** | 🛡️ |
+| V3  | Nunca reusa nonce/chave | cifrar 2× o mesmo dado → `nonce`/`kemCt`/`ciphertext` diferentes; nonce = 12 B | 🛡️ |
+| —   | Randomness sempre de CSPRNG (não previsível) | dois keypairs independentes nunca colidem | 🛡️ |
 | CNJ | Latência conforme (extra do extra) | benchmark cifra/decifra sob carga p/ conformidade CNJ | ⏳ |
 
-Os 🛡️ de hoje vêm de `api/src/viewkey.test.ts` (8/8). Os ⏳ vão para `api/src/viewkey.security.test.ts`.
+Os 🛡️ vêm de `api/src/viewkey.test.ts` (8/8) + `api/src/viewkey.security.test.ts` (10/10). Falta só o
+benchmark de desempenho CNJ (⏳).
+
+> Nota V1: verificação formal de constant-time é delegada à lib auditada (`@noble/post-quantum`); nosso
+> teste prova a **rejeição implícita** (desenho constant-time do ML-KEM FO) e que nosso código não
+> introduz branch dependente de segredo. Nota V2: no X-Wing, mesmo que o X25519 fosse forçado a zero, o
+> ML-KEM-768 ainda protege o segredo — e na prática a lib já rejeita a chave malformada.
 
 ---
 
@@ -106,9 +112,10 @@ Mapeia direto para **V1 (KyberSlash/timing)** e, no geral, para randomness previ
 qualquer randomness (nonce, ephemeral, coins do KEM) deve vir de CSPRNG (`crypto.randomBytes` / RNG da
 lib), nunca determinístico/previsível. Teste: dois artefatos independentes nunca colidem.
 
-## Backlog de testes (a implementar em `api/src/viewkey.security.test.ts`)
-- [ ] V1 timing sanity + versão lib + revisão de branch por segredo
-- [ ] V2 low-order/zero X25519 → sem segredo previsível, erro limpo
-- [ ] V3 não-reuso de nonce/chave (frescor por operação)
-- [ ] V4 (expandir tamper existente)
+## Backlog de testes (`api/src/viewkey.security.test.ts` — 10/10 passando)
+- [x] V1 rejeição implícita constant-time + versão lib
+- [x] V2 low-order/zero X25519 → lib rejeita (falha limpa)
+- [x] V3 não-reuso de nonce/chave (frescor por operação)
+- [x] CSPRNG — keypairs independentes diferem
+- [x] V4 tamper (ciphertext + kemCt) em `viewkey.test.ts`
 - [ ] Extra-extra: benchmark de desempenho p/ conformidade CNJ (latência de cifragem/decifragem sob carga)
