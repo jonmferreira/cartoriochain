@@ -3,6 +3,8 @@ import { createI18n } from 'vue-i18n'
 // Scaffold i18n PT-BR / EN. Começa pela Home (padrão provado); demais páginas expandem depois.
 // Preferência persiste em localStorage.
 
+// i18n PT-BR / EN. Expansão em andamento (módulo por módulo). Padrão: strings estáticas via $t;
+// arrays (passos/stats/loop/servicosDestaque) via computed lendo $tm('home.<chave>') + merge visual.
 const STORAGE_KEY = 'cc-locale'
 
 const messages = {
@@ -49,6 +51,32 @@ const messages = {
       ctaTitle: 'Registro em menos de 30 segundos.',
       ctaBtn: '↗ Ver demo: escritura MCMV',
       ctaHint: 'É um demo — nenhum dado real é armazenado.',
+      custoEyebrow: 'Custo por escritura MCMV',
+      custoCc: 'CartórioChain',
+      custoTrad: 'Cartório tradicional',
+      custoVs: 'vs',
+      custoMaisBarato: 'mais barato',
+      ondeVaiEyebrow: 'Onde vai o R$5',
+      ondeVaiTitulo: 'Cada centavo é rastreável.',
+      loop: [
+        { titulo: 'Promocional', descricao: 'Taxa única via PIX por documento', tag: '' },
+        { titulo: 'Autenticado', descricao: 'ZK proof gerado e vinculado ao arquivo', tag: 'ZK Proof' },
+        { titulo: 'Registrado', descricao: 'Timestamp imutável na Solana', tag: '~R$0,001' },
+        { titulo: 'Armazenado', descricao: 'Documento permanente via Irys', tag: '~R$0,10' },
+        { titulo: 'Verificável', descricao: 'Link público para qualquer pessoa, para sempre', tag: 'Grátis' },
+      ],
+      coberturaEyebrow: 'Cobertura cartorial',
+      coberturaTituloPre: '12 serviços mapeados.',
+      coberturaTituloPost: '2 funcionando hoje.',
+      verTodos: 'Ver todos →',
+      servicosDestaque: [
+        { nome: 'Autenticação', tech: ['SHA-256', 'Solana', 'Irys'] },
+        { nome: 'Escritura MCMV', tech: ['Divulgação seletiva', 'Solana'] },
+        { nome: 'Reconhecimento de firma', tech: ['ZK Proof', 'Divulgação seletiva'] },
+        { nome: 'Procuração', tech: ['ZK Proof', 'Divulgação seletiva'] },
+        { nome: 'Ata notarial', tech: ['Solana', 'Irys'] },
+        { nome: 'Apostila de Haia', tech: ['ZK público'] },
+      ],
     },
   },
   en: {
@@ -94,6 +122,32 @@ const messages = {
       ctaTitle: 'Registration in under 30 seconds.',
       ctaBtn: '↗ See demo: MCMV deed',
       ctaHint: 'It is a demo — no real data is stored.',
+      custoEyebrow: 'Cost per MCMV deed',
+      custoCc: 'CartórioChain',
+      custoTrad: 'Traditional notary',
+      custoVs: 'vs',
+      custoMaisBarato: 'cheaper',
+      ondeVaiEyebrow: 'Where the R$5 goes',
+      ondeVaiTitulo: 'Every cent is traceable.',
+      loop: [
+        { titulo: 'Promotional', descricao: 'One-time PIX fee per document', tag: '' },
+        { titulo: 'Authenticated', descricao: 'ZK proof generated and bound to the file', tag: 'ZK Proof' },
+        { titulo: 'Registered', descricao: 'Immutable timestamp on Solana', tag: '~R$0.001' },
+        { titulo: 'Stored', descricao: 'Permanent document via Irys', tag: '~R$0.10' },
+        { titulo: 'Verifiable', descricao: 'Public link for anyone, forever', tag: 'Free' },
+      ],
+      coberturaEyebrow: 'Notarial coverage',
+      coberturaTituloPre: '12 services mapped.',
+      coberturaTituloPost: '2 working today.',
+      verTodos: 'See all →',
+      servicosDestaque: [
+        { nome: 'Authentication', tech: ['SHA-256', 'Solana', 'Irys'] },
+        { nome: 'MCMV deed', tech: ['Selective disclosure', 'Solana'] },
+        { nome: 'Signature recognition', tech: ['ZK Proof', 'Selective disclosure'] },
+        { nome: 'Power of attorney', tech: ['ZK Proof', 'Selective disclosure'] },
+        { nome: 'Notarial record', tech: ['Solana', 'Irys'] },
+        { nome: 'Apostille', tech: ['Public ZK'] },
+      ],
     },
   },
 }

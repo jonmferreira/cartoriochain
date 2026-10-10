@@ -371,17 +371,26 @@ export default defineComponent({
   computed: {
     stats(): { label: string; valor: string }[] { return this.$tm('home.stats') as unknown as { label: string; valor: string }[] },
     passos(): { titulo: string; descricao: string }[] { return this.$tm('home.passos') as unknown as { titulo: string; descricao: string }[] },
+    loopEconomico(): { icone: string; bg: string; titulo: string; descricao: string; tag: string }[] {
+      const txt = this.$tm('home.loop') as unknown as { titulo: string; descricao: string; tag: string }[]
+      const vis = [
+        { icone: 'R$5', bg: 'var(--color-yellow)' },
+        { icone: '✓',  bg: '#C6ECD8' },
+        { icone: '◎',  bg: '#C5DCF0' },
+        { icone: '∞',  bg: '#E8D5F5' },
+        { icone: '↗',  bg: '#D4E8D0' },
+      ]
+      return vis.map((v, i) => ({ ...v, ...txt[i] }))
+    },
+    servicosDestaque(): { nome: string; mvp: boolean; tech: string[] }[] {
+      const txt = this.$tm('home.servicosDestaque') as unknown as { nome: string; tech: string[] }[]
+      const mvp = [true, true, false, false, false, false]
+      return txt.map((s, i) => ({ ...s, mvp: mvp[i] }))
+    },
   },
 
   data() {
     return {
-      loopEconomico: [
-        { icone: 'R$5', bg: 'var(--color-yellow)', titulo: 'Promocional', descricao: 'Taxa única via PIX por documento', tag: null },
-        { icone: '✓',  bg: '#C6ECD8', titulo: 'Autenticado', descricao: 'ZK proof gerado e vinculado ao arquivo', tag: 'ZK Proof' },
-        { icone: '◎',  bg: '#C5DCF0', titulo: 'Registrado', descricao: 'Timestamp imutável na Solana', tag: '~R$0,001' },
-        { icone: '∞',  bg: '#E8D5F5', titulo: 'Armazenado', descricao: 'Documento permanente via Irys', tag: '~R$0,10' },
-        { icone: '↗',  bg: '#D4E8D0', titulo: 'Verificável', descricao: 'Link público para qualquer pessoa, para sempre', tag: 'Grátis' },
-      ],
       inpiRows: [
         { tipo: 'Registro de marca',     custo: 'R$440–1.720/classe', prazo: '18–36 meses', anterior: 'Data do protocolo' },
         { tipo: 'Registro de software',  custo: '~R$160',             prazo: '< 7 dias',    anterior: 'Data do protocolo' },
@@ -393,14 +402,6 @@ export default defineComponent({
         { num: '03', ativo: false, titulo: 'Identidade ZK on-chain', desc: 'Cidadão prova quem é sem revelar CPF. Vinculação com gov.br via ZK commitment — privacidade sem impunidade.', status: '○ Roadmap', statusKey: 'future' },
         { num: '04', ativo: false, titulo: 'Multi-party e contratos', desc: 'Todas as partes assinam com ZK proof — nenhuma enxerga os dados da outra. Divórcio, inventário, partilha extrajudicial.', status: '○ Roadmap', statusKey: 'future' },
         { num: '05', ativo: false, titulo: 'Integração governo', desc: 'Registro civil, certidões, apostila de Haia. CartórioChain como infraestrutura pública — cartório para 215 milhões de brasileiros.', status: '◌ Visão', statusKey: 'future' },
-      ],
-      servicosDestaque: [
-        { nome: 'Autenticação', mvp: true,  tech: ['SHA-256', 'Solana', 'Irys'] },
-        { nome: 'Escritura MCMV', mvp: true, tech: ['Divulgação seletiva', 'Solana'] },
-        { nome: 'Reconhecimento de firma', mvp: false, tech: ['ZK Proof', 'Divulgação seletiva'] },
-        { nome: 'Procuração', mvp: false, tech: ['ZK Proof', 'Divulgação seletiva'] },
-        { nome: 'Ata notarial', mvp: false, tech: ['Solana', 'Irys'] },
-        { nome: 'Apostila de Haia', mvp: false, tech: ['ZK público'] },
       ],
     }
   },
