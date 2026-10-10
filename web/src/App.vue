@@ -14,18 +14,15 @@
             :class="isActive(link.to) ? 'nav-link--active' : 'nav-link--idle'"
           >{{ t(link.key) }}</router-link>
         </div>
-        <div class="app-lang" role="group" :aria-label="t('lang.aria')">
-          <button
-            class="app-lang-btn"
-            :class="{ 'app-lang-btn--active': locale === 'pt' }"
-            @click="switchLang('pt')"
-          >{{ t('lang.pt') }}</button>
-          <button
-            class="app-lang-btn"
-            :class="{ 'app-lang-btn--active': locale === 'en' }"
-            @click="switchLang('en')"
-          >{{ t('lang.en') }}</button>
-        </div>
+        <select
+          class="app-lang-select"
+          :value="locale"
+          :aria-label="t('lang.aria')"
+          @change="switchLang(($event.target as HTMLSelectElement).value as 'pt' | 'en')"
+        >
+          <option value="pt">{{ t('lang.pt') }}</option>
+          <option value="en">{{ t('lang.en') }}</option>
+        </select>
       </div>
     </nav>
     <main class="flex-1">
@@ -106,22 +103,29 @@ export default defineComponent({
 
 /* ── Idioma (PT/EN) ──────────────────────────────── */
 .app-nav-right { display: flex; align-items: center; gap: 12px; min-width: 0; }
-.app-lang { display: flex; border: 1px solid var(--color-ink-3); flex-shrink: 0; }
-.app-lang-btn {
+.app-lang-select {
   font-family: var(--font-display);
   font-size: 10px;
   font-weight: 800;
   letter-spacing: 0.06em;
-  padding: 0 10px;
-  min-height: 44px;
-  cursor: pointer;
-  background: transparent;
+  text-transform: uppercase;
   color: var(--color-kraft);
-  border: none;
-  transition: background 0.2s cubic-bezier(0.32,0.72,0,1), color 0.2s cubic-bezier(0.32,0.72,0,1);
+  background-color: transparent;
+  border: 1px solid var(--color-ink-3);
+  padding: 0 24px 0 10px;
+  min-height: 44px;
+  flex-shrink: 0;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23D1C09F' stroke-width='1.6' fill='none'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  transition: border-color 0.2s cubic-bezier(0.32,0.72,0,1), color 0.2s cubic-bezier(0.32,0.72,0,1);
 }
-.app-lang-btn--active { background: var(--color-yellow); color: var(--color-ink); }
-.app-lang-btn:focus-visible { outline: 2px solid var(--color-yellow); outline-offset: -2px; }
+.app-lang-select:hover { border-color: var(--color-emerald); color: var(--color-text); }
+.app-lang-select:focus-visible { outline: 2px solid var(--color-yellow); outline-offset: 2px; }
+.app-lang-select option { background: var(--color-ink-1); color: var(--color-text); }
 
 /* Mobile: compacta a nav e deixa os links rolarem dentro da barra
    (evita overflow horizontal da página inteira em telas pequenas). */
