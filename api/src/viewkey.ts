@@ -1,167 +1,128 @@
 /**
- * ViewKey encryption — protege PII do signatário on-chain (LGPD)
+ * ViewKey encryption — protege PII do signatário (LGPD)
  *
- * Semântica inspirada no ZCash ViewKey:
- *   - viewKey (privateKey X25519) = chave de visualização — holder guarda offline
- *   - paymentAddress (publicKey X25519) = endereço público do signatário
- *   - viewkeyPayload (on-chain) = PII cifrado — ninguém lê sem o viewKey
+ * Semântica inspirada no ZCash ViewKey, agora com proteção PÓS-QUÂNTICA:
+ *   - viewKey (secretKey do KEM híbrido) = chave de visualização — holder guarda offline
+ *   - paymentAddress (publicKey do KEM híbrido) = endereço público do signatário
+ *   - viewkeyPayload = PII cifrado — ninguém lê sem o viewKey
  *
- * Fluxo:
- *   1. Signatário gera keypair → guarda viewKey offline
- *   2. PII cifrado com paymentAddress → armazenado on-chain como viewkeyPayload
- *   3. Só quem tem o viewKey consegue decifrar
+ * Criptografia: KEM HÍBRIDO X25519 + ML-KEM-768 (preset `ml_kem768_x25519` do
+ * @noble/post-quantum — construção X-Wing, draft-connolly-cfrg-xwing-kem) para encapsular a chave,
+ * + AES-256-GCM para cifrar os dados. "Harvest now, decrypt later" resolvido: mesmo que o X25519
+ * clássico caia para um computador quântico (Shor), o ML-KEM-768 (FIPS 203) segura o segredo — e
+ * vice-versa. Só quebra se AMBOS caírem.
+ *
+ * Nota de módulo: @noble/post-quantum é ESM puro e a API compila CommonJS, então o KEM é carregado
+ * via dynamic import (encapsulado p/ não ser rebaixado a require pelo TS). As funções são async.
  */
 
 import * as crypto from "crypto";
 
 export interface ViewKeyPair {
-  viewKey: string;       // hex 32 bytes — GUARDAR OFFLINE
-  paymentAddress: string; // hex 32 bytes — pode ser público
+  viewKey: string;        // hex (secretKey do KEM híbrido) — GUARDAR OFFLINE
+  paymentAddress: string; // hex (publicKey do KEM híbrido) — pode ser público
 }
 
 export interface EncryptedPayload {
-  ciphertext: string; // base64
-  ephemeralPub: string; // hex 32 bytes
+  v: string;          // versão do esquema
+  kemCt: string;      // hex — ciphertext do KEM (encapsulamento híbrido)
   nonce: string;      // hex 12 bytes
   authTag: string;    // hex 16 bytes
+  ciphertext: string; // base64 (AES-256-GCM)
+}
+
+const SCHEME_VERSION = "vk-pqc-v2";
+const HKDF_INFO = "CartorioChain ViewKey PQC v2";
+
+// @noble/post-quantum é ESM; carregamos via import() nativo sem o TS rebaixar para require().
+const _dynImport: (p: string) => Promise<any> = new Function("p", "return import(p)") as any;
+let _kemPromise: Promise<any> | null = null;
+
+/** KEM híbrido X25519 + ML-KEM-768 (X-Wing), carregado uma vez. */
+async function getKem(): Promise<any> {
+  if (!_kemPromise) {
+    _kemPromise = _dynImport("@noble/post-quantum/hybrid.js").then(
+      (m: any) => m.ml_kem768_x25519
+    );
+  }
+  return _kemPromise;
+}
+
+/** Deriva a chave AES-256 a partir do shared secret do KEM (HKDF-SHA256, domain-separated). */
+function deriveAesKey(sharedSecret: Uint8Array): Buffer {
+  const dk = crypto.hkdfSync("sha256", Buffer.from(sharedSecret), Buffer.alloc(0), HKDF_INFO, 32);
+  return Buffer.from(dk);
 }
 
 /**
- * Gera um par viewKey / paymentAddress para um novo signatário.
+ * Gera um par viewKey / paymentAddress (KEM híbrido) para um novo signatário.
  */
-export function generateViewKeyPair(): ViewKeyPair {
-  const { privateKey, publicKey } = crypto.generateKeyPairSync("x25519", {
-    privateKeyEncoding: { type: "pkcs8", format: "der" },
-    publicKeyEncoding: { type: "spki", format: "der" },
-  });
-
-  // X25519 raw key = últimos 32 bytes do DER
-  const viewKey = Buffer.from(privateKey).slice(-32).toString("hex");
-  const paymentAddress = Buffer.from(publicKey).slice(-32).toString("hex");
-
-  return { viewKey, paymentAddress };
+export async function generateViewKeyPair(): Promise<ViewKeyPair> {
+  const kem = await getKem();
+  const { secretKey, publicKey } = kem.keygen();
+  return {
+    viewKey: Buffer.from(secretKey).toString("hex"),
+    paymentAddress: Buffer.from(publicKey).toString("hex"),
+  };
 }
 
 /**
- * Cifra os dados do signatário com o paymentAddress (chave pública).
- * Retorna payload pronto para armazenar on-chain.
+ * Cifra os dados do signatário com o paymentAddress (chave pública híbrida).
+ * Retorna payload JSON pronto para armazenar.
  */
-export function encryptForViewKey(
+export async function encryptForViewKey(
   plaintext: Record<string, unknown>,
   paymentAddressHex: string
-): string {
-  const recipientPub = Buffer.from(paymentAddressHex, "hex");
+): Promise<string> {
+  const kem = await getKem();
+  const encapsKey = Uint8Array.from(Buffer.from(paymentAddressHex, "hex"));
 
-  // Keypair efêmero para ECDH
-  const ephemeral = crypto.generateKeyPairSync("x25519", {
-    privateKeyEncoding: { type: "pkcs8", format: "der" },
-    publicKeyEncoding: { type: "spki", format: "der" },
-  });
+  // Encapsulamento híbrido: devolve ciphertext + shared secret (32 bytes)
+  const { cipherText, sharedSecret } = kem.encapsulate(encapsKey);
+  const encKey = deriveAesKey(sharedSecret);
 
-  const ephemeralPub = Buffer.from(ephemeral.publicKey).slice(-32);
-  const ephemeralPrivRaw = Buffer.from(ephemeral.privateKey).slice(-32);
-
-  // Reconstruir chave privada efêmera como KeyObject X25519
-  const ephPrivKey = crypto.createPrivateKey({
-    key: buildX25519Pkcs8(ephemeralPrivRaw),
-    format: "der",
-    type: "pkcs8",
-  });
-
-  // Reconstruir chave pública do destinatário como KeyObject X25519
-  const recipPubKey = crypto.createPublicKey({
-    key: buildX25519Spki(recipientPub),
-    format: "der",
-    type: "spki",
-  });
-
-  const sharedSecret = crypto.diffieHellman({
-    privateKey: ephPrivKey,
-    publicKey: recipPubKey,
-  });
-
-  // Deriva chave simétrica com HKDF
-  const encKey = crypto.hkdfSync("sha256", sharedSecret, ephemeralPub, "CartorioChain ViewKey v1", 32);
-
-  // Cifra com AES-256-GCM
   const nonce = crypto.randomBytes(12);
-  const cipher = crypto.createCipheriv("aes-256-gcm", Buffer.from(encKey), nonce);
+  const cipher = crypto.createCipheriv("aes-256-gcm", encKey, nonce);
   const data = Buffer.from(JSON.stringify(plaintext), "utf-8");
   const ciphertext = Buffer.concat([cipher.update(data), cipher.final()]);
   const authTag = cipher.getAuthTag();
 
   const payload: EncryptedPayload = {
-    ciphertext: ciphertext.toString("base64"),
-    ephemeralPub: ephemeralPub.toString("hex"),
+    v: SCHEME_VERSION,
+    kemCt: Buffer.from(cipherText).toString("hex"),
     nonce: nonce.toString("hex"),
     authTag: authTag.toString("hex"),
+    ciphertext: ciphertext.toString("base64"),
   };
 
   return JSON.stringify(payload);
 }
 
 /**
- * Decifra o viewkeyPayload com o viewKey (chave privada).
+ * Decifra o viewkeyPayload com o viewKey (secretKey híbrida).
  * Só funciona se o viewKey corresponder ao paymentAddress usado na cifragem.
  */
-export function decryptViewKeyPayload(
+export async function decryptViewKeyPayload(
   payloadJson: string,
   viewKeyHex: string
-): Record<string, unknown> {
+): Promise<Record<string, unknown>> {
+  const kem = await getKem();
   const payload: EncryptedPayload = JSON.parse(payloadJson);
 
-  const viewKeyRaw = Buffer.from(viewKeyHex, "hex");
-  const ephemeralPub = Buffer.from(payload.ephemeralPub, "hex");
+  const secretKey = Uint8Array.from(Buffer.from(viewKeyHex, "hex"));
+  const kemCt = Uint8Array.from(Buffer.from(payload.kemCt, "hex"));
 
-  const privKey = crypto.createPrivateKey({
-    key: buildX25519Pkcs8(viewKeyRaw),
-    format: "der",
-    type: "pkcs8",
-  });
-  const ephPubKey = crypto.createPublicKey({
-    key: buildX25519Spki(ephemeralPub),
-    format: "der",
-    type: "spki",
-  });
-
-  const sharedSecret = crypto.diffieHellman({
-    privateKey: privKey,
-    publicKey: ephPubKey,
-  });
-
-  const encKey = crypto.hkdfSync("sha256", sharedSecret, ephemeralPub, "CartorioChain ViewKey v1", 32);
+  // Decapsulamento híbrido → mesmo shared secret
+  const sharedSecret = kem.decapsulate(kemCt, secretKey);
+  const encKey = deriveAesKey(sharedSecret);
 
   const nonce = Buffer.from(payload.nonce, "hex");
   const authTag = Buffer.from(payload.authTag, "hex");
   const ciphertext = Buffer.from(payload.ciphertext, "base64");
 
-  const decipher = crypto.createDecipheriv("aes-256-gcm", Buffer.from(encKey), nonce);
+  const decipher = crypto.createDecipheriv("aes-256-gcm", encKey, nonce);
   decipher.setAuthTag(authTag);
   const plaintext = Buffer.concat([decipher.update(ciphertext), decipher.final()]);
 
   return JSON.parse(plaintext.toString("utf-8"));
-}
-
-// ──────────────────────────────────────────────────────────────
-// Helpers para construir DER mínimo com chave raw X25519 (RFC 8410)
-// ──────────────────────────────────────────────────────────────
-
-// SPKI para X25519: OID 1.3.101.110 + chave pública raw
-const X25519_SPKI_PREFIX = Buffer.from(
-  "302a300506032b656e032100",
-  "hex"
-);
-
-// PKCS8 para X25519: version 0 + AlgorithmIdentifier + chave privada raw
-const X25519_PKCS8_PREFIX = Buffer.from(
-  "302e020100300506032b656e04220420",
-  "hex"
-);
-
-function buildX25519Spki(rawPub: Buffer): Buffer {
-  return Buffer.concat([X25519_SPKI_PREFIX, rawPub]);
-}
-
-function buildX25519Pkcs8(rawPriv: Buffer): Buffer {
-  return Buffer.concat([X25519_PKCS8_PREFIX, rawPriv]);
 }

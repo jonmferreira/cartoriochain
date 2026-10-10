@@ -117,7 +117,7 @@ documents.post("/", async (c) => {
     if (paymentAddress && signerData && !viewkeyPayload) {
       try {
         const parsed = JSON.parse(signerData);
-        viewkeyPayload = encryptForViewKey(parsed, paymentAddress);
+        viewkeyPayload = await encryptForViewKey(parsed, paymentAddress);
       } catch {
         return c.json({ error: "signerData deve ser JSON valido" }, 400);
       }

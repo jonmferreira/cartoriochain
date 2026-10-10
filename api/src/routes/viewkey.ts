@@ -8,8 +8,8 @@ viewkey.use("*", rateLimit(10, 60_000));
 
 // GET /viewkey/generate
 // Gera um novo par viewKey / paymentAddress para um signatário
-viewkey.get("/generate", (c) => {
-  const pair = generateViewKeyPair();
+viewkey.get("/generate", async (c) => {
+  const pair = await generateViewKeyPair();
   return c.json({
     viewKey: pair.viewKey,
     paymentAddress: pair.paymentAddress,
@@ -30,11 +30,12 @@ viewkey.post("/encrypt", async (c) => {
     if (!paymentAddress || !data) {
       return c.json({ error: "paymentAddress e data sao obrigatorios" }, 400);
     }
-    if (paymentAddress.length !== 64 || !/^[0-9a-fA-F]+$/.test(paymentAddress)) {
-      return c.json({ error: "paymentAddress deve ser hex de 64 chars (32 bytes)" }, 400);
+    // paymentAddress é a publicKey do KEM híbrido X25519+ML-KEM-768 (~1.2 KB → hex longo)
+    if (paymentAddress.length % 2 !== 0 || !/^[0-9a-fA-F]+$/.test(paymentAddress)) {
+      return c.json({ error: "paymentAddress deve ser hex valido" }, 400);
     }
 
-    const payload = encryptForViewKey(data, paymentAddress);
+    const payload = await encryptForViewKey(data, paymentAddress);
     return c.json({ viewkeyPayload: payload });
   } catch (e: unknown) {
     return c.json({ error: (e as Error).message }, 500);
@@ -54,11 +55,12 @@ viewkey.post("/decrypt", async (c) => {
     if (!viewKey || !viewkeyPayload) {
       return c.json({ error: "viewKey e viewkeyPayload sao obrigatorios" }, 400);
     }
-    if (viewKey.length !== 64 || !/^[0-9a-fA-F]+$/.test(viewKey)) {
-      return c.json({ error: "viewKey deve ser hex de 64 chars (32 bytes)" }, 400);
+    // viewKey é a secretKey do KEM híbrido X25519+ML-KEM-768 (hex longo)
+    if (viewKey.length % 2 !== 0 || !/^[0-9a-fA-F]+$/.test(viewKey)) {
+      return c.json({ error: "viewKey deve ser hex valido" }, 400);
     }
 
-    const data = decryptViewKeyPayload(viewkeyPayload, viewKey);
+    const data = await decryptViewKeyPayload(viewkeyPayload, viewKey);
     return c.json({ data });
   } catch (e: unknown) {
     // Falha na decifragem = chave errada
