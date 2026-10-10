@@ -9,21 +9,20 @@
           <!-- Texto -->
           <div class="home-hero-text">
             <h1 class="home-hero-title">
-              Autentique<br/>
-              <span class="home-hero-highlight">documentos</span><br/>
-              com prova<br/>criptográfica.<br/>
-              <span class="home-hero-sub">Sem intermediário.</span>
+              {{ $t('home.heroVerb') }}<br/>
+              <span class="home-hero-highlight">{{ $t('home.heroHighlight') }}</span><br/>
+              {{ $t('home.heroRest') }}<br/>
+              <span class="home-hero-sub">{{ $t('home.heroSub') }}</span>
             </h1>
             <p class="body-muted home-hero-body">
-              Cartório digital descentralizado para o mercado brasileiro.
-              Prova criptográfica de autenticidade. Dados do signatário protegidos por criptografia de divulgação seletiva — LGPD nativa.
+              {{ $t('home.heroBody') }}
             </p>
             <div class="home-hero-ctas">
               <button class="btn btn-primary btn-lg" @click="$router.push('/registrar?demo=mcmv')">
-                ↗ Registrar documento
+                {{ $t('home.ctaRegistrar') }}
               </button>
               <button class="btn btn-secondary btn-lg" @click="$router.push('/verificar')">
-                ◎ Verificar autenticidade
+                {{ $t('home.ctaVerificar') }}
               </button>
             </div>
           </div>
@@ -39,7 +38,7 @@
                 </div>
               </div>
               <div class="home-sticker-foot">
-                ✓ Sem conta · Sem carteira
+                {{ $t('home.stickerFoot') }}
               </div>
             </div>
           </div>
@@ -53,21 +52,21 @@
       <div class="wrap">
         <div class="anim-slide-up grid-2">
           <div>
-            <div class="eyebrow-label" style="margin-bottom:12px;">O problema</div>
+            <div class="eyebrow-label" style="margin-bottom:12px;">{{ $t('home.problemaEyebrow') }}</div>
             <h2 class="section-title" style="margin-bottom:12px;">
-              Documentos falsificados, perdidos ou inacessíveis.
+              {{ $t('home.problemaTitle') }}
             </h2>
             <p class="body-muted">
-              Programas como o <strong>Minha Casa Minha Vida</strong> movimentam bilhões em contratos. Cartórios tradicionais são lentos, caros e centralizados. Um documento pode ser falsificado e nunca ser detectado.
+              {{ $t('home.problemaBody') }}
             </p>
           </div>
           <div>
-            <div class="eyebrow-label" style="margin-bottom:12px;">A solução</div>
+            <div class="eyebrow-label" style="margin-bottom:12px;">{{ $t('home.solucaoEyebrow') }}</div>
             <h2 class="section-title" style="margin-bottom:12px;">
-              ZK Proof + privacidade com divulgação seletiva + Armazenamento permanente.
+              {{ $t('home.solucaoTitle') }}
             </h2>
             <p class="body-muted">
-              Cada documento gera uma prova criptográfica verificável por qualquer pessoa. Os dados do signatário ficam cifrados — só quem tem a chave pode ver.
+              {{ $t('home.solucaoBody') }}
             </p>
             <a
               class="home-pqc-badge"
@@ -75,8 +74,8 @@
               target="_blank"
               rel="noopener noreferrer"
             >
-              <span class="home-pqc-badge-tag">Proteção pós-quântica</span>
-              <span class="home-pqc-badge-text">Produzido com estratégia de proteção pós-quântica — abordagem híbrida alinhada às diretrizes de transição PQC do NIST ↗</span>
+              <span class="home-pqc-badge-tag">{{ $t('home.pqcBadgeTag') }}</span>
+              <span class="home-pqc-badge-text">{{ $t('home.pqcBadgeText') }}</span>
             </a>
           </div>
         </div>
