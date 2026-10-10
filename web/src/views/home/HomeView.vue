@@ -172,53 +172,53 @@
     <!-- Para quem ─────────────────────────────────────── -->
     <section class="home-s-perfis">
       <div class="wrap">
-        <div class="eyebrow" style="margin-bottom:8px;">Quem usa</div>
-        <h2 class="section-title" style="margin-bottom:36px;">Três formas de usar.<br/>Uma infraestrutura.</h2>
+        <div class="eyebrow" style="margin-bottom:8px;">{{ $t('home.quemUsaEyebrow') }}</div>
+        <h2 class="section-title" style="margin-bottom:36px;">{{ $t('home.quemUsaTituloPre') }}<br/>{{ $t('home.quemUsaTituloPost') }}</h2>
         <div class="home-perfis-grid">
 
           <!-- Cidadão -->
           <div class="home-perfil-card">
-            <span class="badge badge-yellow">Cidadão</span>
+            <span class="badge badge-yellow">{{ $t('home.perfil.cidadao.badge') }}</span>
             <div>
-              <div class="home-perfil-title">Escrituras, contratos<br/>e procurações</div>
-              <p class="body-sm">Autentique documentos habitacionais, herança e contratos pessoais. R$5 por registro — sem conta, sem carteira digital.</p>
+              <div class="home-perfil-title">{{ $t('home.perfil.cidadao.tituloPre') }}<br/>{{ $t('home.perfil.cidadao.tituloPost') }}</div>
+              <p class="body-sm">{{ $t('home.perfil.cidadao.body') }}</p>
             </div>
             <ul class="check-list">
-              <li class="check-item"><span class="check-icon">✓</span> Registro em menos de 30 segundos</li>
-              <li class="check-item"><span class="check-icon">✓</span> Link público de verificação para qualquer pessoa</li>
-              <li class="check-item"><span class="check-icon">✓</span> Dados pessoais protegidos — só o titular acessa</li>
+              <li class="check-item"><span class="check-icon">✓</span> {{ $t('home.perfil.cidadao.c1') }}</li>
+              <li class="check-item"><span class="check-icon">✓</span> {{ $t('home.perfil.cidadao.c2') }}</li>
+              <li class="check-item"><span class="check-icon">✓</span> {{ $t('home.perfil.cidadao.c3') }}</li>
             </ul>
-            <button class="btn btn-primary btn-sm home-perfil-cta" @click="$router.push('/registrar?demo=mcmv')">↗ Registrar documento</button>
+            <button class="btn btn-primary btn-sm home-perfil-cta" @click="$router.push('/registrar?demo=mcmv')">{{ $t('home.perfil.cidadao.cta') }}</button>
           </div>
 
           <!-- Construtora -->
           <div class="home-perfil-card">
-            <span class="badge badge-emerald">Construtora · Escritório</span>
+            <span class="badge badge-emerald">{{ $t('home.perfil.construtora.badge') }}</span>
             <div>
-              <div class="home-perfil-title">Volume de documentos<br/>com rastreabilidade</div>
-              <p class="body-sm">API batch para registrar centenas de contratos MCMV ou jurídicos por mês. Auditoria on-chain elimina passivo por fraude.</p>
+              <div class="home-perfil-title">{{ $t('home.perfil.construtora.tituloPre') }}<br/>{{ $t('home.perfil.construtora.tituloPost') }}</div>
+              <p class="body-sm">{{ $t('home.perfil.construtora.body') }}</p>
             </div>
             <ul class="check-list">
-              <li class="check-item"><span class="check-icon">✓</span> API batch — integra com ERP jurídico</li>
-              <li class="check-item"><span class="check-icon">✓</span> Painel de gestão por projeto / obra</li>
-              <li class="check-item"><span class="check-icon">✓</span> R$3/doc em volume (vs R$300 em cartório)</li>
+              <li class="check-item"><span class="check-icon">✓</span> {{ $t('home.perfil.construtora.c1') }}</li>
+              <li class="check-item"><span class="check-icon">✓</span> {{ $t('home.perfil.construtora.c2') }}</li>
+              <li class="check-item"><span class="check-icon">✓</span> {{ $t('home.perfil.construtora.c3') }}</li>
             </ul>
-            <button class="btn btn-secondary btn-sm home-perfil-cta" style="border-color:var(--color-text-muted); color:var(--color-kraft);" @click="$router.push('/servicos')">Ver planos B2B →</button>
+            <button class="btn btn-secondary btn-sm home-perfil-cta" style="border-color:var(--color-text-muted); color:var(--color-kraft);" @click="$router.push('/servicos')">{{ $t('home.perfil.construtora.cta') }}</button>
           </div>
 
           <!-- Banco / Seguradora -->
           <div class="home-perfil-card">
-            <span class="badge badge-ink">Banco · Seguradora</span>
+            <span class="badge badge-ink">{{ $t('home.perfil.banco.badge') }}</span>
             <div>
-              <div class="home-perfil-title">Verificação de autenticidade<br/>em lote</div>
-              <p class="body-sm">Confirme a autenticidade de escrituras e laudos antes de liberar financiamento ou pagar sinistros. Resposta em millisegundos.</p>
+              <div class="home-perfil-title">{{ $t('home.perfil.banco.tituloPre') }}<br/>{{ $t('home.perfil.banco.tituloPost') }}</div>
+              <p class="body-sm">{{ $t('home.perfil.banco.body') }}</p>
             </div>
             <ul class="check-list">
-              <li class="check-item"><span class="check-icon">✓</span> Consulta pública sem wallet nem conta</li>
-              <li class="check-item"><span class="check-icon">✓</span> API REST — integra com due diligence existente</li>
-              <li class="check-item"><span class="check-icon">✓</span> Evidência imutável, auditável por qualquer parte</li>
+              <li class="check-item"><span class="check-icon">✓</span> {{ $t('home.perfil.banco.c1') }}</li>
+              <li class="check-item"><span class="check-icon">✓</span> {{ $t('home.perfil.banco.c2') }}</li>
+              <li class="check-item"><span class="check-icon">✓</span> {{ $t('home.perfil.banco.c3') }}</li>
             </ul>
-            <button class="btn btn-secondary btn-sm home-perfil-cta" style="border-color:var(--color-text-muted); color:var(--color-kraft);" @click="$router.push('/verificar')">◎ Verificar autenticidade</button>
+            <button class="btn btn-secondary btn-sm home-perfil-cta" style="border-color:var(--color-text-muted); color:var(--color-kraft);" @click="$router.push('/verificar')">{{ $t('home.perfil.banco.cta') }}</button>
           </div>
 
         </div>
