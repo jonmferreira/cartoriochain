@@ -4,7 +4,7 @@ export function getRecursos(): RecursoItem[] {
   return [
     {
       icone: 'pi pi-lock',
-      titulo: 'ZK Proof + ZCash ViewKey',
+      titulo: 'ZK Proof + privacidade seletiva',
       descricao: 'Prova que o signatário assinou sem revelar dados pessoais. LGPD nativa.',
     },
     {

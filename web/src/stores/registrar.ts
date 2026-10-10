@@ -4,7 +4,7 @@ import type { RegistrarResult } from '../views/registrar/types'
 
 const DEMO_KEY = 'a' + '0'.repeat(63)
 const DEMO_VIEWKEY_PAYLOAD = JSON.stringify({
-  v: 'zcash-vk-v1',
+  v: 'vk-sel-disclosure-v1',
   payload: '4a5f3c2b1a9e8d7c6f5e4d3c2b1a0f9e8d7c6b5a4f3e2d1c0b9a8f7e6d5c4b3',
   hint: 'zxviews1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq',
 })

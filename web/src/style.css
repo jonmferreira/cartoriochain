@@ -370,7 +370,7 @@ body::-webkit-scrollbar { display: none; }  /* Chrome/Safari/Edge */
   gap: 8px;
 }
 
-/* ── ViewKey badge ──────────────────────────────── */
+/* ── Selective-disclosure badge ──────────────────── */
 .vk-section {
   border: 2px solid var(--color-ink);
   background: var(--color-ink);

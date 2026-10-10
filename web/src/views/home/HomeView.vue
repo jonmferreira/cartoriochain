@@ -16,7 +16,7 @@
             </h1>
             <p class="body-muted home-hero-body">
               Cartório digital descentralizado para o mercado brasileiro.
-              Prova criptográfica de autenticidade. Dados do signatário protegidos por ZCash ViewKey — LGPD nativa.
+              Prova criptográfica de autenticidade. Dados do signatário protegidos por criptografia de divulgação seletiva — LGPD nativa.
             </p>
             <div class="home-hero-ctas">
               <button class="btn btn-primary btn-lg" @click="$router.push('/registrar?demo=mcmv')">
@@ -64,10 +64,10 @@
           <div>
             <div class="eyebrow-label" style="margin-bottom:12px;">A solução</div>
             <h2 class="section-title" style="margin-bottom:12px;">
-              ZK Proof + ZCash ViewKey + Armazenamento permanente.
+              ZK Proof + privacidade com divulgação seletiva + Armazenamento permanente.
             </h2>
             <p class="body-muted">
-              Cada documento gera uma prova criptográfica verificável por qualquer pessoa. Os dados do signatário ficam cifrados on-chain — só o titular da ViewKey pode ver.
+              Cada documento gera uma prova criptográfica verificável por qualquer pessoa. Os dados do signatário ficam cifrados — só quem tem a chave pode ver.
             </p>
           </div>
         </div>
@@ -394,9 +394,9 @@ export default defineComponent({
       ],
       servicosDestaque: [
         { nome: 'Autenticação', mvp: true,  tech: ['SHA-256', 'Solana', 'Irys'] },
-        { nome: 'Escritura MCMV', mvp: true, tech: ['ZCash ViewKey', 'Solana'] },
-        { nome: 'Reconhecimento de firma', mvp: false, tech: ['ZK Proof', 'ViewKey'] },
-        { nome: 'Procuração', mvp: false, tech: ['ZK Proof', 'ViewKey'] },
+        { nome: 'Escritura MCMV', mvp: true, tech: ['Divulgação seletiva', 'Solana'] },
+        { nome: 'Reconhecimento de firma', mvp: false, tech: ['ZK Proof', 'Divulgação seletiva'] },
+        { nome: 'Procuração', mvp: false, tech: ['ZK Proof', 'Divulgação seletiva'] },
         { nome: 'Ata notarial', mvp: false, tech: ['Solana', 'Irys'] },
         { nome: 'Apostila de Haia', mvp: false, tech: ['ZK público'] },
       ],

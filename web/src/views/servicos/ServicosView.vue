@@ -6,7 +6,7 @@
       <div class="anim-slide-up">
         <div class="eyebrow" style="margin-bottom:8px;">Cobertura do produto</div>
         <h1 class="svc-h1">Serviços<br/>cartoriais</h1>
-        <p class="body-muted" style="max-width:520px;">12 serviços de cartório físico brasileiro mapeados para o protocolo CartórioChain. Cada serviço mapeia diretamente para uma combinação de ZK Proof, ZCash ViewKey, Solana e Irys.</p>
+        <p class="body-muted" style="max-width:520px;">12 serviços de cartório físico brasileiro mapeados para o protocolo CartórioChain. Cada serviço mapeia diretamente para uma combinação de ZK Proof, criptografia de divulgação seletiva, Solana e Irys.</p>
       </div>
 
       <!-- Cobertura summary -->
@@ -144,7 +144,7 @@ export default defineComponent({
       techStack: [
         { nome: 'SHA-256',         papel: 'Integridade do documento' },
         { nome: 'ZK Proof (Noir)', papel: 'Autenticidade sem revelar conteúdo' },
-        { nome: 'ZCash ViewKey',   papel: 'Privacidade do signatário (LGPD)' },
+        { nome: 'Divulgação seletiva', papel: 'Privacidade do signatário (LGPD)' },
         { nome: 'Solana',          papel: 'Registro imutável + timestamp' },
         { nome: 'Irys',            papel: 'Armazenamento permanente' },
       ],
@@ -175,13 +175,13 @@ export default defineComponent({
         { nome: 'Autenticação de documento', status: 'mvp', descricao: 'Hash SHA-256 do documento registrado on-chain com prova de autenticidade verificável por qualquer pessoa.' },
         { nome: 'Escritura pública (MCMV / Imóvel)', status: 'mvp', descricao: 'Escrituras de transferência de imóvel com metadados cifrados. Caso de uso Minha Casa Minha Vida já demonstrado em produção.' },
         { nome: 'Reconhecimento de firma', status: 'proximo', descricao: 'ZK proof vincula assinante ao documento sem revelar identidade. Equivalente digital do reconhecimento presencial.' },
-        { nome: 'Procuração', status: 'proximo', descricao: 'Outorgante protegido por ViewKey — terceiros verificam a validade sem acessar dados pessoais do titular.' },
+        { nome: 'Procuração', status: 'proximo', descricao: 'Outorgante protegido por criptografia de divulgação seletiva — terceiros verificam a validade sem acessar dados pessoais do titular.' },
         { nome: 'Ata notarial', status: 'proximo', descricao: 'Registro de fato com timestamp imutável on-chain. Substitui a ata lavrada em cartório para fins de prova.' },
         { nome: 'Apostila de Haia', status: 'roadmap', descricao: 'Hash + ZK proof exportáveis para verificação internacional. Elimina burocracia de autenticação entre países.' },
-        { nome: 'Testamento', status: 'roadmap', descricao: 'Documento cifrado com ViewKey — conteúdo fica sigiloso até a abertura. Revelação condicionada a evento on-chain.' },
+        { nome: 'Testamento', status: 'roadmap', descricao: 'Documento cifrado com divulgação seletiva — conteúdo fica sigiloso até a abertura. Revelação condicionada a evento on-chain.' },
         { nome: 'Registro de imóveis', status: 'roadmap', descricao: 'NFT de propriedade com histórico completo on-chain. Cadeia de custódia auditável desde o primeiro registro.' },
         { nome: 'Contrato particular autenticado', status: 'roadmap', descricao: 'Multi-party ZK commitment — todas as partes provam assinatura sem expor dados umas às outras.' },
-        { nome: 'Divórcio extrajudicial', status: 'futuro', descricao: 'Escritura consensual com privacidade das partes garantida por ViewKey. Requer fluxo multi-party.' },
+        { nome: 'Divórcio extrajudicial', status: 'futuro', descricao: 'Escritura consensual com privacidade das partes garantida por criptografia de divulgação seletiva. Requer fluxo multi-party.' },
         { nome: 'Inventário extrajudicial', status: 'futuro', descricao: 'Partilha de bens documentada on-chain com privacidade dos herdeiros protegida.' },
         { nome: 'Registro civil', status: 'futuro', descricao: 'Nascimento, casamento, óbito com identidade ZK vinculada ao CPF/RNPN. Requer integração gov.' },
         { nome: 'Registro de patente / propriedade intelectual', status: 'futuro', descricao: 'Prova de anterioridade criptográfica para inventores e pesquisadores. Hash do documento registrado on-chain antes do protocolo INPI — evidência imutável de prior art em disputas de propriedade intelectual.' },
