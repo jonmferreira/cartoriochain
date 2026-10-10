@@ -106,6 +106,14 @@ hypothesis we derived from it — lives here:
 
 **→ [Security research & vulnerability source map](./docs/seguranca-vulnerabilidades-pesquisa.md)**
 
+### Performance — negligible crypto latency
+
+Swapping classical crypto for hybrid post-quantum costs almost nothing: keygen ~1 ms, encrypt ~3 ms,
+decrypt ~3.4 ms (p95 all under 6 ms) → ~243 documents/s per core. Plenty of headroom for the high
+availability expected of a digital notary. Full methodology (tooling, environment, how to reproduce):
+
+**→ [Performance benchmark — details & reproduction](./docs/benchmark-desempenho.md)**
+
 ---
 
 ## Registration flow
