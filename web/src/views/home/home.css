@@ -68,6 +68,34 @@
   padding: 48px 24px;
 }
 
+/* ── Badge proteção pós-quântica (NIST) ──────────── */
+.home-pqc-badge     {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 20px;
+  padding: 14px 18px;
+  background: var(--color-ink-2);
+  border: 1.5px solid var(--color-emerald);
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.4s cubic-bezier(0.32,0.72,0,1), background 0.4s cubic-bezier(0.32,0.72,0,1);
+}
+.home-pqc-badge:hover { background: var(--color-ink-3); transform: translateY(-2px); }
+.home-pqc-badge:focus-visible { outline: 3px solid var(--color-yellow); outline-offset: 3px; }
+.home-pqc-badge-tag {
+  background: var(--color-emerald);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+}
+.home-pqc-badge-text { font-size: 13px; color: var(--color-text); line-height: 1.5; max-width: 440px; }
+@media (prefers-reduced-motion: reduce) { .home-pqc-badge { transition: none; } }
+
 /* ── Como funciona ───────────────────────────────── */
 .home-s-como        { padding: 56px 24px; }
 .home-passo-num     {

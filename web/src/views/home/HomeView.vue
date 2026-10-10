@@ -69,6 +69,15 @@
             <p class="body-muted">
               Cada documento gera uma prova criptográfica verificável por qualquer pessoa. Os dados do signatário ficam cifrados — só quem tem a chave pode ver.
             </p>
+            <a
+              class="home-pqc-badge"
+              href="https://csrc.nist.gov/projects/post-quantum-cryptography"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span class="home-pqc-badge-tag">Proteção pós-quântica</span>
+              <span class="home-pqc-badge-text">Produzido com estratégia de proteção pós-quântica — abordagem híbrida alinhada às diretrizes de transição PQC do NIST ↗</span>
+            </a>
           </div>
         </div>
       </div>

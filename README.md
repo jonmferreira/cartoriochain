@@ -20,7 +20,7 @@ The user never sees a blockchain. They see document type, notary and date. Under
 |---|---|
 | "Unique fingerprint of the file" | SHA-256 hash computed locally — the file never leaves the device |
 | "Proof of authenticity" | ZK circuit in Noir — proves X signed this document without revealing who X is |
-| "Protected data" | PII encrypted with X25519 + AES-256-GCM (ZCash ViewKey semantics) — only the holder decrypts |
+| "Protected data" | PII encrypted with a hybrid post-quantum scheme (X25519 + ML-KEM-768) + AES-256-GCM — only the key-holder decrypts |
 | "Permanent record" | Solana (immutable timestamp) + Irys/Arweave (permanent storage) |
 | "Public verification" | `/verificar/:id` — anyone verifies by URL, no login, no wallet |
 
@@ -48,7 +48,7 @@ Founded by a Computer Engineering student (UEA) whose undergraduate thesis is on
 | Layer | Technology | Status |
 |---|---|---|
 | Blockchain | Solana (Anchor 1.2.0) | ✅ Devnet — `BZnhVb4mdVbGRKbspvYq9mos2P4sY4iej87BEtBs2VPW` |
-| Privacy | X25519 + AES-256-GCM with ZCash ViewKey semantics | ✅ Complete |
+| Privacy | Hybrid post-quantum (X25519 + ML-KEM-768) + AES-256-GCM — selective disclosure | ✅ Complete |
 | ZK Proofs | Noir (nargo 1.0) + Barretenberg UltraHonk | ✅ Compiled circuit + working proof |
 | Permanent storage | Irys (Arweave) | ✅ Complete |
 | Payment | Tempo (USDC) — on-chain verification via RPC | ✅ Backend integrated · frontend being finalized |
@@ -71,13 +71,40 @@ code/
 ├── api/                      — Backend (Hono)
 │   └── src/
 │       ├── zk.ts             — ZK proof generation/verification (Noir JS + Barretenberg)
-│       ├── viewkey.ts        — Encrypt/decrypt PII with X25519 (ViewKey semantics)
+│       ├── viewkey.ts        — Encrypt/decrypt signer PII with a hybrid post-quantum KEM (X25519 + ML-KEM-768) + AES-256-GCM
 │       ├── irys.ts           — Upload documents to Irys/Arweave
 │       ├── tempo.ts          — Verify USDC payment on the Tempo chain via JSON-RPC
 │       ├── anchor-client.ts  — Interaction with the Solana program
 │       └── routes/           — documents, proofs, viewkey
 └── web/                      — Vue 3 frontend: Home, Registrar, Verificar, Serviços
 ```
+
+---
+
+## Security — post-quantum privacy
+
+A notary record is meant to last **forever** (permanent storage on Irys/Arweave). "Forever" means it must
+survive attacks that don't exist yet: the day a quantum computer can break today's encryption, everything
+stored becomes readable — the **"harvest now, decrypt later"** threat. So the signer's PII is encrypted
+with a **hybrid post-quantum scheme**, not classical crypto alone:
+
+- **Hybrid KEM — X25519 + ML-KEM-768** (the **X-Wing** construction) encapsulates the key; **AES-256-GCM**
+  encrypts the data. It only breaks if **both** the classical (X25519) **and** the post-quantum
+  (ML-KEM-768) halves fall — a quantum computer breaks X25519 but not ML-KEM, and vice-versa.
+- **ML-KEM-768 is NIST FIPS 203.** The hybrid approach follows NIST's post-quantum **transition guidance**
+  (NIST IR 8547). Implemented with the pure-JS, auditable `@noble/post-quantum`. *(We implement the
+  NIST-standardized algorithm; we are not CMVP/FIPS-140 validated — we don't claim to be.)*
+- **Tested** (`api/src/viewkey.test.ts`, 8/8): round-trip, wrong-key rejection, ciphertext/encapsulation
+  tamper rejection, and key/ciphertext sizes confirming ML-KEM is actually present.
+
+### Security research — grounded in recent papers
+
+Our threat model isn't hand-waved — it's derived from recent cryptographic research on the exact
+primitives we use (KyberSlash timing side-channels on ML-KEM, X25519 low-order points, AES-GCM nonce
+reuse). The full **source map** — each paper, its authors/year, what it contributed, and the test
+hypothesis we derived from it — lives here:
+
+**→ [Security research & vulnerability source map](./docs/seguranca-vulnerabilidades-pesquisa.md)**
 
 ---
 
