@@ -109,8 +109,16 @@ hypothesis we derived from it — lives here:
 ### Performance — negligible crypto latency
 
 Swapping classical crypto for hybrid post-quantum costs almost nothing: keygen ~1 ms, encrypt ~3 ms,
-decrypt ~3.4 ms (p95 all under 6 ms) → ~243 documents/s per core. Plenty of headroom for the high
-availability expected of a digital notary. Full methodology (tooling, environment, how to reproduce):
+decrypt ~3.4 ms (p95 all under 6 ms) → ~243 documents/s per core. Against the CNJ digital-notary
+thresholds (≤500 ms latency, ≥50 TPS — Provimento 213/2026), the crypto layer uses **~0.5% of the latency
+budget**. Measured, not estimated; charts in the TCC benchmark style (matplotlib).
+
+| Post-quantum crypto vs CNJ 500 ms budget | Overhead: classical vs hybrid |
+|---|---|
+| ![Latency vs CNJ](./docs/img/01-latencia-vs-cnj.png) | ![Overhead classical vs hybrid](./docs/img/02-overhead-classico-vs-pqc.png) |
+
+Full methodology, all four charts (incl. key-size tradeoff and throughput), environment and how to
+reproduce:
 
 **→ [Performance benchmark — details & reproduction](./docs/benchmark-desempenho.md)**
 

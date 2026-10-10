@@ -60,6 +60,39 @@ milissegundos** — imperceptível no fluxo de registro (que é dominado por red
 confirmação on-chain). Ou seja: a proteção pós-quântica **não** custa responsividade, e sobra folga para
 operação contínua/alta disponibilidade.
 
+## Comparativo visual (clássico vs pós-quântico)
+
+Gráficos gerados no mesmo estilo da suíte de benchmark do TCC (matplotlib, DPI 300, limiares do CNJ
+Prov. 213/2026: ≤500 ms, ≥50 TPS). Dados reais medidos — clássico = esquema ECIES X25519 que o projeto
+usava antes do PQC; híbrido = X25519 + ML-KEM-768 atual.
+
+**Latência da cripto pós-quântica vs limiar de latência do CNJ (500 ms)** — pior caso usa ~0,5% do orçamento:
+
+![Latência vs CNJ](./img/01-latencia-vs-cnj.png)
+
+**Overhead da proteção pós-quântica (clássico vs híbrido)** — o PQC adiciona poucos milissegundos:
+
+![Overhead clássico vs híbrido](./img/02-overhead-classico-vs-pqc.png)
+
+**Tradeoff do PQC — chaves maiores** (chave pública 32 B → 1216 B), latência segue baixa:
+
+![Tamanho de chave/payload](./img/03-tamanho-chave-payload.png)
+
+**Vazão vs mínimo do CNJ (50 TPS)** — folga de capacidade por núcleo:
+
+![Throughput vs CNJ](./img/04-throughput-vs-cnj.png)
+
+### Como regenerar os gráficos
+```powershell
+cd C:\Projetos\cartoriochain\code
+npx ts-node api/src/viewkey.compare-bench.ts   # mede clássico vs híbrido -> docs/benchmark-data.json
+pip install matplotlib                          # uma vez
+python scripts/plots/plot_benchmark.py          # le o JSON -> docs/img/*.png (estilo TCC)
+```
+Dados brutos versionados em [`benchmark-data.json`](./benchmark-data.json). Script de plot em
+`scripts/plots/plot_benchmark.py` (paleta e limiares CNJ espelhados de `caliper/benchmark_suite/config.py`
+do TCC).
+
 ## Relacionados
 - Testes de corretude/segurança: `api/src/viewkey.test.ts` (8/8), `api/src/viewkey.security.test.ts` (10/10).
 - Mapa de fontes e ameaças: [`seguranca-vulnerabilidades-pesquisa.md`](./seguranca-vulnerabilidades-pesquisa.md).
