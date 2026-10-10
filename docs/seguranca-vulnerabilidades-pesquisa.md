@@ -64,6 +64,22 @@ Os 🛡️ vêm de `api/src/viewkey.test.ts` (8/8) + `api/src/viewkey.security.t
 
 ---
 
+## Autocrítica honesta — os artigos de referência encontraram novos bugs?
+
+**Não.** Os artigos (KyberSlash, X25519 low-order, nonce reuse) **não revelaram nenhum bug novo** no nosso
+código. O que eles fizeram foi **dirigir a validação**: de cada ameaça conhecida derivamos uma hipótese e
+um teste, e os testes **confirmaram que a implementação já resiste** àquela classe de ataque (a lib rejeita
+pontos de ordem baixa; o ML-KEM faz rejeição implícita constant-time; usamos nonce/chave frescos por
+operação). Ou seja: valor em **validar a blindagem**, não em descobrir defeito.
+
+Não vamos inflar isso como "a pesquisa achou e consertamos vulnerabilidades" — seria falso. Os problemas
+reais encontrados e resolvidos nesta frente foram de **integração**, não de criptografia: a
+incompatibilidade de módulo ESM↔CommonJS do `@noble/post-quantum` (resolvida com dynamic import) e uma
+asserção de teste minha equivocada (corrigida). O mérito dos artigos é terem transformado "achamos que está
+seguro" em "está testado contra os ataques que a literatura descreve".
+
+---
+
 ## V1 — KyberSlash (timing secret-dependent no ML-KEM/Kyber)
 - **O quê:** divisões dependentes de segredo em `poly_tomsg`/`poly_compress` durante o decapsulamento
   vazam, por tempo, bits da chave secreta — recuperável em minutos/horas em alvos reais (RPi2, Cortex-M4).

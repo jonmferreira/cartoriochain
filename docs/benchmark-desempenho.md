@@ -96,3 +96,27 @@ do TCC).
 ## Relacionados
 - Testes de corretude/segurança: `api/src/viewkey.test.ts` (8/8), `api/src/viewkey.security.test.ts` (10/10).
 - Mapa de fontes e ameaças: [`seguranca-vulnerabilidades-pesquisa.md`](./seguranca-vulnerabilidades-pesquisa.md).
+
+---
+
+## Autocrítica honesta — o sistema é bom de desempenho?
+
+Todo bom trabalho precisa de uma autocrítica honesta. Então:
+
+**Sim, na camada que foi medida — a criptografia.** O custo por operação é de poucos milissegundos
+(~0,5% do orçamento de 500 ms do CNJ), e a proteção pós-quântica adiciona só alguns ms sobre o esquema
+clássico. Para o que o produto precisa (cifrar/decifrar PII de documento), a cripto **não é gargalo**.
+
+**Mas é importante dizer o que este benchmark NÃO prova:**
+- É um **micro-benchmark da camada de cripto**, isolada — não um teste de desempenho do sistema inteiro.
+- A **latência ponta-a-ponta** do registro real é dominada por rede, upload no Irys/Arweave e confirmação
+  on-chain (Solana), que **não** foram medidas aqui. Esses passos custam ordens de grandeza mais que a cripto.
+- Rodou em **uma máquina, um processo, execução única**, via `ts-node` (não o build de produção) e **sem
+  concorrência** — não há p99 sob carga nem teste distribuído.
+- Os limiares do CNJ (500 ms / 50 TPS) são do **sistema/transação** notarial, não da cripto isolada; aqui
+  servem de régua de ordem de grandeza, não de prova de conformidade da plataforma.
+
+**Conclusão honesta:** o correto é dizer *"a criptografia pós-quântica não é gargalo de desempenho"*, e
+**não** *"o sistema inteiro foi comprovado rápido"*. O que falta para uma afirmação forte de desempenho de
+sistema: teste de carga concorrente, medição ponta-a-ponta (com Irys + Solana) e p99 sob tráfego real —
+registrado no backlog.
