@@ -36,18 +36,12 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* ── Scrollbar vertical da página — customizada, on-brand (sharp, sem radius) ── */
+/* ── Scrollbar da página — escondida (consistente com nav/inpi/marquee) ── */
 html, body {
-  scrollbar-width: thin;                                        /* Firefox */
-  scrollbar-color: var(--color-ink-4) var(--color-ink);
+  scrollbar-width: none;            /* Firefox */
+  -ms-overflow-style: none;         /* Edge/IE legado */
 }
-html::-webkit-scrollbar, body::-webkit-scrollbar { width: 12px; }
-html::-webkit-scrollbar-track, body::-webkit-scrollbar-track { background: var(--color-ink); }
-html::-webkit-scrollbar-thumb, body::-webkit-scrollbar-thumb {
-  background: var(--color-ink-4);
-  border: 3px solid var(--color-ink);   /* respiro ao redor do thumb */
-}
-html::-webkit-scrollbar-thumb:hover, body::-webkit-scrollbar-thumb:hover { background: var(--color-emerald); }
+html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; }  /* Chrome/Safari/Edge */
 
 /* ── Botões ─────────────────────────────────────── */
 .btn {
